@@ -15,7 +15,7 @@ namespace Khooversoft.Net
             return new RestResponse(response);
         }
 
-        public static async Task<RestResponse> EnsureSuccessStatusCodeAsync(this RestResponse httpResponseResult, IWorkContext context)
+        public static async Task<RestResponse> EnsureSuccessStatusCodeAsync(this RestResponse httpResponseResult, IWorkContext context, HttpStatusCode[] acceptedCodes = null)
         {
             try
             {
@@ -30,7 +30,7 @@ namespace Khooversoft.Net
             return httpResponseResult;
         }
 
-        public static async Task<RestResponse> EnsureSuccessStatusCodeAsync(this Task<RestResponse> httpResponseResult, IWorkContext context)
+        public static async Task<RestResponse> EnsureSuccessStatusCodeAsync(this Task<RestResponse> httpResponseResult, IWorkContext context, HttpStatusCode[] acceptedCodes = null)
         {
             var response = await httpResponseResult;
 

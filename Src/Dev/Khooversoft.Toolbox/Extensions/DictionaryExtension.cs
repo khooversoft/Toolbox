@@ -365,11 +365,11 @@ namespace Khooversoft.Toolbox
 
             if (comparer != null)
             {
-                return new ImmutableDictionary<TKey, TValue>(self, comparer);
+                return self.ToDictionary(x => x.Key, x => x.Value, comparer);
             }
             else
             {
-                return new ImmutableDictionary<TKey, TValue>(self);
+                return self.ToDictionary(x => x.Key, x => x.Value);
             }
         }
     }

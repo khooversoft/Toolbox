@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Khooversoft.Toolbox
@@ -20,7 +21,7 @@ namespace Khooversoft.Toolbox
         {
             Cv = new CorrelationVector();
             Tag = Tag.Empty;
-            Properties = ImmutableDictionary<string, object>.Empty;
+            Properties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -32,7 +33,8 @@ namespace Khooversoft.Toolbox
             Cv = workContext.Cv;
             Tag = workContext.Tag;
             Container = workContext.Container;
-            Properties = new ImmutableDictionary<string, object>(workContext.Properties);
+            Properties = workContext.Properties.ToDictionary(x => x.Key, x => x.Value);
+            CancellationToken = workContext.CancellationToken;
         }
 
         /// <summary>
@@ -42,7 +44,7 @@ namespace Khooversoft.Toolbox
         /// <param name="tag">code location tag</param>
         /// <param name="workContainer">container</param>
         /// <param name="properties">properties (optional)</param>
-        public WorkContext(CorrelationVector cv, Tag tag, ILifetimeScope workContainer, IEnumerable<KeyValuePair<string, object>> properties = null)
+        public WorkContext(CorrelationVector cv, Tag tag, ILifetimeScope workContainer, IEnumerable<KeyValuePair<string, object>> properties = null, CancellationToken? cancellationToken = null)
         {
             Verify.IsNotNull(nameof(cv), cv);
             Verify.IsNotNull(nameof(tag), tag);
@@ -50,7 +52,8 @@ namespace Khooversoft.Toolbox
             Cv = cv;
             Tag = tag;
             Container = workContainer;
-            Properties = properties == null ? ImmutableDictionary<string, object>.Empty : new ImmutableDictionary<string, object>(properties);
+            Properties = properties.ToDictionary(x => x.Key, x => x.Value) ?? new Dictionary<string, object>();
+            CancellationToken = cancellationToken ?? CancellationToken.None;
         }
 
         /// <summary>
@@ -65,6 +68,8 @@ namespace Khooversoft.Toolbox
         public ILifetimeScope Container { get; }
 
         public IReadOnlyDictionary<string, object> Properties { get; }
+
+        public CancellationToken CancellationToken { get; private set; } = CancellationToken.None;
 
         /// <summary>
         /// Create new instance of work context with key and value being added to properties
@@ -147,6 +152,19 @@ namespace Khooversoft.Toolbox
             return new WorkContext(this)
             {
                 Tag = Tag.With(tag.WithMethodName(memberName)),
+            };
+        }
+
+        /// <summary>
+        /// Create new context with cancellation token
+        /// </summary>
+        /// <param name="token">token to set, null to clear</param>
+        /// <returns>new work context</returns>
+        public IWorkContext With(CancellationToken? token)
+        {
+            return new WorkContext(this)
+            {
+                CancellationToken = token ?? CancellationToken.None
             };
         }
 

@@ -82,7 +82,9 @@
   <ItemGroup>
     <Analyzer Include="..\..\_Packages\xunit.analyzers.0.8.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Dev\Khooversoft.Actor\Khooversoft.Actor.csproj">
       <Project>{2236fbe3-0681-4904-b871-a9edea887710}</Project>

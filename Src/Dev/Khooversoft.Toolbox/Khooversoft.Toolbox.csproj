@@ -52,6 +52,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\KeyedDictionary.cs" />
     <Compile Include="Configuration\IServiceConfiguration.cs" />
     <Compile Include="Configuration\ServiceConfiguration.cs" />
     <Compile Include="Application\ToolboxEventSource.cs" />
@@ -81,16 +82,26 @@
     <Compile Include="Tools\DisposableManager.cs" />
     <Compile Include="Tools\HighResolutionDateTime.cs" />
     <Compile Include="Tools\IObjectValue.cs" />
+    <Compile Include="Tools\LocalProcess.cs" />
     <Compile Include="Tools\PageRequest.cs" />
     <Compile Include="Tools\PageRequest_T.cs" />
     <Compile Include="Tools\PageResult.cs" />
     <Compile Include="Tools\Scope.cs" />
     <Compile Include="Tools\Scope_T.cs" />
+    <Compile Include="Tools\StateManager\IStateItem.cs" />
+    <Compile Include="Tools\StateManager\IStateManager.cs" />
+    <Compile Include="Tools\StateManager\StateContext.cs" />
+    <Compile Include="Tools\StateManager\StateManager.cs" />
+    <Compile Include="Tools\StateManager\StateManagerBuilder.cs" />
+    <Compile Include="Tools\StateManager\StateNotify.cs" />
+    <Compile Include="Tools\StateManager\States\ProcessRunning.cs" />
+    <Compile Include="Tools\StateManager\States\ProcessStopped.cs" />
     <Compile Include="Tools\StringVector\StringVector.cs" />
     <Compile Include="Tools\StringVector\StringVectorBind.cs" />
     <Compile Include="Tools\TimerScope.cs" />
     <Compile Include="Verify\CustomTypeBase.cs" />
     <Compile Include="Verify\ICustomType.cs" />
+    <Compile Include="Verify\IVerify.cs" />
     <Compile Include="Verify\StringType.cs" />
     <Compile Include="Verify\Verify.cs" />
     <Compile Include="Tools\WorkContext\IWorkContext.cs" />

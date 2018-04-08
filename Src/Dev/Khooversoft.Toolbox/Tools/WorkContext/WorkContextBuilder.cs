@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Khooversoft.Toolbox
@@ -34,6 +35,7 @@ namespace Khooversoft.Toolbox
             Cv = context.Cv;
             Tag = context.Tag;
             WorkContainer = context.Container;
+            CancellationToken = context.CancellationToken;
         }
 
         public CorrelationVector Cv { get; set; }
@@ -43,6 +45,8 @@ namespace Khooversoft.Toolbox
         public ILifetimeScope WorkContainer { get; set; }
 
         public IDictionary<string, object> Properties { get; }
+
+        public CancellationToken? CancellationToken { get; set; }
 
         /// <summary>
         /// Add new property
@@ -108,6 +112,17 @@ namespace Khooversoft.Toolbox
         }
 
         /// <summary>
+        /// Set cancellation token
+        /// </summary>
+        /// <param name="token">cancellation token</param>
+        /// <returns></returns>
+        public WorkContextBuilder SetCancellationToken(CancellationToken? token)
+        {
+            CancellationToken = token;
+            return this;
+        }
+
+        /// <summary>
         /// Remove property
         /// </summary>
         /// <param name="key">key</param>
@@ -135,7 +150,7 @@ namespace Khooversoft.Toolbox
         /// <returns>new instance of work context</returns>
         public IWorkContext Build()
         {
-            return new WorkContext(Cv, Tag, WorkContainer, Properties);
+            return new WorkContext(Cv, Tag, WorkContainer, Properties, CancellationToken);
         }
     }
 }

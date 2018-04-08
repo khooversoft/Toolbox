@@ -1,4 +1,6 @@
 ﻿using Khooversoft.Toolbox;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 
 namespace Khooversoft.Net
@@ -90,16 +92,21 @@ namespace Khooversoft.Net
         /// <param name="message">message</param>
         /// <returns>this</returns>
         /// <exception cref="RestResponseException">if HTTP status is failure</exception>
-        new public RestResponse<T> AssertSuccessStatusCode(IWorkContext context, string message = null)
+        new public RestResponse<T> AssertSuccessStatusCode(IWorkContext context, string message = null, HttpStatusCode[] acceptedCodes = null)
         {
             Verify.IsNotNull(nameof(context), context);
 
-            if (!IsSuccessStatusCode)
+            if (IsSuccessStatusCode)
             {
-                throw new RestResponseException(context, this, message ?? _httpRequestFailedText);
+                return this;
             }
 
-            return this;
+            if (acceptedCodes != null && acceptedCodes.Any(x => x == StatusCode))
+            {
+                return this;
+            }
+
+            throw new RestResponseException(context, this, message ?? _httpRequestFailedText);
         }
     }
 }

@@ -4,18 +4,26 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Khooversoft.Sql
 {
     /// <summary>
     /// SQL Execute, primary abstraction for ADO.NET with strong contracts
+    /// 
+    /// If a deadlock is detected, the sql command will be retried n times with a random back off delay between 10 and 1000 ms.
+    /// 
     /// </summary>
     public class SqlExec
     {
         private static readonly Tag _tag = new Tag(nameof(SqlExec));
+        private static readonly Random _random = new Random();
+        private const int _retryCount = 5;
+        private const int _deadLockNumber = 1205;
+        private const string _deadLockMessage = "Deadlock retry failed";
 
-        public SqlExec(SqlConfiguration configuration)
+        public SqlExec(ISqlConfiguration configuration)
         {
             Verify.IsNotNull(nameof(configuration), configuration);
 
@@ -25,7 +33,7 @@ namespace Khooversoft.Sql
         /// <summary>
         /// SQL configuration
         /// </summary>
-        public SqlConfiguration Configuration { get; }
+        public ISqlConfiguration Configuration { get; }
 
         /// <summary>
         /// SQL command
@@ -118,6 +126,7 @@ namespace Khooversoft.Sql
             Verify.IsNotNull(nameof(context), context);
 
             context = context.WithTag(_tag);
+            SqlException saveEx = null;
 
             using (var conn = new SqlConnection(Configuration.ConnectionString))
             using (var cmd = conn.CreateCommand())
@@ -128,24 +137,34 @@ namespace Khooversoft.Sql
 
                 conn.Open();
 
-                try
+                for (int retry = 0; retry < _retryCount; retry++)
                 {
-                    using (var scope = new ActivityScope(context, Command))
+                    try
                     {
-                        cmd.ExecuteNonQuery();
-                        return;
+                        using (var scope = new ActivityScope(context, Command))
+                        {
+                            cmd.ExecuteNonQuery();
+                            return;
+                        }
                     }
-                }
-                catch (SqlException sqlEx)
-                {
-                    Exception ex = ToException(context, sqlEx);
-                    ToolboxEventSource.Log.Error(context, ex.Message, ex);
-                    throw ex;
-                }
-                catch (Exception ex)
-                {
-                    ToolboxEventSource.Log.Error(context, ex.Message, ex);
-                    throw new WorkException(ex.Message, context);
+                    catch (SqlException sqlEx)
+                    {
+                        if (sqlEx.Number == _deadLockNumber)
+                        {
+                            saveEx = sqlEx;
+                            Thread.Sleep(TimeSpan.FromMilliseconds(_random.Next(10, 1000)));
+                            continue;
+                        }
+
+                        Exception ex = ToException(context, sqlEx);
+                        ToolboxEventSource.Log.Error(context, ex.Message, ex);
+                        throw ex;
+                    }
+                    catch (Exception ex)
+                    {
+                        ToolboxEventSource.Log.Error(context, ex.Message, ex);
+                        throw new WorkException(ex.Message, context);
+                    }
                 }
             }
         }
@@ -199,7 +218,7 @@ namespace Khooversoft.Sql
         /// <param name="context">execution context</param>
         /// <param name="factory">type factor</param>
         /// <returns>list of types</returns>
-        public IList<T> Exceute<T>(IWorkContext context, Func<SqlDataReader, T> factory)
+        public IList<T> Execute<T>(IWorkContext context, Func<SqlDataReader, T> factory)
         {
             Verify.IsNotNull(nameof(context), context);
             Verify.IsNotNull(nameof(factory), factory);
@@ -252,7 +271,7 @@ namespace Khooversoft.Sql
         /// <param name="context">execution context</param>
         /// <param name="factory">type factor</param>
         /// <returns>list of types</returns>
-        public async Task<IList<T>> ExceuteAsync<T>(IWorkContext context, Func<IWorkContext, SqlDataReader, T> factory)
+        public async Task<IList<T>> ExecuteAsync<T>(IWorkContext context, Func<IWorkContext, SqlDataReader, T> factory)
         {
             Verify.IsNotNull(nameof(context), context);
             Verify.IsNotNull(nameof(factory), factory);
@@ -309,7 +328,7 @@ namespace Khooversoft.Sql
         {
             context.WithTag(_tag);
 
-            IList<T> result = Exceute(context, factory);
+            IList<T> result = Execute(context, factory);
             return result.Count == 0 ? default(T) : result[0];
         }
 
@@ -324,7 +343,7 @@ namespace Khooversoft.Sql
         {
             context = context.WithTag(_tag);
 
-            IList<T> result = await ExceuteAsync(context, factory);
+            IList<T> result = await ExecuteAsync(context, factory);
             return result.Count == 0 ? default(T) : result[0];
         }
 

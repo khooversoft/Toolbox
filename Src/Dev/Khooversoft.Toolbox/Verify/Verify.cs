@@ -186,5 +186,24 @@ namespace Khooversoft.Toolbox
                 Verify.Assert(userType.IsValueValid(), name);
             }
         }
+
+
+        /// <summary>
+        /// Verify type is valid
+        /// </summary>
+        /// <typeparam name="T">type</typeparam>
+        /// <param name="name">name of variable</param>
+        /// <param name="userType">user type</param>
+        /// <param name="allowNull">allow null</param>
+        public static void IsValid(string name, IVerify userType, bool allowNull = false)
+        {
+            Verify.IsNotEmpty(nameof(name), name);
+            Verify.Assert<ArgumentNullException>(allowNull || userType != null, name);
+
+            if (userType != null)
+            {
+                Verify.Assert(userType.IsValid(), name);
+            }
+        }
     }
 }

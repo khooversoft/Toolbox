@@ -7,7 +7,7 @@ using System.Diagnostics;
 namespace Khooversoft.Sql
 {
     [DebuggerDisplay("ConnectionString={ConnectionString}")]
-    public class SqlConfiguration
+    public class SqlConfiguration : ISqlConfiguration
     {
         private static readonly Tag _tag = new Tag(nameof(SqlConfiguration));
 

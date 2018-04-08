@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8F84599E-3A9D-4691-9DB7-710173D6D2B3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Khooversoft.MongoDb</RootNamespace>
+    <AssemblyName>Khooversoft.MongoDb</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DnsClient, Version=1.0.7.0, Culture=neutral, PublicKeyToken=4574bb5573c51424, processorArchitecture=MSIL">
+      <HintPath>..\..\_Packages\DnsClient.1.0.7\lib\net45\DnsClient.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Bson, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\_Packages\MongoDB.Bson.2.5.0\lib\net45\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\_Packages\MongoDB.Driver.2.5.0\lib\net45\MongoDB.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver.Core, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\_Packages\MongoDB.Driver.Core.2.5.0\lib\net45\MongoDB.Driver.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\_Packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\_Packages\System.Buffers.4.4.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Application\JsonUtility.cs" />
+    <Compile Include="Application\MongoDbEventSource.cs" />
+    <Compile Include="Client\DbClient.cs" />
+    <Compile Include="CollectionSchema\DbCollection.cs" />
+    <Compile Include="CollectionSchema\DbCollectionDependency.cs" />
+    <Compile Include="CollectionSchema\DbCollectionKey.cs" />
+    <Compile Include="CollectionSchema\DbCollectionManagement.cs" />
+    <Compile Include="CollectionSchema\DbCollectionPartialFilter.cs" />
+    <Compile Include="Collection\CollectionModel.cs" />
+    <Compile Include="Collection\CollectionModelPackage.cs" />
+    <Compile Include="Collection\CollectionModelSettings.cs" />
+    <Compile Include="Collection\States\RemoveCollectionState.cs" />
+    <Compile Include="Collection\States\CreateCollectionState.cs" />
+    <Compile Include="Collection\States\CreateIndexState.cs" />
+    <Compile Include="Collection\States\RemoveIndexesNotInSource.cs" />
+    <Compile Include="Context\CollectionDetails.cs" />
+    <Compile Include="Context\MongoDbContext.cs" />
+    <Compile Include="Extensions\BsonDocument.cs" />
+    <Compile Include="Extensions\UtilityExtensions.cs" />
+    <Compile Include="Models\Internal\ConvertToExtensions.cs" />
+    <Compile Include="Models\Internal\InternalCollectionDetail.cs" />
+    <Compile Include="Models\Internal\InternalDatabaseDetail.cs" />
+    <Compile Include="Models\Internal\InternalInfoDetail.cs" />
+    <Compile Include="Models\V1\CollectionDetailV1.cs" />
+    <Compile Include="Collection\CollectionIndex.cs" />
+    <Compile Include="Models\V1\DatabaseDetailV1.cs" />
+    <Compile Include="Models\V1\IndexDetailV1.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Server\DocumentCollection.cs" />
+    <Compile Include="Server\DocumentDatabase.cs" />
+    <Compile Include="Server\DocumentIndex.cs" />
+    <Compile Include="Server\DocumentServer.cs" />
+    <Compile Include="Server\IDocumentCollection.cs" />
+    <Compile Include="Server\IDocumentDatabase.cs" />
+    <Compile Include="Server\IDocumentIndex.cs" />
+    <Compile Include="Server\IDocumentServer.cs" />
+    <Compile Include="Collection\IndexKey.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Khooversoft.Toolbox\Khooversoft.Toolbox.csproj">
+      <Project>{7c91ae08-d47e-467b-92b1-8dd5c85ccd8d}</Project>
+      <Name>Khooversoft.Toolbox</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
