@@ -6,6 +6,9 @@ using System.Diagnostics;
 
 namespace Khooversoft.Sql
 {
+    /// <summary>
+    /// SQL configuration (immutable builder pattern)
+    /// </summary>
     [DebuggerDisplay("ConnectionString={ConnectionString}")]
     public class SqlConfiguration : ISqlConfiguration
     {
@@ -65,7 +68,7 @@ namespace Khooversoft.Sql
         /// <summary>
         /// Test the DB connection by executing "select 1"
         /// </summary>
-        /// <returns></returns>
+        /// <returns>true if pass, false if not</returns>
         public bool TestConnection(IWorkContext context)
         {
             Verify.IsNotNull(nameof(context), context);

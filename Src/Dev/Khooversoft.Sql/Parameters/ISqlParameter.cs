@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Khooversoft.Sql
 {
+    /// <summary>
+    /// Interface for simple SQL parameters
+    /// </summary>
     public interface ISqlParameter
     {
         SqlParameter ToSqlParameter();

@@ -97,10 +97,6 @@
       <Project>{36a4183f-5703-453f-aef4-bf0d393e40ef}</Project>
       <Name>Khooversoft.EventFlow</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Khooversoft.Observers\Khooversoft.Observers.csproj">
-      <Project>{d2430893-d8fd-49ac-9332-eabfb2459521}</Project>
-      <Name>Khooversoft.Observers</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Khooversoft.Toolbox\Khooversoft.Toolbox.csproj">
       <Project>{7c91ae08-d47e-467b-92b1-8dd5c85ccd8d}</Project>
       <Name>Khooversoft.Toolbox</Name>

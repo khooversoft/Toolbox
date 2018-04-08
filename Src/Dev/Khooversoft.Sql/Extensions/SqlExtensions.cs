@@ -1,9 +1,13 @@
 ﻿using Khooversoft.Toolbox;
 using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 
 namespace Khooversoft.Sql
 {
+    /// <summary>
+    /// Extensions for supporting reading and converting SQL data to .NET types
+    /// </summary>
     public static class SqlExtensions
     {
         /// <summary>
@@ -24,14 +28,14 @@ namespace Khooversoft.Sql
             {
                 ordinal = reader.GetOrdinal(name);
             }
-            catch (IndexOutOfRangeException)
+            catch (IndexOutOfRangeException ex)
             {
                 if (optional)
                 {
                     return default(T);
                 }
 
-                throw;
+                throw new IndexOutOfRangeException($"{name} is not in the SqlDataReader", ex);
             }
 
             if (reader.IsDBNull(ordinal))
@@ -57,13 +61,13 @@ namespace Khooversoft.Sql
         }
 
         /// <summary>
-        /// Parse enum from database
+        /// Parse column data in SQL reader to enum type.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="reader"></param>
-        /// <param name="name"></param>
-        /// <param name="optional"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">enum type</typeparam>
+        /// <param name="reader">SQL reader</param>
+        /// <param name="name">column name</param>
+        /// <param name="optional">if true, the value is optional</param>
+        /// <returns>null or enum value</returns>
         public static T Parse<T>(this SqlDataReader reader, string name, bool optional = false)
         {
             Verify.IsNotNull(nameof(reader), reader);
@@ -91,6 +95,32 @@ namespace Khooversoft.Sql
             Type underType = Nullable.GetUnderlyingType(type);
 
             return (T)Enum.Parse(underType ?? type, value, true);
+        }
+
+        /// <summary>
+        /// Get collections from SQL reader.  SQL reader support reading multiple data sets.
+        /// This capability allows a single call to a stored procedure to return different data sets
+        /// as required, improving performance and providing single snapshot view of related data.
+        /// 
+        /// This extension is called for every dataset returned by a single call to a stored procedures.
+        /// </summary>
+        /// <typeparam name="T">type of collection</typeparam>
+        /// <param name="reader">SQL reader</param>
+        /// <param name="context">work context</param>
+        /// <param name="factory">type constructor factory</param>
+        /// <returns>List of types returned by SQL.  List can be 0 in length if no data was returned for dataset.</returns>
+        public static IList<T> GetCollection<T>(this SqlDataReader reader, IWorkContext context, Func<IWorkContext, SqlDataReader, T> factory)
+        {
+            var list = new List<T>();
+
+            while (reader.Read())
+            {
+                list.Add(factory(context, reader));
+            }
+
+            reader.NextResult();
+
+            return list;
         }
     }
 }

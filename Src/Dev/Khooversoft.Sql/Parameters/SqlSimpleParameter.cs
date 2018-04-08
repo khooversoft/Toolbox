@@ -4,7 +4,10 @@ using System.Diagnostics;
 
 namespace Khooversoft.Sql
 {
-    [DebuggerDisplay("ParameterName={ParameterName}, Value={Value}")]
+    /// <summary>
+    /// Handle simple SQL parameters (immutable)
+    /// </summary>
+    [DebuggerDisplay("Name={Name}, Value={Value}")]
     public class SqlSimpleParameter : ISqlParameter
     {
         public SqlSimpleParameter(string name, object value)
@@ -16,10 +19,20 @@ namespace Khooversoft.Sql
             Value = value;
         }
 
-        public string Name { get; }
+        /// <summary>
+        /// Name of the parameter
+        /// </summary>
+        public string Name { get; set; }
 
-        public object Value { get; }
+        /// <summary>
+        /// Value of the parameter
+        /// </summary>
+        public object Value { get; set; }
 
+        /// <summary>
+        /// Convert to SQL Parameter
+        /// </summary>
+        /// <returns>SQL parameter</returns>
         public SqlParameter ToSqlParameter()
         {
             return new SqlParameter(Name, Value);

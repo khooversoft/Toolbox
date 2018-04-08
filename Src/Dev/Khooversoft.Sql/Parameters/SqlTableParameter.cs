@@ -3,9 +3,11 @@ using Microsoft.SqlServer.Server;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 
 namespace Khooversoft.Sql
 {
+    [DebuggerDisplay("Name={Name}, TableTypeName={TableTypeName.ToString()}")]
     public class SqlTableParameter<T> : ISqlParameter
     {
         public SqlTableParameter(string parameterName, string tableTypeName)
@@ -38,7 +40,7 @@ namespace Khooversoft.Sql
         /// <summary>
         /// List of values to write
         /// </summary>
-        public List<T> Items { get; } = new List<T>();
+        public IList<T> Items { get; } = new List<T>();
 
         /// <summary>
         /// Return metadata definition from table binding
