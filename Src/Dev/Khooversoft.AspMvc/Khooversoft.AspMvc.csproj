@@ -297,6 +297,7 @@
   <ItemGroup>
     <Compile Include="Application\AspMvcEventSource.cs" />
     <Compile Include="Application\IWebEventLog.cs" />
+    <Compile Include="Extensions\ExceptionExtensions.cs" />
     <Compile Include="Extensions\HttpContextExtensions.cs" />
     <Compile Include="Filters\HmacAuthenticateAttribute.cs" />
     <Compile Include="Middleware\ErrorHandlingMiddleware.cs" />
@@ -306,7 +307,6 @@
     <Compile Include="Middleware\SetupMiddleware.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\StandardActionResult.cs" />
-    <Compile Include="Tools\Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Khooversoft.EventFlow\Khooversoft.EventFlow.csproj">

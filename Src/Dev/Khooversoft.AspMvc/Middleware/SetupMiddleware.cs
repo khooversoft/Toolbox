@@ -1,4 +1,7 @@
-﻿using Khooversoft.Net;
+﻿// Copyright (c) KhooverSoft. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using Khooversoft.Net;
 using Khooversoft.Toolbox;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -68,7 +71,7 @@ namespace Khooversoft.AspMvc
 
                 if (httpContext?.Response?.StatusCode != null)
                 {
-                    _serviceConfiguration.EventLog.Verbose(workContext, $"REST response result: {httpContext.Response.StatusCode}");
+                    AspMvcEventSource.Log.Verbose(workContext, $"REST response result: {httpContext.Response.StatusCode}");
                 }
             }
         }

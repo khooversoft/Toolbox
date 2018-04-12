@@ -1,4 +1,7 @@
-﻿using Khooversoft.EventFlow;
+﻿// Copyright (c) KhooverSoft. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using Khooversoft.EventFlow;
 using Khooversoft.Net;
 using Khooversoft.Toolbox;
 using Microsoft.AspNetCore.Http;
@@ -51,14 +54,14 @@ namespace Khooversoft.AspMvc
 
         private Task HandleExceptionAsync(HttpContext httpContext, Exception exception)
         {
-            HttpStatusCode code = Utility.CalculateStatusCode(exception);
+            HttpStatusCode code = exception.ToHttpStatusCode();
 
             RequestContext requestContext = httpContext.Items.Get<RequestContext>();
             IWorkContext context = requestContext.Context ?? WorkContext.Empty;
 
             if (code == HttpStatusCode.InternalServerError)
             {
-                _serviceConfiguration.EventLog.Error(context, exception.Message, exception);
+                AspMvcEventSource.Log.Error(context, exception.Message, exception);
             }
 
             CorrelationVector cv = null;

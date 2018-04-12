@@ -1,4 +1,7 @@
-﻿using Khooversoft.EventFlow;
+﻿// Copyright (c) KhooverSoft. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using Khooversoft.EventFlow;
 using Khooversoft.Net;
 using Khooversoft.Toolbox;
 using Microsoft.AspNetCore.Mvc;
@@ -41,7 +44,7 @@ namespace Khooversoft.AspMvc
         {
             if (value != null)
             {
-                this.Headers.Add(value.GetType().Name, value);
+                Headers.Add(value.GetType().Name, value);
             }
 
             return this;
@@ -55,7 +58,7 @@ namespace Khooversoft.AspMvc
 
         public Task ExecuteResultAsync(ActionContext actionContext)
         {
-            actionContext.HttpContext.Response.StatusCode = (int)this.StatusCode;
+            actionContext.HttpContext.Response.StatusCode = (int)StatusCode;
 
             // Requested headers
             Headers.Values.OfType<IHttpHeaderProperty>()

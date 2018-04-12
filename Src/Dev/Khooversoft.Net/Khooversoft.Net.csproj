@@ -62,6 +62,7 @@
     <Compile Include="Exceptions\RestConflictException.cs" />
     <Compile Include="Exceptions\RestNotFoundException.cs" />
     <Compile Include="Extensions\EventDetailContractExtensions.cs" />
+    <Compile Include="Extensions\ExceptionExtensions.cs" />
     <Compile Include="Extensions\HttpExtensions.cs" />
     <Compile Include="Extensions\PageResultExtensions.cs" />
     <Compile Include="Extensions\RestClientExtensions.cs" />

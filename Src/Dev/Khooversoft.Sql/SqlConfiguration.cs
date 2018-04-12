@@ -1,4 +1,7 @@
-﻿using Khooversoft.Toolbox;
+﻿// Copyright (c) KhooverSoft. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using Khooversoft.Toolbox;
 using System;
 using System.Data;
 using System.Data.SqlClient;
@@ -18,7 +21,7 @@ namespace Khooversoft.Sql
         {
             Verify.IsNotEmpty(nameof(connectionString), connectionString);
 
-            this.ConnectionString = connectionString;
+            ConnectionString = connectionString;
         }
 
         public SqlConfiguration(string server, string databaseName)
@@ -33,7 +36,7 @@ namespace Khooversoft.Sql
                 IntegratedSecurity = true
             };
 
-            this.ConnectionString = builder.ToString();
+            ConnectionString = builder.ToString();
         }
 
         public SqlConfiguration(string server, string databaseName, string userId, string password)
@@ -50,14 +53,14 @@ namespace Khooversoft.Sql
                 Password = password,
             };
 
-            this.ConnectionString = builder.ToString();
+            ConnectionString = builder.ToString();
         }
 
         public SqlConfiguration(SqlConnectionStringBuilder builder)
         {
             Verify.IsNotNull(nameof(builder), builder);
 
-            this.ConnectionString = builder.ToString();
+            ConnectionString = builder.ToString();
         }
 
         /// <summary>
@@ -76,7 +79,7 @@ namespace Khooversoft.Sql
 
             try
             {
-                using (var conn = new SqlConnection(this.ConnectionString))
+                using (var conn = new SqlConnection(ConnectionString))
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = "select 1";
@@ -91,7 +94,7 @@ namespace Khooversoft.Sql
             }
             catch (Exception ex)
             {
-                SqlEventSource.Log.Error(context, $"Cannot open database - connection string: {this.ConnectionString}", ex);
+                SqlEventSource.Log.Error(context, $"Cannot open database - connection string: {ConnectionString}", ex);
                 return false;
             }
         }

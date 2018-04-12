@@ -1,4 +1,7 @@
-﻿using Khooversoft.Net;
+﻿// Copyright (c) KhooverSoft. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using Khooversoft.Net;
 using Khooversoft.Toolbox;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -19,7 +22,7 @@ namespace Khooversoft.AspMvc
 
         public void OnException(ExceptionContext context)
         {
-            HttpStatusCode code = Utility.CalculateStatusCode(context.Exception);
+            HttpStatusCode code = context.Exception.ToHttpStatusCode();
 
             var errorMessage = new ErrorMessageContractV1
             {

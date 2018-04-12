@@ -1,4 +1,7 @@
-﻿using Khooversoft.Toolbox;
+﻿// Copyright (c) KhooverSoft. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using Khooversoft.Toolbox;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -19,7 +22,7 @@ namespace Khooversoft.Net
         {
             try
             {
-                httpResponseResult.AssertSuccessStatusCode(context);
+                httpResponseResult.AssertSuccessStatusCode(context, acceptedCodes: acceptedCodes);
             }
             catch (RestResponseException)
             {
@@ -36,7 +39,7 @@ namespace Khooversoft.Net
 
             try
             {
-                response.AssertSuccessStatusCode(context);
+                response.AssertSuccessStatusCode(context, acceptedCodes: acceptedCodes);
             }
             catch (RestResponseException)
             {

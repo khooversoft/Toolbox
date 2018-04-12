@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) KhooverSoft. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +12,7 @@ using Autofac;
 namespace Khooversoft.Toolbox
 {
     /// <summary>
-    /// Service configuration, not immutable.  Changes impact full service stack
+    /// Service configuration, is immutable.  Changes impact full service stack
     /// where this interface is used.
     /// 
     /// Class is thread safe
@@ -25,11 +28,6 @@ namespace Khooversoft.Toolbox
         /// Auto fact container
         /// </summary>
         public ILifetimeScope Container { get; set; }
-
-        /// <summary>
-        /// Event log
-        /// </summary>
-        public IEventLog EventLog { get; set; }
 
         /// <summary>
         /// Properties (read only from the interface)
