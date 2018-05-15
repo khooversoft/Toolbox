@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\KeyedDictionary.cs" />
+    <Compile Include="Configuration\IConnectionConfiguration.cs" />
     <Compile Include="Configuration\IServiceConfiguration.cs" />
     <Compile Include="Configuration\ServiceConfiguration.cs" />
     <Compile Include="Application\ToolboxEventSource.cs" />
@@ -65,9 +66,11 @@
     <Compile Include="Exceptions\ETagException.cs" />
     <Compile Include="Exceptions\WorkException.cs" />
     <Compile Include="Extensions\ByteExtensions.cs" />
+    <Compile Include="Extensions\DictionaryUtilityExtensions.cs" />
+    <Compile Include="Extensions\DictionaryPropertyStringExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\CacheObjectExtensions.cs" />
-    <Compile Include="Extensions\DictionaryExtension.cs" />
+    <Compile Include="Extensions\DictionaryTypeAsKeyExtension.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\X509CertificateExtensions.cs" />

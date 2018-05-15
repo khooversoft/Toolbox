@@ -11,7 +11,7 @@ namespace Khooversoft.MongoDb.Collection.States
 {
     internal class CreateIndexState : IStateItem
     {
-        private readonly Tag _tag = new Tag(nameof(CreateIndexState));
+        private static readonly Tag _tag = new Tag(nameof(CreateIndexState));
 
         public CreateIndexState(CollectionModelPackage parent, CollectionIndex index)
         {

@@ -14,31 +14,31 @@ namespace Khooversoft.Actor.Test.Actor
 
         // Disabled test because of changes in actor collection
         //[Fact]
-        public async Task ActorRetirementSimpleTest()
-        {
-            var builder = new ContainerBuilder();
-            builder.RegisterType<StringCache>().As<ICache>();
-            ILifetimeScope container = builder.Build();
+        //public async Task ActorRetirementSimpleTest()
+        //{
+        //    var builder = new ContainerBuilder();
+        //    builder.RegisterType<StringCache>().As<ICache>();
+        //    ILifetimeScope container = builder.Build();
 
-            IActorManager manager = new ActorManagerBuilder()
-                .Set(container)
-                .SetActorRetirementPeriod(TimeSpan.FromSeconds(2))
-                .SetInactivityScanPeriod(TimeSpan.FromSeconds(1))
-                .Build();
+        //    IActorManager manager = new ActorManagerBuilder()
+        //        .Set(container)
+        //        .SetActorRetirementPeriod(TimeSpan.FromSeconds(2))
+        //        .SetInactivityScanPeriod(TimeSpan.FromSeconds(1))
+        //        .Build();
 
-            using (container)
-            {
-                ActorKey key = new ActorKey("retirement/test");
-                ICache cache = await manager.CreateProxyAsync<ICache>(_context, key);
+        //    using (container)
+        //    {
+        //        ActorKey key = new ActorKey("retirement/test");
+        //        ICache cache = await manager.CreateProxyAsync<ICache>(_context, key);
 
-                (await cache.GetCount()).Should().Be(1);
-                await Task.Delay(TimeSpan.FromSeconds(10));
+        //        (await cache.GetCount()).Should().Be(1);
+        //        await Task.Delay(TimeSpan.FromSeconds(10));
 
-                (await cache.GetCount()).Should().Be(0);
-            }
+        //        (await cache.GetCount()).Should().Be(0);
+        //    }
 
-            await manager.DeactivateAllAsync(_context);
-        }
+        //    await manager.DeactivateAllAsync(_context);
+        //}
 
         private interface ICache : IActor
         {

@@ -1,4 +1,5 @@
-﻿using Khooversoft.Toolbox;
+﻿using Khooversoft.MongoDb.Models.V1;
+using Khooversoft.Toolbox;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Khooversoft.MongoDb.Collection.States
 {
     internal class CreateCollectionState : IStateItem
     {
-        private readonly Tag _tag = new Tag(nameof(CreateCollectionState));
+        private static readonly Tag _tag = new Tag(nameof(CreateCollectionState));
 
         public CreateCollectionState(CollectionModelPackage parent)
         {
@@ -27,6 +28,23 @@ namespace Khooversoft.MongoDb.Collection.States
             Verify.IsNotNull(nameof(context), context);
             context = context.WithTag(_tag);
 
+            if ((await Parent.Database.CollectionExist(context, Parent.Model.CollectionName)))
+            {
+                if (!Parent.Settings.AllowDataLoss)
+                {
+                    throw new InvalidOperationException($"Collection {Parent.Model.CollectionName} exist but allow data loss is not set.  Cannot re-create");
+                }
+
+                await Parent.Database.DropCollection(context, Parent.Model.CollectionName);
+            }
+
+            CappedCollectionModel cappedModel = Parent.Model as CappedCollectionModel;
+            if (cappedModel != null)
+            {
+                await Parent.Database.CreateCappedCollection(context, cappedModel.CollectionName, cappedModel.MaxNumberOfDocuments, cappedModel.MaxSizeInBytes);
+                return true;
+            }
+
             await Parent.Database.CreateCollection(context, Parent.Model.CollectionName);
             return true;
         }
@@ -36,9 +54,25 @@ namespace Khooversoft.MongoDb.Collection.States
             Verify.IsNotNull(nameof(context), context);
             context = context.WithTag(_tag);
 
-            bool status = await Parent.Database.CollectionExist(context, Parent.Model.CollectionName);
-            MongoDbEventSource.Log.Info(context, $"Collection {Parent.Model.CollectionName}, exists={status}");
-            return status;
+            CollectionDetailV1 detail = await Parent.Database.GetCollectionDetail(context, Parent.Model.CollectionName);
+            if (detail == null)
+            {
+                MongoDbEventSource.Log.Info(context, $"Collection {Parent.Model.CollectionName}, does not exists");
+                return false;
+            }
+
+            CappedCollectionModel cappedModel = Parent.Model as CappedCollectionModel;
+            if (cappedModel != null)
+            {
+                bool status = detail.Capped == true &&
+                    cappedModel.MaxNumberOfDocuments == (int)detail.MaxDocuments &&
+                    cappedModel.MaxSizeInBytes == (long)detail.MaxSizeInBytes;
+
+                MongoDbEventSource.Log.Info(context, $"Collection {Parent.Model.CollectionName} is capped, isEqual={status}");
+            }
+
+            MongoDbEventSource.Log.Info(context, $"Collection {Parent.Model.CollectionName}, exists");
+            return true;
         }
     }
 }

@@ -22,6 +22,13 @@ namespace Khooversoft.MongoDb
             Client = new MongoClient(ConnectionString);
         }
 
+        public DocumentServer(MongoUrl url)
+        {
+            Verify.IsNotNull(nameof(url), url);
+
+            Client = new MongoClient(url);
+        }
+
         public string ConnectionString { get; }
 
         public MongoClient Client { get; private set; }
@@ -58,7 +65,7 @@ namespace Khooversoft.MongoDb
             await Client.DropDatabaseAsync(dbName, context.CancellationToken);
         }
 
-        public DocumentDatabase GetDatabase(IWorkContext context, string dbName)
+        public IDocumentDatabase GetDatabase(IWorkContext context, string dbName)
         {
             Verify.IsNotNull(nameof(context), context);
             Verify.IsNotEmpty(nameof(dbName), dbName);

@@ -37,7 +37,7 @@ namespace Khooversoft.MongoDb
                 builder.Add(new CreateCollectionState(this));
                 builder.Add(new RemoveIndexesNotInSource(this));
 
-                foreach (var item in Model.Indexes)
+                foreach (var item in Model.Indexes ?? Enumerable.Empty<CollectionIndex>())
                 {
                     builder.Add(new CreateIndexState(this, item));
                 }

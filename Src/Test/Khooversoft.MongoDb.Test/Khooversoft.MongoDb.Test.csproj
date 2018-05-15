@@ -54,10 +54,6 @@
       <HintPath>..\..\_Packages\System.Buffers.4.3.0\lib\netstandard1.1\System.Buffers.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.InteropServices.RuntimeInformation">
-      <HintPath>..\..\_Packages\System.Runtime.InteropServices.RuntimeInformation.4.0.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -79,7 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application\Constants.cs" />
-    <Compile Include="Application\Utility.cs" />
+    <Compile Include="DatabaseTests\CappedCollectionModelPackageTests.cs" />
     <Compile Include="DatabaseTests\CollectionIndexTests.cs" />
     <Compile Include="DatabaseTests\CollectionModelPackageTests.cs" />
     <Compile Include="DatabaseTests\CreateRemoveDatabaseTests.cs" />

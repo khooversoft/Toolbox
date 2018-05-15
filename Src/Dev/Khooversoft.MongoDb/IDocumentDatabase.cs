@@ -23,6 +23,8 @@ namespace Khooversoft.MongoDb
 
         Task CreateCollection(IWorkContext context, string collectionName);
 
+        Task CreateCappedCollection(IWorkContext context, string collectionName, int maxNumberOfDocuments, long maxSizeInBytes);
+
         Task DropCollection(IWorkContext context, string collectionName);
 
         DocumentCollection<TDocument> GetCollection<TDocument>(string collectionName);

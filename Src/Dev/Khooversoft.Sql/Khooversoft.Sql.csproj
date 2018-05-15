@@ -42,7 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application\SqlEventSource.cs" />
-    <Compile Include="ISqlConfiguration.cs" />
     <Compile Include="Parameters\ISqlParameter.cs" />
     <Compile Include="Parameters\SqlColumnDefintion.cs" />
     <Compile Include="Parameters\SqlSimpleParameter.cs" />

@@ -36,6 +36,9 @@ namespace Khooversoft.MongoDb
                 Name = self.Name,
                 Type = self.Type,
                 Readonly = self.Info.Readonly,
+                Capped = self.Options?.Capped ?? false,
+                MaxDocuments = self.Options?.MaxDocuments,
+                MaxSizeInBytes = self.Options?.MaxSizeInBytes,
             };
         }
     }

@@ -48,7 +48,7 @@ namespace Khooversoft.Actor.Test.Actor
             ILifetimeScope container = builder.Build();
 
             IActorManager manager = new ActorManagerBuilder()
-                .Set(container)
+                .Register<ICache>((c, k, m) => container.Resolve<ICache>(new TypedParameter(typeof(ActorKey), k), new TypedParameter(typeof(IActorManager), m)))
                 .Build();
 
             using (container.BeginLifetimeScope())

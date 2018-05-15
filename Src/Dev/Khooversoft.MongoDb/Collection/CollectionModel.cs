@@ -15,11 +15,10 @@ namespace Khooversoft.MongoDb
 
         public IList<CollectionIndex> Indexes { get; set; }
 
-        public bool IsValid()
+        public virtual bool IsValid()
         {
             return CollectionName.IsNotEmpty() &&
-                Indexes != null &&
-                Indexes.All(x => x.IsValid());
+                (Indexes == null || (Indexes.All(x => x.IsValid())));
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Khooversoft.MongoDb.Test.DatabaseTests
         public async Task CreateSingleIndexTest()
         {
             await _documentServer.DropDatabase(_workContext, _dbName);
-            DocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
+            IDocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
             await db.CreateCollection(_workContext, _collectionName);
 
             IDocumentCollection<TestDocument> collection = db.GetCollection<TestDocument>(_collectionName);
@@ -76,7 +76,7 @@ namespace Khooversoft.MongoDb.Test.DatabaseTests
         public async Task RemoveSingleIndexTest()
         {
             await _documentServer.DropDatabase(_workContext, _dbName);
-            DocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
+            IDocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
             await db.CreateCollection(_workContext, _collectionName);
 
             IDocumentCollection<TestDocument> collection = db.GetCollection<TestDocument>(_collectionName);

@@ -6,6 +6,7 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -40,14 +41,20 @@ namespace Khooversoft.MongoDb
             await MongoCollection.InsertOneAsync(document, options, context.CancellationToken);
         }
 
-        public async Task<IEnumerable<TDocument>> Find(IWorkContext context, BsonDocument search, BsonDocument projection = null)
+        public async Task<IEnumerable<TDocument>> Find(IWorkContext context, Expression<Func<TDocument, bool>> filter, FindOptions options = null)
         {
             Verify.IsNotNull(nameof(context), context);
-            Verify.IsNotNull(nameof(search), search);
+            Verify.IsNotNull(nameof(filter), filter);
 
-            var findOptions = new FindOptions<TDocument>();
+            using (var cursor = await MongoCollection.FindAsync(filter, options: null, cancellationToken: context.CancellationToken))
+            {
+                return await cursor.ToListAsync();
+            }
+        }
 
-            using (var cursor = await MongoCollection.FindAsync(new BsonDocument(), findOptions, context.CancellationToken))
+        public async Task<IEnumerable<TDocument>> Find(IWorkContext context, FilterDefinition<TDocument> filter)
+        {
+            using (var cursor = await MongoCollection.FindAsync(filter, options: null, cancellationToken: context.CancellationToken))
             {
                 return await cursor.ToListAsync();
             }
@@ -61,6 +68,15 @@ namespace Khooversoft.MongoDb
             var options = new DeleteOptions();
 
             await MongoCollection.DeleteManyAsync(filter, options, context.CancellationToken);
+        }
+
+        public async Task<long> Count(IWorkContext context, FilterDefinition<TDocument> filter = null)
+        {
+            Verify.IsNotNull(nameof(context), context);
+
+            var filterDefinition = filter ?? FilterDefinition<TDocument>.Empty;
+
+            return await MongoCollection.CountAsync(filterDefinition, options: null, cancellationToken: context.CancellationToken);
         }
     }
 }

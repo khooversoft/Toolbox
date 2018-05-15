@@ -7,20 +7,11 @@ using System;
 namespace Khooversoft.Actor
 {
     /// <summary>
-    /// Actor registration for lambda or activator creation
+    /// Actor registration for lambda activator
     /// </summary>
     public class ActorTypeRegistration
     {
         private readonly Tag _tag = new Tag(nameof(ActorTypeRegistration));
-
-        public ActorTypeRegistration(Type interfaceType, Type actorType)
-        {
-            Verify.IsNotNull(nameof(interfaceType), interfaceType);
-            Verify.IsNotNull(nameof(actorType), actorType);
-
-            InterfaceType = interfaceType;
-            ActorType = actorType;
-        }
 
         public ActorTypeRegistration(Type interfaceType, Func<IWorkContext, ActorKey, IActorManager, IActor> createImplementation)
         {
@@ -31,10 +22,14 @@ namespace Khooversoft.Actor
             CreateImplementation = createImplementation;
         }
 
+        /// <summary>
+        /// Interface type
+        /// </summary>
         public Type InterfaceType { get; }
 
-        public Type ActorType { get; }
-
+        /// <summary>
+        /// Create implementation by lambda
+        /// </summary>
         public Func<IWorkContext, ActorKey, IActorManager, IActor> CreateImplementation { get; }
     }
 }

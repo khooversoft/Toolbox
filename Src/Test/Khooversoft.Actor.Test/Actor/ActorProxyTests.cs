@@ -19,7 +19,7 @@ namespace Khooversoft.Actor.Test.Actor
             const int taskCount = 10;
 
             ActorManager manager = new ActorManager();
-            manager.Register<ICache, StringCache>(_context);
+            manager.Register<ICache>(_context, (context, k, m) => new StringCache(k, m));
 
             var tasks = new List<Task>();
             ActorKey key1 = new ActorKey("Cache/Test1");

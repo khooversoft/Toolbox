@@ -11,5 +11,7 @@ namespace Khooversoft.MongoDb
         public bool Remove { get; set; }
 
         public bool ReCreate { get; set; }
+
+        public bool AllowDataLoss { get; set; }
     }
 }

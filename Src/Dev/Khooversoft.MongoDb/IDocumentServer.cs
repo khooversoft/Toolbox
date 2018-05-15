@@ -21,7 +21,7 @@ namespace Khooversoft.MongoDb
 
         Task DropDatabase(IWorkContext context, string dbName);
 
-        DocumentDatabase GetDatabase(IWorkContext context, string dbName);
+        IDocumentDatabase GetDatabase(IWorkContext context, string dbName);
 
         Task<DatabaseDetailV1> GetDatabaseDetail(IWorkContext context, string dbName);
     }

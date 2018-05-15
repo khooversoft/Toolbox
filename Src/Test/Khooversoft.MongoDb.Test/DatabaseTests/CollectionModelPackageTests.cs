@@ -37,7 +37,7 @@ namespace Khooversoft.MongoDb.Test.DatabaseTests
         [Fact]
         public async Task ApplyCollectionModelFull()
         {
-            DocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
+            IDocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
 
             var model = new CollectionModel
             {
@@ -77,7 +77,7 @@ namespace Khooversoft.MongoDb.Test.DatabaseTests
         [Fact]
         public async Task ApplyCollectionModelMultipleIndexesFull()
         {
-            DocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
+            IDocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
 
             CollectionModel model = CreateCollectionModel(2);
 
@@ -95,7 +95,7 @@ namespace Khooversoft.MongoDb.Test.DatabaseTests
         [Fact]
         public async Task ApplyCollectionModelCompositeKeyFull()
         {
-            DocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
+            IDocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
 
             var model = new CollectionModel
             {
@@ -129,7 +129,7 @@ namespace Khooversoft.MongoDb.Test.DatabaseTests
         [Fact]
         public async Task TestCollectionModelFull()
         {
-            DocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
+            IDocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
 
             CollectionModel model = CreateCollectionModel(1);
 
@@ -149,7 +149,7 @@ namespace Khooversoft.MongoDb.Test.DatabaseTests
         [Fact]
         public async Task TestCollectionModelFullFail()
         {
-            DocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
+            IDocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
 
             foreach (var variation in Enumerable.Range(1, 2))
             {
@@ -177,7 +177,7 @@ namespace Khooversoft.MongoDb.Test.DatabaseTests
         [Fact]
         public async Task ApplyCollectionMultipleIndexesFull()
         {
-            DocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
+            IDocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
 
             CollectionModel model = CreateCollectionModel(2);
 
@@ -195,7 +195,7 @@ namespace Khooversoft.MongoDb.Test.DatabaseTests
         [Fact]
         public async Task ApplyUpdateIncreaseIndexAndVerify()
         {
-            DocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
+            IDocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
 
             CollectionModel model = CreateCollectionModel(2);
 
@@ -221,7 +221,7 @@ namespace Khooversoft.MongoDb.Test.DatabaseTests
         [Fact]
         public async Task ApplyUpdateRemovedIndexUpdateModel()
         {
-            DocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
+            IDocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
 
             CollectionModel model = CreateCollectionModel(3);
 
@@ -247,7 +247,7 @@ namespace Khooversoft.MongoDb.Test.DatabaseTests
         [Fact]
         public async Task ApplyUpdateRemovedCollection()
         {
-            DocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
+            IDocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
 
             CollectionModel model = CreateCollectionModel(3);
 
@@ -292,7 +292,7 @@ namespace Khooversoft.MongoDb.Test.DatabaseTests
             };
         }
 
-        private async Task<bool> VerifyCollectionModel(DocumentDatabase db, CollectionModel model)
+        private async Task<bool> VerifyCollectionModel(IDocumentDatabase db, CollectionModel model)
         {
             (await db.CollectionExist(_workContext, _collectionName)).Should().BeTrue();
             IDocumentCollection<TestDocument> collection = db.GetCollection<TestDocument>(_collectionName);

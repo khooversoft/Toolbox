@@ -9,7 +9,7 @@ namespace Khooversoft.MongoDb.Collection.States
 {
     internal class RemoveCollectionState : IStateItem
     {
-        private readonly Tag _tag = new Tag(nameof(RemoveCollectionState));
+        private static readonly Tag _tag = new Tag(nameof(RemoveCollectionState));
 
         public RemoveCollectionState(CollectionModelPackage parent)
         {

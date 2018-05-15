@@ -60,12 +60,7 @@
   <ItemGroup>
     <Compile Include="Application\JsonUtility.cs" />
     <Compile Include="Application\MongoDbEventSource.cs" />
-    <Compile Include="Client\DbClient.cs" />
-    <Compile Include="CollectionSchema\DbCollection.cs" />
-    <Compile Include="CollectionSchema\DbCollectionDependency.cs" />
-    <Compile Include="CollectionSchema\DbCollectionKey.cs" />
-    <Compile Include="CollectionSchema\DbCollectionManagement.cs" />
-    <Compile Include="CollectionSchema\DbCollectionPartialFilter.cs" />
+    <Compile Include="Collection\CappedCollectionModel.cs" />
     <Compile Include="Collection\CollectionModel.cs" />
     <Compile Include="Collection\CollectionModelPackage.cs" />
     <Compile Include="Collection\CollectionModelSettings.cs" />
@@ -75,10 +70,12 @@
     <Compile Include="Collection\States\RemoveIndexesNotInSource.cs" />
     <Compile Include="Context\CollectionDetails.cs" />
     <Compile Include="Context\MongoDbContext.cs" />
+    <Compile Include="DatabaseConfigurationBuilder.cs" />
     <Compile Include="Extensions\BsonDocument.cs" />
     <Compile Include="Extensions\UtilityExtensions.cs" />
     <Compile Include="Models\Internal\ConvertToExtensions.cs" />
     <Compile Include="Models\Internal\InternalCollectionDetail.cs" />
+    <Compile Include="Models\Internal\InternalCollectionOption.cs" />
     <Compile Include="Models\Internal\InternalDatabaseDetail.cs" />
     <Compile Include="Models\Internal\InternalInfoDetail.cs" />
     <Compile Include="Models\V1\CollectionDetailV1.cs" />
@@ -86,14 +83,14 @@
     <Compile Include="Models\V1\DatabaseDetailV1.cs" />
     <Compile Include="Models\V1\IndexDetailV1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Server\DocumentCollection.cs" />
-    <Compile Include="Server\DocumentDatabase.cs" />
-    <Compile Include="Server\DocumentIndex.cs" />
-    <Compile Include="Server\DocumentServer.cs" />
-    <Compile Include="Server\IDocumentCollection.cs" />
-    <Compile Include="Server\IDocumentDatabase.cs" />
-    <Compile Include="Server\IDocumentIndex.cs" />
-    <Compile Include="Server\IDocumentServer.cs" />
+    <Compile Include="DocumentCollection.cs" />
+    <Compile Include="DocumentDatabase.cs" />
+    <Compile Include="DocumentIndex.cs" />
+    <Compile Include="DocumentServer.cs" />
+    <Compile Include="IDocumentCollection.cs" />
+    <Compile Include="IDocumentDatabase.cs" />
+    <Compile Include="IDocumentIndex.cs" />
+    <Compile Include="IDocumentServer.cs" />
     <Compile Include="Collection\IndexKey.cs" />
   </ItemGroup>
   <ItemGroup>

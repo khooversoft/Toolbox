@@ -21,21 +21,19 @@ namespace Khoover.Services.Test.Certificate
         public async Task CertificateSetGetTest()
         {
             const string testData = "Test data, test, data";
+            IWorkContext context = _workContext.WithMethodName();
 
             var builder = new ContainerBuilder();
             builder.RegisterModule(new CertificateAutoFacModule());
             ILifetimeScope container = builder.Build();
 
             IActorManager manager = new ActorManagerBuilder()
-                .Set(container)
+                .AddCertificateModule(container)
                 .Build();
 
-            using (ILifetimeScope scopeContainer = container.BeginLifetimeScope(x => x.RegisterInstance(manager)))
+            using (ILifetimeScope scopeContainer = container.BeginLifetimeScope())
+            using (manager)
             {
-                var context = _workContext.ToBuilder()
-                    .SetContainer(scopeContainer)
-                    .Build();
-
                 var key = new LocalCertificateKey(StoreLocation.LocalMachine, StoreName.My, "7A270477C5F0B9AAB2AD304B0838E1F8714C5377", true);
 
                 ICertificateActor actor = await manager.CreateProxyAsync<ICertificateActor>(context, key.CreateActorKey());

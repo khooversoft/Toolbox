@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace Khooversoft.Actor
 {
+    /// <summary>
+    /// Base class for actors
+    /// </summary>
     public abstract class ActorBase : IActorBase
     {
         private int _lockValue;
@@ -19,6 +22,11 @@ namespace Khooversoft.Actor
         private readonly Tag _tag = new Tag(nameof(ActorBase));
         private readonly IWorkContext _workContext = WorkContext.Empty;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="actorKey">actor key</param>
+        /// <param name="actorManager">actor manager</param>
         public ActorBase(ActorKey actorKey, IActorManager actorManager)
         {
             Verify.IsNotNull(nameof(actorKey), actorKey);
@@ -30,10 +38,21 @@ namespace Khooversoft.Actor
             ActorEventSource.Log.ActorActivate(_workContext.WithTag(_tag), ActorKey, this.GetType());
         }
 
+        /// <summary>
+        /// Get actor key
+        /// </summary>
         public ActorKey ActorKey { get; }
 
+        /// <summary>
+        /// Get actor manager
+        /// </summary>
         public IActorManager ActorManager { get; }
 
+        /// <summary>
+        /// Activate actor
+        /// </summary>
+        /// <param name="context">context</param>
+        /// <returns>task</returns>
         public async Task ActivateAsync(IWorkContext context)
         {
             Verify.IsNotNull(nameof(context), context);
@@ -49,6 +68,11 @@ namespace Khooversoft.Actor
             await OnActivate(context);
         }
 
+        /// <summary>
+        /// Deactivate actor
+        /// </summary>
+        /// <param name="context">context</param>
+        /// <returns>task</returns>
         public async Task DeactivateAsync(IWorkContext context)
         {
             Verify.IsNotNull(nameof(context), context);
@@ -65,25 +89,47 @@ namespace Khooversoft.Actor
             await OnDeactivate(context);
         }
 
+        /// <summary>
+        /// Dispose, virtual
+        /// </summary>
         public virtual void Dispose()
         {
         }
 
+        /// <summary>
+        /// Event for on activate actor
+        /// </summary>
+        /// <param name="context">context</param>
+        /// <returns>task</returns>
         protected virtual Task OnActivate(IWorkContext context)
         {
             return Task.FromResult(0);
         }
 
+        /// <summary>
+        /// Event for on deactivate actor
+        /// </summary>
+        /// <param name="context">context</param>
+        /// <returns>task</returns>
         protected virtual Task OnDeactivate(IWorkContext context)
         {
             return Task.FromResult(0);
         }
 
+        /// <summary>
+        /// Time event
+        /// </summary>
+        /// <returns>task</returns>
         protected virtual Task OnTimer()
         {
             return Task.FromResult(0);
         }
 
+        /// <summary>
+        /// Set timer notification of actor
+        /// </summary>
+        /// <param name="dueTime">due time, first event</param>
+        /// <param name="period">every period</param>
         public void SetTimer(TimeSpan dueTime, TimeSpan period)
         {
             Verify.Assert(_timer == null, "Timer already running");
@@ -92,6 +138,9 @@ namespace Khooversoft.Actor
             ActorEventSource.Log.ActorStartTimer(_workContext.WithMethodName(), ActorKey);
         }
 
+        /// <summary>
+        /// Stop timer
+        /// </summary>
         public void StopTimer()
         {
             Timer t = Interlocked.Exchange(ref _timer, null);
@@ -102,6 +151,10 @@ namespace Khooversoft.Actor
             }
         }
 
+        /// <summary>
+        /// Timer all back, through task
+        /// </summary>
+        /// <param name="obj">obj, not used</param>
         private void TimerCallback(object obj)
         {
             int currentValue = Interlocked.CompareExchange(ref _timerLockValue, 1, 0);

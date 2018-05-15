@@ -16,6 +16,9 @@ namespace Khooversoft.MongoDb
         [BsonElement("type")]
         public string Type { get; set; }
 
+        [BsonElement("options")]
+        public InternalCollectionOption Options { get; set; }
+
         [BsonElement("info")]
         public InternalInfoDetail Info { get; set; }
     }

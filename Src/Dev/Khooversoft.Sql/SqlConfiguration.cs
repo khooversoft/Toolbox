@@ -13,7 +13,7 @@ namespace Khooversoft.Sql
     /// SQL configuration (immutable builder pattern)
     /// </summary>
     [DebuggerDisplay("ConnectionString={ConnectionString}")]
-    public class SqlConfiguration : ISqlConfiguration
+    public class SqlConfiguration : IConnectionConfiguration
     {
         private static readonly Tag _tag = new Tag(nameof(SqlConfiguration));
 

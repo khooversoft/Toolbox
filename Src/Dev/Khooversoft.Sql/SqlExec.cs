@@ -25,7 +25,7 @@ namespace Khooversoft.Sql
         private const int _deadLockNumber = 1205;
         private const string _deadLockMessage = "Deadlock retry failed";
 
-        public SqlExec(ISqlConfiguration configuration)
+        public SqlExec(IConnectionConfiguration configuration)
         {
             Verify.IsNotNull(nameof(configuration), configuration);
 
@@ -35,7 +35,7 @@ namespace Khooversoft.Sql
         /// <summary>
         /// SQL configuration
         /// </summary>
-        public ISqlConfiguration Configuration { get; }
+        public IConnectionConfiguration Configuration { get; }
 
         /// <summary>
         /// SQL command

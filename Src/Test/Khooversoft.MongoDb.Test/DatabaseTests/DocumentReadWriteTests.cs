@@ -37,7 +37,7 @@ namespace Khooversoft.MongoDb.Test.DatabaseTests
         [Fact]
         public async Task CreateReadTest()
         {
-            DocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
+            IDocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
             IDocumentCollection<TestDocument> collection = db.GetCollection<TestDocument>(_collectionName);
 
             TestDocument test = CreateTestDocument(0);
@@ -62,9 +62,41 @@ namespace Khooversoft.MongoDb.Test.DatabaseTests
         }
 
         [Fact]
+        public async Task CreateReadTestWithDatabaseInConnectionString()
+        {
+            const string connectionDatabaseName = "TestIndexDatabase2";
+
+            string connectionString = Constants.CreateConnectionString(connectionDatabaseName);
+            IDocumentDatabase db = new DocumentDatabase(connectionString);
+            IDocumentCollection<TestDocument> collection = db.GetCollection<TestDocument>(_collectionName);
+
+            TestDocument test = CreateTestDocument(0);
+
+            await collection.Insert(_workContext, test);
+
+            IEnumerable<TestDocument> results = await collection.Find(_workContext, new BsonDocument());
+            results.Should().NotBeNull();
+            results.Count().Should().Be(1);
+
+            TestDocument result = results.First();
+            result.Should().NotBeNull();
+            result.Index.Should().Be(test.Index);
+            result.FirstName.Should().Be(test.FirstName);
+            result.LastName.Should().Be(test.LastName);
+            result.Birthdate.ToString("s").Should().Be(test.Birthdate.ToString("s"));
+            result.Address1.Should().Be(test.Address1);
+            result.Address2.Should().Be(test.Address2);
+            result.City.Should().Be(test.City);
+            result.State.Should().Be(test.State);
+            result.ZipCode.Should().Be(test.ZipCode);
+
+            await db.DocumentServer.DropDatabase(_workContext, connectionDatabaseName);
+        }
+
+        [Fact]
         public async Task CreateReadDeleteTest()
         {
-            DocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
+            IDocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
             IDocumentCollection<TestDocument> collection = db.GetCollection<TestDocument>(_collectionName);
 
             TestDocument test = CreateTestDocument(0);
@@ -105,7 +137,7 @@ namespace Khooversoft.MongoDb.Test.DatabaseTests
         {
             const int count = 10;
 
-            DocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
+            IDocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
             IDocumentCollection<TestDocument> collection = db.GetCollection<TestDocument>(_collectionName);
 
             var documentList = new List<TestDocument>();
@@ -142,7 +174,7 @@ namespace Khooversoft.MongoDb.Test.DatabaseTests
         {
             const int count = 10;
 
-            DocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
+            IDocumentDatabase db = _documentServer.GetDatabase(_workContext, _dbName);
             IDocumentCollection<TestDocument> collection = db.GetCollection<TestDocument>(_collectionName);
 
             var documentList = new List<TestDocument>();

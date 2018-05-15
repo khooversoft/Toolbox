@@ -1,8 +1,9 @@
 ﻿// Copyright (c) KhooverSoft. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Autofac;
+using Khooversoft.Toolbox;
 using System;
+using System.Collections.Generic;
 
 namespace Khooversoft.Actor
 {
@@ -16,13 +17,13 @@ namespace Khooversoft.Actor
 
         public IActorRepository ActorRepository { get; private set; }
 
-        public ILifetimeScope Container { get; private set; }
-
         public TimeSpan ActorCallTimeout { get; private set; } = TimeSpan.FromSeconds(120);
 
         public TimeSpan ActorRetirementPeriod { get; private set; } = TimeSpan.FromMinutes(60);
 
         public TimeSpan InactivityScanPeriod { get; private set; } = TimeSpan.FromMinutes(5);
+
+        public IList<ActorTypeRegistration> Registration { get; private set; } = new List<ActorTypeRegistration>();
 
         public ActorManagerBuilder Set(IActorRepository repository)
         {
@@ -30,9 +31,11 @@ namespace Khooversoft.Actor
             return this;
         }
 
-        public ActorManagerBuilder Set(ILifetimeScope container)
+        public ActorManagerBuilder Register<T>(Func<IWorkContext, ActorKey, IActorManager, T> createImplementation) where T : IActor
         {
-            Container = container;
+            Verify.IsNotNull(nameof(createImplementation), createImplementation);
+
+            Registration.Add(new ActorTypeRegistration(typeof(T), (c, x, m) => createImplementation(c, x, m)));
             return this;
         }
 
@@ -58,12 +61,13 @@ namespace Khooversoft.Actor
         {
             var configuration = new ActorManagerBuilder
             {
-                Capacity = this.Capacity,
-                ActorRepository = this.ActorRepository,
-                Container = this.Container,
-                ActorCallTimeout = this.ActorCallTimeout,
-                ActorRetirementPeriod = this.ActorRetirementPeriod,
-                InactivityScanPeriod = this.InactivityScanPeriod,
+                Capacity = Capacity,
+                ActorRepository = ActorRepository,
+                //Container = Container,
+                ActorCallTimeout = ActorCallTimeout,
+                ActorRetirementPeriod = ActorRetirementPeriod,
+                InactivityScanPeriod = InactivityScanPeriod,
+                Registration = new List<ActorTypeRegistration>(Registration),
             };
 
             return new ActorManager(configuration);

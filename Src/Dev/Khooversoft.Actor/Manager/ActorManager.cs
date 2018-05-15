@@ -4,6 +4,7 @@
 using Autofac;
 using Khooversoft.Toolbox;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -32,6 +33,11 @@ namespace Khooversoft.Actor
 
             Configuration = configuration;
             _actorRepository = Configuration.ActorRepository ?? new ActorRepository(Configuration);
+
+            foreach (ActorTypeRegistration registration in configuration?.Registration ?? Enumerable.Empty<ActorTypeRegistration>())
+            {
+                _typeManager.Register(_actorManagerWorkContext, registration);
+            }
         }
 
         /// <summary>
@@ -42,30 +48,12 @@ namespace Khooversoft.Actor
         /// <summary>
         /// Container setup for Actors
         /// </summary>
-        public ILifetimeScope Container => Configuration.Container;
+        //public ILifetimeScope Container => Configuration.Container;
 
         /// <summary>
         /// Is actor manager running (not disposed)
         /// </summary>
         public bool IsRunning { get { return _disposed == 0 || _disposing; } }
-
-        /// <summary>
-        /// Register actor and implementation type
-        /// </summary>
-        /// <typeparam name="T">actor interface</typeparam>
-        /// <typeparam name="TBase"></typeparam>
-        /// <param name="context">context</param>
-        /// <returns>this</returns>
-        public IActorManager Register<T, TBase>(IWorkContext context)
-            where TBase : class, IActorBase
-            where T : IActor
-        {
-            Verify.Assert(IsRunning, _disposedTestText);
-            Verify.IsNotNull(nameof(context), context);
-
-            _typeManager.Register<T, TBase>(context.WithTag(_tag));
-            return this;
-        }
 
         /// <summary>
         /// Register actor and lambda creator
@@ -108,9 +96,11 @@ namespace Khooversoft.Actor
             }
 
             // Create actor (type manager or DI container)
-            IActor actorObject = Configuration.Container != null ?
-                Configuration.Container.Resolve<T>(new TypedParameter(typeof(ActorKey), actorKey), new TypedParameter(typeof(IActorManager), this)) :
-                _typeManager.Create<T>(context, actorKey, this);
+            IActor actorObject = _typeManager.Create<T>(context, actorKey, this);
+
+            //IActor actorObject = Configuration.Container != null ?
+            //    Configuration.Container.Resolve<T>(new TypedParameter(typeof(ActorKey), actorKey), new TypedParameter(typeof(IActorManager), this)) :
+            //    _typeManager.Create<T>(context, actorKey, this);
 
             IActorBase actorBase = actorObject as IActorBase;
             if (actorBase == null)
@@ -176,9 +166,6 @@ namespace Khooversoft.Actor
                     Task.Run(() => _actorRepository.ClearAsync(_actorManagerWorkContext))
                         .ConfigureAwait(false)
                         .GetAwaiter();
-
-                    Container?.Dispose();
-                    Configuration.Container?.Dispose();
                 }
             }
             finally

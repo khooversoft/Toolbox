@@ -2,6 +2,8 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using Autofac;
+using Khooversoft.Actor;
+using Khooversoft.Toolbox;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +27,16 @@ namespace Khooversoft.Services
         public static ContainerBuilder AddIdentityModule(this ContainerBuilder self)
         {
             self.RegisterModule(new IdentityActorAutoFacModule());
+            return self;
+        }
+
+        public static ActorManagerBuilder AddIdentityModule(this ActorManagerBuilder self, ILifetimeScope container)
+        {
+            Verify.IsNotNull(nameof(self), self);
+            Verify.IsNotNull(nameof(container), container);
+
+            self.Register<IIdentityActor>((c, k, m) => container.Resolve<IIdentityActor>(new TypedParameter(typeof(ActorKey), k), new TypedParameter(typeof(IActorManager), m)));
+
             return self;
         }
     }

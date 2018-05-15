@@ -11,7 +11,13 @@ namespace Khooversoft.MongoDb.Collection.States
 {
     public class RemoveIndexesNotInSource : IStateItem
     {
-        private readonly Tag _tag = new Tag(nameof(CreateIndexState));
+        private static readonly Tag _tag = new Tag(nameof(CreateIndexState));
+
+        private static readonly HashSet<string> _excludeList = new HashSet<string>
+        {
+            "_id",
+            "_id_",
+        };
 
         public RemoveIndexesNotInSource(CollectionModelPackage parent)
         {
@@ -74,16 +80,10 @@ namespace Khooversoft.MongoDb.Collection.States
                 return null;
             }
 
-            var excludeList = new HashSet<string>
-            {
-                "_id",
-                "_id_",
-            };
-
             return indexList
                 .Select(x => x.Name)
-                .Where(x => !excludeList.Contains(x))
-                .Except(Parent.Model.Indexes.Select(x => x.Name)).ToList();
+                .Where(x => !_excludeList.Contains(x))
+                .Except((Parent.Model.Indexes ?? Enumerable.Empty<CollectionIndex>()).Select(x => x.Name)).ToList();
         }
     }
 }

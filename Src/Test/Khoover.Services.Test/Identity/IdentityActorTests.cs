@@ -17,6 +17,8 @@ namespace Khoover.Services.Test.Identity
         [Fact]
         public async Task CertificateSetGetTest()
         {
+            IWorkContext context = _workContext.WithMethodName();
+
             var identityRepository = new IdentityInMemoryStore()
                 .Set(_workContext, new IdentityPrincipal(new PrincipalId("client1@domain.com"), IdentityPrincipalType.User).With(new ApiKey("API Key1", DateTime.UtcNow.AddYears(1))))
                 .Set(_workContext, new IdentityPrincipal(new PrincipalId("client2@domain.com"), IdentityPrincipalType.User).With(new ApiKey("API Key2", DateTime.UtcNow.AddYears(1))));
@@ -27,15 +29,12 @@ namespace Khoover.Services.Test.Identity
             ILifetimeScope container = builder.Build();
 
             IActorManager manager = new ActorManagerBuilder()
-                .Set(container)
+                .AddIdentityModule(container)
                 .Build();
 
-            using (ILifetimeScope scopeContainer = container.BeginLifetimeScope(x => x.RegisterInstance(manager)))
+            using (ILifetimeScope scopeContainer = container.BeginLifetimeScope())
+            using (manager)
             {
-                var context = _workContext.ToBuilder()
-                    .SetContainer(scopeContainer)
-                    .Build();
-
                 IIdentityActor clientActor1 = await manager.CreateProxyAsync<IIdentityActor>(context, new ActorKey("client1@domain.com"));
                 IdentityPrincipal client1 = await clientActor1.Get(context);
                 client1.Should().NotBeNull();

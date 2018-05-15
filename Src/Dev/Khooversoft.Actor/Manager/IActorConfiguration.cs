@@ -3,6 +3,7 @@
 
 using Autofac;
 using System;
+using System.Collections.Generic;
 
 namespace Khooversoft.Actor
 {
@@ -12,12 +13,12 @@ namespace Khooversoft.Actor
 
         IActorRepository ActorRepository { get; }
 
-        ILifetimeScope Container { get; }
-
         TimeSpan ActorCallTimeout { get; }
 
         TimeSpan ActorRetirementPeriod { get; }
 
         TimeSpan InactivityScanPeriod { get; }
+
+        IList<ActorTypeRegistration> Registration { get; }
     }
 }

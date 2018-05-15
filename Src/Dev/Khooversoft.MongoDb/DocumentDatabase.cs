@@ -24,6 +24,18 @@ namespace Khooversoft.MongoDb
             MongoDatabase = mongoDatabase;
         }
 
+        public DocumentDatabase(string connectionString)
+        {
+            Verify.IsNotNull(nameof(connectionString), connectionString);
+
+            var configuration = new DatabaseConfigurationBuilder(connectionString);
+
+            DocumentServer = new DocumentServer(configuration.Url);
+            MongoDatabase = DocumentServer.Client.GetDatabase(configuration.DatabaseName);
+        }
+
+        public string ConnectionString { get; }
+
         public IDocumentServer DocumentServer { get; }
 
         public IMongoDatabase MongoDatabase { get; }
@@ -67,6 +79,26 @@ namespace Khooversoft.MongoDb
 
             MongoDbEventSource.Log.Info(context, $"Creating collection {collectionName}");
             await MongoDatabase.CreateCollectionAsync(collectionName, options: null, cancellationToken: context.CancellationToken);
+        }
+
+        public async Task CreateCappedCollection(IWorkContext context, string collectionName, int maxNumberOfDocuments, long maxSizeInBytes)
+        {
+            Verify.IsNotNull(nameof(context), context);
+            Verify.IsNotEmpty(nameof(collectionName), collectionName);
+            Verify.Assert<ArgumentOutOfRangeException>(maxNumberOfDocuments > 0, nameof(maxNumberOfDocuments));
+            Verify.Assert<ArgumentOutOfRangeException>(maxSizeInBytes > 0, nameof(maxSizeInBytes));
+
+            context = context.WithTag(_tag);
+
+            var options = new CreateCollectionOptions
+            {
+                Capped = true,
+                MaxDocuments = maxNumberOfDocuments,
+                MaxSize = maxSizeInBytes
+            };
+
+            MongoDbEventSource.Log.Info(context, $"Creating capped collection {collectionName}");
+            await MongoDatabase.CreateCollectionAsync(collectionName, options: options, cancellationToken: context.CancellationToken);
         }
 
         public async Task DropCollection(IWorkContext context, string collectionName)
