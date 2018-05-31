@@ -1,0 +1,41 @@
+﻿namespace Khooversoft.Telemetry.Schemas
+
+struct PropertyData
+{
+	10 : string PropertyName;
+}
+
+struct PropertyDataInt : PropertyData
+{
+	20 : int32 Value;
+}
+
+struct PropertyDataLong : PropertyData
+{
+	20 : int64 Value;
+}
+
+struct PropertyDataString : PropertyData
+{
+	20 : string Value;
+}
+
+struct PropertyDataDate : PropertyData
+{
+	20 : string Value;
+}
+
+struct EventDataRecord
+{
+	10  : string Timestamp;
+	20  : int32 Version;
+	30  : string EventName;
+	40  : string EventSourceName;
+	50  : string EventLevel;
+	60  : nullable<string> Cv;
+	70  : nullable<string> Tag;
+	80  : nullable<vector<PropertyDataInt>> IntProperties;
+	90  : nullable<vector<PropertyDataLong>> LongProperties;
+	100 : nullable<vector<PropertyDataString>> StringProperties;
+	110 : nullable<vector<PropertyDataDate>> DateProperties;
+}

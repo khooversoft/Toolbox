@@ -52,10 +52,7 @@ namespace Khooversoft.Observers
         protected void Close()
         {
             StreamWriter sw = Interlocked.Exchange(ref _outputFile, null);
-            if (sw != null)
-            {
-                sw.Close();
-            }
+            sw?.Close();
         }
 
         protected override void OnCompletedCore()
