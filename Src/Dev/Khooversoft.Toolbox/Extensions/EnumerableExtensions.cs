@@ -1,7 +1,4 @@
-﻿// Copyright (c) KhooverSoft. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,81 +9,69 @@ namespace Khooversoft.Toolbox
     public static class EnumerableExtensions
     {
         /// <summary>
-        /// Starts a enumerable sequence
+        /// Partition an collection based on a partition size
         /// </summary>
         /// <typeparam name="T">type</typeparam>
-        /// <param name="value">value</param>
-        /// <returns>enumerable of value</returns>
-        public static IEnumerable<T> ToEnumerable<T>(this T value)
+        /// <param name="self">enumerable</param>
+        /// <param name="partitionSize">partition size</param>
+        /// <returns>collection of partitions</returns>
+        public static IEnumerable<IEnumerable<T>> Partition<T>(this IEnumerable<T> self, int partitionSize)
         {
-            yield return value;
-        }
+            Verify.IsNotNull(nameof(self), self);
+            Verify.Assert(partitionSize > 0, $"{nameof(partitionSize)} must be greater then 0");
+            List<T> list = null;
 
-        /// <summary>
-        /// Apply action to each item in enumerable
-        /// </summary>
-        /// <typeparam name="T">type</typeparam>
-        /// <param name="list">list of types</param>
-        /// <param name="action">action to be applied</param>
-        public static void Run<T>(this IEnumerable<T> list, Action<T> action)
-        {
-            Verify.IsNotNull(nameof(list), list);
-            Verify.IsNotNull(nameof(action), action);
-
-            foreach (var item in list)
+            foreach (var item in self)
             {
-                action(item);
+                list = list ?? new List<T>(partitionSize);
+                list.Add(item);
+
+                if (list.Count >= partitionSize)
+                {
+                    var returnList = list;
+                    list = null;
+
+                    yield return returnList;
+                }
+            }
+
+            if (list?.Count > 0)
+            {
+                yield return list;
             }
         }
 
         /// <summary>
-        /// Apply action to each item in enumerable
+        /// Partition based on signal based on the next element.  The signaled element will be placed in the next partition
         /// </summary>
         /// <typeparam name="T">type</typeparam>
-        /// <param name="list">list of types</param>
-        /// <param name="action">action to be applied (int is an index)</param>
-        public static void Run<T>(this IEnumerable<T> list, Action<T, int> action)
+        /// <param name="self">collection</param>
+        /// <param name="partitionSignal">partition signal, true signals current collection is a partition</param>
+        /// <returns>collection of partitions</returns>
+        public static IEnumerable<IEnumerable<T>> Partition<T>(this IEnumerable<T> self, Func<IReadOnlyList<T>, T, bool> partitionSignal)
         {
-            Verify.IsNotNull(nameof(list), list);
-            Verify.IsNotNull(nameof(action), action);
+            Verify.IsNotNull(nameof(self), self);
+            List<T> list = null;
 
-            int index = 0;
-            foreach (var item in list)
+            foreach (var item in self)
             {
-                action(item, index++);
+                if (list != null && partitionSignal(list, item))
+                {
+                    var returnList = list;
+                    list = new List<T> { item };
+
+                    yield return returnList;
+                }
+                else
+                {
+                    list = list ?? new List<T>();
+                    list.Add(item);
+                }
             }
-        }
 
-        /// <summary>
-        /// Perform action on T, return T
-        /// </summary>
-        /// <typeparam name="T">type</typeparam>
-        /// <param name="list">enumerable of T</param>
-        /// <param name="action">action</param>
-        /// <returns>enumerable T</returns>
-        public static IEnumerable<T> Do<T>(this IEnumerable<T> list, Action<T> action)
-        {
-            foreach (var item in list)
+            if (list?.Count > 0)
             {
-                action(item);
-                yield return item;
-            }
-        }
-
-        /// <summary>
-        /// Perform action on T, return T
-        /// </summary>
-        /// <typeparam name="T">type</typeparam>
-        /// <param name="list">enumerable of T</param>
-        /// <param name="action">action</param>
-        /// <returns>enumerable T</returns>
-        public static IEnumerable<T> Do<T>(this IEnumerable<T> list, Action<T, int> action)
-        {
-            int index = 0;
-            foreach (var item in list)
-            {
-                action(item, index++);
-                yield return item;
+                yield return list;
             }
         }
     }

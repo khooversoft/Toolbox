@@ -18,7 +18,7 @@ namespace Khooversoft.Toolbox
         /// <param name="self">string value</param>
         /// <param name="ignoreCase">True to ignore case</param>
         /// <returns>Enum type</returns>
-        public static TEnum Parse<TEnum>(this string self, bool ignoreCase = false) where TEnum : struct
+        public static TEnum Parse<TEnum>(this string self, bool ignoreCase = false) where TEnum : System.Enum
         {
             return (TEnum)Enum.Parse(typeof(TEnum), self, ignoreCase);
         }
@@ -38,8 +38,7 @@ namespace Khooversoft.Toolbox
                 return defaultValue;
             }
 
-            TEnum result;
-            if (!Enum.TryParse(self, ignoreCase, out result))
+            if (!Enum.TryParse(self, ignoreCase, out TEnum result))
             {
                 return (TEnum)defaultValue;
             }
@@ -54,7 +53,7 @@ namespace Khooversoft.Toolbox
         /// <param name="self">enum value</param>
         /// <param name="ignoreCase">True to ignore case</param>
         /// <returns>Enum type</returns>
-        public static TEnum ConvertTo<TEnum>(this System.Enum self, bool ignoreCase = false) where TEnum : struct
+        public static TEnum ConvertTo<TEnum>(this System.Enum self, bool ignoreCase = false) where TEnum : System.Enum
         {
             return (TEnum)Enum.Parse(typeof(TEnum), self.ToString(), ignoreCase);
         }

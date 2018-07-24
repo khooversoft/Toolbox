@@ -21,7 +21,7 @@ namespace Khooversoft.Telemetry
     {
         private readonly Serializer<SimpleBinaryWriter<OutputStream>> _serializer;
         private FileStream _file;
-        private ActionBlock<EventData> actionBlock;
+        //private ActionBlock<EventData> actionBlock;
         private OutputStream _outputStream;
         private SimpleBinaryWriter<OutputStream> _simpleBinaryWriter;
 

@@ -20,7 +20,7 @@ namespace Khooversoft.Telemetry.Test
         [Fact]
         public void TestEventDataSerialization()
         {
-            const string cvText = "CV:1234";
+            //const string cvText = "CV:1234";
 
             var variables = new KeyValuePair<string, object>[]
             {

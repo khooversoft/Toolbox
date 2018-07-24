@@ -10,10 +10,10 @@ using Xunit;
 
 namespace Khooversoft.Telemetry.Test.LogFile
 {
-    [Trait("Category", "Toolbox")]
-    public class LogFileWriterTests
-    {
-        [Fact]
+    //[Trait("Category", "Toolbox")]
+    //public class LogFileWriterTests
+    //{
+    //    [Fact]
 
-    }
+    //}
 }

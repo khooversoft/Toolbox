@@ -70,7 +70,7 @@ namespace Khooversoft.Toolbox.Test.Collections
             }
 
             store.Remove("xxxx").Should().BeFalse();
-            store.Invoking(x => { var r = x["notKey"]; }).ShouldThrow<KeyNotFoundException>();
+            store.Invoking(x => { var r = x["notKey"]; }).Should().Throw<KeyNotFoundException>();
 
             var list = new List<string>(store.Select(x => store.GetKey(x)));
             list.Count.Should().Be(count);
@@ -217,7 +217,7 @@ namespace Khooversoft.Toolbox.Test.Collections
                 };
             };
 
-            test.ShouldThrow<ArgumentException>();
+            test.Should().Throw<ArgumentException>();
         }
 
         private class Record

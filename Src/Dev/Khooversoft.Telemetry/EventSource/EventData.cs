@@ -31,7 +31,7 @@ namespace Khooversoft.Telemetry
             Version = version;
             EventName = eventName;
             EventSourceName = eventSourceName;
-            EventLevel = EventLevel;
+            EventLevel = eventLevel;
             Tag = tag;
             Cv = cv;
             Properties = properties?.ToList();

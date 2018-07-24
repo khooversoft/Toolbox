@@ -23,6 +23,7 @@ struct PropertyDataString : PropertyData
 struct PropertyDataDate : PropertyData
 {
 	20 : string Value;
+	30 : string Value2;
 }
 
 struct EventDataRecord
