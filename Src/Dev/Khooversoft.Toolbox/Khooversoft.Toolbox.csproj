@@ -76,6 +76,12 @@
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\EnumerableActionExtensions.cs" />
     <Compile Include="Extensions\X509CertificateExtensions.cs" />
+    <Compile Include="Graph\DirectedEdge.cs" />
+    <Compile Include="Graph\EdgeId.cs" />
+    <Compile Include="Graph\Graph.cs" />
+    <Compile Include="Graph\GraphStorage.cs" />
+    <Compile Include="Graph\IGraphComponent.cs" />
+    <Compile Include="Graph\Vertex.cs" />
     <Compile Include="Logging\ActivityScope.cs" />
     <Compile Include="Logging\CorrelationVector.cs" />
     <Compile Include="Logging\IEventLog.cs" />

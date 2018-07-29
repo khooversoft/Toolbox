@@ -68,6 +68,9 @@
     <Compile Include="Extensions\DictionaryPropertyStringTests.cs" />
     <Compile Include="Extensions\EnumerableExtensionTests.cs" />
     <Compile Include="Extensions\StringExtensionTests.cs" />
+    <Compile Include="Graph\DependencyTreeTests.cs" />
+    <Compile Include="Graph\EdgeIdTests.cs" />
+    <Compile Include="Graph\GraphTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\CacheObjectTests.cs" />
     <Compile Include="Tools\CursorListTests.cs" />

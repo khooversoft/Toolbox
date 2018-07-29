@@ -84,6 +84,7 @@
     <Compile Include="Collection\CollectionIndex.cs" />
     <Compile Include="Models\V1\DatabaseDetailV1.cs" />
     <Compile Include="Models\V1\IndexDetailV1.cs" />
+    <Compile Include="MSql\TokenType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DocumentCollection.cs" />
     <Compile Include="DocumentDatabase.cs" />
