@@ -21,8 +21,6 @@ namespace Khooversoft.Toolbox
         where TVertex : Vertex
         where TEdge : DirectedEdge
     {
-        private readonly GraphStorage<TVertex, TEdge> _storage = new GraphStorage<TVertex, TEdge>();
-
         public Graph()
         {
         }
@@ -51,35 +49,31 @@ namespace Khooversoft.Toolbox
                 .Where(x => x.EdgeId.SourceNodeId == nodeId);
         }
 
-        public IReadOnlyList<IReadOnlyList<int>> GetTopologicalOrdering()
+        /// <summary>
+        /// Get topological order from graph tree.  This is done by processing
+        /// tree directed edges to understand dependencies.
+        /// </summary>
+        /// <param name="numberOfLevels">only process n levels is specified</param>
+        /// <returns>list of list of vertices for each level</returns>
+        public IReadOnlyList<IReadOnlyList<int>> GetTopologicalOrdering(int? numberOfLevels = null)
         {
             var list = new List<IReadOnlyList<int>>();
+            GraphStorage<TVertex, TEdge> processGraph = base.Clone();
 
-            var first = _vertices.Values
-                .Where(x => !_edges.Values.Any(y => y.EdgeId.ToNodeId == x.NodeId))
-                .Select(x => x.NodeId);
-
-            if( !first.Any())
+            while (numberOfLevels != list.Count)
             {
-                return list;
-            }
+                var freeNode = processGraph.Vertices.Values
+                    .Where(x => !processGraph.Edges.Values.Any(y => y.EdgeId.ToNodeId == x.NodeId))
+                    .Select(x => x.NodeId)
+                    .ToList();
 
-            list.Add(new List<int>(first));
-            int index = 0;
-
-            while (true)
-            {
-                var add = _edges.Values
-                    .Join(list[index], x => x.EdgeId.SourceNodeId, x => x, (o, i) => o)
-                    .Select(x => x.EdgeId.ToNodeId);
-
-                if(!add.Any())
+                if (freeNode.Count == 0)
                 {
-                    break;
+                    return list;
                 }
 
-                list.Add(new List<int>(add));
-                index++;
+                list.Add(new List<int>(freeNode));
+                freeNode.Run(x => processGraph.Remove(x));
             }
 
             return list;

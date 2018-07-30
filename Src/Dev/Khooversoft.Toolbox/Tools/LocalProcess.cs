@@ -83,7 +83,7 @@ namespace Toolbox.Tools
             Process.StartInfo.UseShellExecute = UseShellExecute;
             Process.StartInfo.CreateNoWindow = CreateNoWindow;
 
-            if (UseShellExecute == false)
+            if (!UseShellExecute)
             {
                 Process.StartInfo.RedirectStandardOutput = true;
                 Process.StartInfo.RedirectStandardError = true;
@@ -134,7 +134,7 @@ namespace Toolbox.Tools
             // Close process
             Process.Close();
 
-            if (SuccessExitCode.HasValue == true && ExitCode != SuccessExitCode)
+            if (SuccessExitCode.HasValue && ExitCode != SuccessExitCode)
             {
                 throw new ArgumentException(string.Format("Exit code: {0} does not match required exit code {1}", ExitCode, SuccessExitCode));
             }
@@ -150,10 +150,10 @@ namespace Toolbox.Tools
             {
                 string str = reader.ReadLine();
                 if (str == null) { continue; }
-                if (RemoveBlankLine == true && str.Trim().IsNotEmpty() == true) { continue; }
+                if (RemoveBlankLine && str.Trim().IsNotEmpty()) { continue; }
 
                 // Save output
-                if (standard == true)
+                if (standard)
                 {
                     StandardOutputAction?.Invoke(str);
                 }

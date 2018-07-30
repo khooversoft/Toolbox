@@ -45,6 +45,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Khooversoft.Parser", "Khoov
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Khooversoft.Parser.Test", "Khooversoft.Parser.Test\Khooversoft.Parser.Test.csproj", "{1DCEFDD3-40D8-400A-8239-62CFF577BDE7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Khooversoft.Workflow", "Khooversoft.Workflow\Khooversoft.Workflow.csproj", "{77ADD7C3-973B-4ECC-B249-DF9107180EE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Khooversoft.Workflow.Test", "..\Test\Khooversoft.Workflow.Test\Khooversoft.Workflow.Test.csproj", "{C56F7BAE-D4DA-438E-BB7C-0C042AD88CD6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -131,6 +135,14 @@ Global
 		{1DCEFDD3-40D8-400A-8239-62CFF577BDE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DCEFDD3-40D8-400A-8239-62CFF577BDE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DCEFDD3-40D8-400A-8239-62CFF577BDE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77ADD7C3-973B-4ECC-B249-DF9107180EE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77ADD7C3-973B-4ECC-B249-DF9107180EE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77ADD7C3-973B-4ECC-B249-DF9107180EE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77ADD7C3-973B-4ECC-B249-DF9107180EE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C56F7BAE-D4DA-438E-BB7C-0C042AD88CD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C56F7BAE-D4DA-438E-BB7C-0C042AD88CD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C56F7BAE-D4DA-438E-BB7C-0C042AD88CD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C56F7BAE-D4DA-438E-BB7C-0C042AD88CD6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -143,6 +155,7 @@ Global
 		{C899F733-F0E5-4B77-816B-05429E249E5A} = {2098937C-CCEE-4DC5-A571-427B48DDBA26}
 		{747C5F26-4719-41B7-8E77-FC327CF39134} = {2098937C-CCEE-4DC5-A571-427B48DDBA26}
 		{1DCEFDD3-40D8-400A-8239-62CFF577BDE7} = {2098937C-CCEE-4DC5-A571-427B48DDBA26}
+		{C56F7BAE-D4DA-438E-BB7C-0C042AD88CD6} = {2098937C-CCEE-4DC5-A571-427B48DDBA26}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A2C6CB97-61A7-461A-84B8-7907D4C231DD}

@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Khooversoft.Toolbox
@@ -9,7 +10,7 @@ namespace Khooversoft.Toolbox
     /// <summary>
     /// State manager builder
     /// </summary>
-    public class StateManagerBuilder
+    public class StateManagerBuilder : IEnumerable<IStateItem>
     {
         public StateManagerBuilder()
         {
@@ -35,6 +36,14 @@ namespace Khooversoft.Toolbox
             return this;
         }
 
+        public StateManagerBuilder Add(IEnumerable<IStateItem> items)
+        {
+            Verify.IsNotNull(nameof(items), items);
+
+            items.Run(x => Add(x));
+            return this;
+        }
+
         public StateManagerBuilder Set(Action<StateNotify> notify)
         {
             Verify.IsNotNull(nameof(notify), notify);
@@ -46,6 +55,16 @@ namespace Khooversoft.Toolbox
         public IStateManager Build()
         {
             return new StateManager(this);
+        }
+
+        public IEnumerator<IStateItem> GetEnumerator()
+        {
+            return StateItems.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return StateItems.GetEnumerator();
         }
     }
 }

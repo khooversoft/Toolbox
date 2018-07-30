@@ -1,6 +1,4 @@
-﻿// Copyright (c) KhooverSoft. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
-
+﻿using Khooversoft.Toolbox;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,15 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Khooversoft.Toolbox
+namespace Khooversoft.Workflow
 {
-    [EventSource(Name = "Khooversoft.Toolbox")]
-    public sealed class ToolboxEventSource : EventSource, IEventLog
+    [EventSource(Name = "Khooversoft.Toolbox.Workflow")]
+    public sealed class WorkflowEventSource : EventSource, IEventLog
     {
         /// <summary>
         /// Singleton for ETW logging
         /// </summary>
-        public static ToolboxEventSource Log { get; } = new ToolboxEventSource();
+        public static WorkflowEventSource Log { get; } = new WorkflowEventSource();
 
         private enum EventIds
         {
@@ -32,7 +30,7 @@ namespace Khooversoft.Toolbox
         readonly string _machineName;
         readonly string _processName;
 
-        public ToolboxEventSource()
+        public WorkflowEventSource()
             : base(EventSourceSettings.ThrowOnEventWriteErrors)
         {
             _machineName = Environment.MachineName;

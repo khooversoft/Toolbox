@@ -76,12 +76,12 @@
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\EnumerableActionExtensions.cs" />
     <Compile Include="Extensions\X509CertificateExtensions.cs" />
-    <Compile Include="Graph\DirectedEdge.cs" />
-    <Compile Include="Graph\EdgeId.cs" />
-    <Compile Include="Graph\Graph.cs" />
-    <Compile Include="Graph\GraphStorage.cs" />
-    <Compile Include="Graph\IGraphComponent.cs" />
-    <Compile Include="Graph\Vertex.cs" />
+    <Compile Include="Tools\Graph\DirectedEdge.cs" />
+    <Compile Include="Tools\Graph\EdgeId.cs" />
+    <Compile Include="Tools\Graph\Graph.cs" />
+    <Compile Include="Tools\Graph\GraphStorage.cs" />
+    <Compile Include="Tools\Graph\IGraphComponent.cs" />
+    <Compile Include="Tools\Graph\Vertex.cs" />
     <Compile Include="Logging\ActivityScope.cs" />
     <Compile Include="Logging\CorrelationVector.cs" />
     <Compile Include="Logging\IEventLog.cs" />
@@ -106,8 +106,6 @@
     <Compile Include="Tools\StateManager\StateManager.cs" />
     <Compile Include="Tools\StateManager\StateManagerBuilder.cs" />
     <Compile Include="Tools\StateManager\StateNotify.cs" />
-    <Compile Include="Tools\StateManager\States\ProcessRunning.cs" />
-    <Compile Include="Tools\StateManager\States\ProcessStopped.cs" />
     <Compile Include="Tools\StringVector\StringVector.cs" />
     <Compile Include="Tools\StringVector\StringVectorBind.cs" />
     <Compile Include="Tools\TimerScope.cs" />

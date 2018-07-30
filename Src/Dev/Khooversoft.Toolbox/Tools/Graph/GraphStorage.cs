@@ -22,9 +22,27 @@ namespace Khooversoft.Toolbox
 
         public IReadOnlyDictionary<long, TEdge> Edges => _edges;
 
+        public void Clear()
+        {
+            _vertices.Clear();
+            _edges.Clear();
+        }
+
         public void Add(IGraphComponent component)
         {
-            Add(component);
+            switch(component)
+            {
+                case TVertex vertex:
+                    Add(vertex);
+                    break;
+
+                case TEdge edge:
+                    Add(edge);
+                    break;
+
+                default:
+                    throw new ArgumentException($"Unknown type: {component.GetType().FullName}");
+            }
         }
 
         public void Add(TVertex vertex)
@@ -45,7 +63,7 @@ namespace Khooversoft.Toolbox
         public bool Remove(int nodeId)
         {
             bool result = _vertices.Remove(nodeId);
-            var list = _edges.Values.Where(x => x.IsSameNode(nodeId));
+            var list = _edges.Values.Where(x => x.IsSameNode(nodeId)).ToList();
 
             foreach (var item in list)
             {
@@ -76,6 +94,14 @@ namespace Khooversoft.Toolbox
             return count;
         }
 
+        public GraphStorage<TVertex, TEdge> Clone()
+        {
+            var cloneGraph = new GraphStorage<TVertex, TEdge>();
+
+            this.Run(x => cloneGraph.Add(x));
+            return cloneGraph;
+        }
+
         public IEnumerator<IGraphComponent> GetEnumerator()
         {
             return _vertices.Values
@@ -88,5 +114,6 @@ namespace Khooversoft.Toolbox
         {
             return GetEnumerator();
         }
+
     }
 }
