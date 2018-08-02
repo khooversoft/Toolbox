@@ -54,11 +54,16 @@ namespace Khooversoft.Toolbox
         /// tree directed edges to understand dependencies.
         /// </summary>
         /// <param name="numberOfLevels">only process n levels is specified</param>
+        /// <param name="processedNodes">Nodes that have already been processed</param>
         /// <returns>list of list of vertices for each level</returns>
-        public IReadOnlyList<IReadOnlyList<int>> GetTopologicalOrdering(int? numberOfLevels = null)
+        public IReadOnlyList<IReadOnlyList<int>> GetTopologicalOrdering(int? numberOfLevels = null, IEnumerable<int> processedNodes = null)
         {
             var list = new List<IReadOnlyList<int>>();
             GraphStorage<TVertex, TEdge> processGraph = base.Clone();
+
+            (processedNodes ?? Enumerable.Empty<int>()).Run(x => processGraph.Remove(x));
+
+            var nodesProcessed = new HashSet<int>(processedNodes ?? Enumerable.Empty<int>());
 
             while (numberOfLevels != list.Count)
             {

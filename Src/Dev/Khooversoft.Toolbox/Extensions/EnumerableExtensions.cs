@@ -74,5 +74,21 @@ namespace Khooversoft.Toolbox
                 yield return list;
             }
         }
+
+        /// <summary>
+        /// Convert enumerable to hash set
+        /// </summary>
+        /// <typeparam name="T">type</typeparam>
+        /// <param name="self">enumerable</param>
+        /// <returns>hash set</returns>
+        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> self)
+        {
+            if( self == null )
+            {
+                return null;
+            }
+
+            return new HashSet<T>(self);
+        }
     }
 }

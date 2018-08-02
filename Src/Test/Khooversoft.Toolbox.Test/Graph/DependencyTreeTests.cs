@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -168,6 +169,139 @@ namespace Khooversoft.Toolbox.Test.Graph
 
             RunTest(graph, expectedResults);
         }
+
+        [Fact]
+        public void TreeDependencyOrder_5_Tree()
+        {
+            // Tree graph
+            // 0 -> 1 -> 2 -> 3
+            //      1 -> 3
+            var graph = new Graph<Vertex, DirectedEdge>
+            {
+                new Vertex(0),
+                new Vertex(1),
+                new Vertex(2),
+                new DirectedEdge(0, 1),
+                new DirectedEdge(1, 2),
+            };
+
+            var expectedResults = new List<int[]>
+            {
+                new int[] { 0 },
+                new int[] { 1 },
+                new int[] { 2 },
+            };
+
+            RunTest(graph, expectedResults);
+        }
+
+        [Fact]
+        public void TreeDependencyOrder_ProcessedNode_1_Tree()
+        {
+            // Tree graph
+            // 0 -> 1 -> 2
+            //      1 -> 3
+            var graph = new Graph<Vertex, DirectedEdge>
+            {
+                new Vertex(0),
+                new Vertex(1),
+                new Vertex(2),
+                new DirectedEdge(0, 1),
+                new DirectedEdge(1, 2),
+            };
+
+            var processedNodes = new int[]
+            {
+                0,
+            };
+
+            var expectedResults = new List<int[]>
+            {
+                new int[] { 1 },
+                new int[] { 2 },
+            };
+
+            RunTest(graph, expectedResults, null, processedNodes);
+        }
+
+        [Fact]
+        public void TreeDependencyOrder_ProcessedNode_2_Tree()
+        {
+            // Tree graph
+            // 0 -> 1 -> 2 -> 3
+            //      1 -> 3
+            var graph = new Graph<Vertex, DirectedEdge>
+            {
+                new Vertex(0),
+                new Vertex(1),
+                new Vertex(2),
+                new Vertex(3),
+                new Vertex(4),
+                new DirectedEdge(0, 1),
+                new DirectedEdge(1, 2),
+                new DirectedEdge(2, 3),
+                new DirectedEdge(1, 3),
+            };
+
+            var variations = new[]
+            {
+                new
+                {
+                    Results = new List<int[]>
+                    {
+                        new int[] { 0, 4 },
+                        new int[] { 1 },
+                        new int[] { 2 },
+                        new int[] { 3 },
+                    },
+                    ProcessedNodes = new int[] { },
+                },
+                new
+                {
+                    Results = new List<int[]>
+                    {
+                        new int[] { 1, 4 },
+                        new int[] { 2 },
+                        new int[] { 3 },
+                    },
+                    ProcessedNodes = new int[] { 0 },
+                },
+                new
+                {
+                    Results = new List<int[]>
+                    {
+                        new int[] { 2, 4 },
+                        new int[] { 3 },
+                    },
+                    ProcessedNodes = new int[] { 0, 1 },
+                },
+                new
+                {
+                    Results = new List<int[]>
+                    {
+                        new int[] { 1 },
+                        new int[] { 2 },
+                        new int[] { 3 },
+                    },
+                    ProcessedNodes = new int[] { 0, 4 },
+                },
+                new
+                {
+                    Results = new List<int[]>
+                    {
+                        new int[] { 3 },
+                    },
+                    ProcessedNodes = new int[] { 0, 1, 2, 4 },
+                },
+            };
+
+            foreach (var item in variations)
+            {
+                RunTest(graph, item.Results, null, item.ProcessedNodes);
+            }
+        }
+
+
         [Fact]
         public void TreeDependencyOrder_Level_Tree()
         {
@@ -242,9 +376,87 @@ namespace Khooversoft.Toolbox.Test.Graph
             RunTest(graph, expectedResults);
         }
 
-        private void RunTest(Graph<Vertex, DirectedEdge> graph, List<int[]> expectedResults, int? numberOfLevels = null)
+        [Fact]
+        public void TreeDependencyOrder_Right_1_ProcessedNodesTest()
         {
-            var x1 = graph.GetTopologicalOrdering(numberOfLevels);
+            // Tree graph
+            // 0 <- 1 <- 2 <- 3
+            //      1 <- 4
+            var graph = new Graph<Vertex, DirectedEdge>
+            {
+                new Vertex(0),
+                new Vertex(1),
+                new Vertex(2),
+                new Vertex(3),
+                new Vertex(4),
+                new DirectedEdge(3, 2),
+                new DirectedEdge(2, 1),
+                new DirectedEdge(1, 0),
+                new DirectedEdge(4, 1),
+            };
+
+            var variations = new[]
+            {
+                new
+                {
+                    Results = new List<int[]>
+                    {
+                        new int[] { 3, 4 },
+                        new int[] { 2 },
+                        new int[] { 1 },
+                        new int[] { 0 },
+                    },
+                    ProcessedNodes = new int[] { },
+                },
+                new
+                {
+                    Results = new List<int[]>
+                    {
+                        new int[] { 2, 4 },
+                        new int[] { 1 },
+                        new int[] { 0 },
+                    },
+                    ProcessedNodes = new int[] { 3 },
+                },
+                new
+                {
+                    Results = new List<int[]>
+                    {
+                        new int[] { 2 },
+                        new int[] { 1 },
+                        new int[] { 0 },
+                    },
+                    ProcessedNodes = new int[] { 3, 4 },
+                },
+                new
+                {
+                    Results = new List<int[]>
+                    {
+                        new int[] { 4 },
+                        new int[] { 1 },
+                        new int[] { 0 },
+                    },
+                    ProcessedNodes = new int[] { 3, 2 },
+                },
+                new
+                {
+                    Results = new List<int[]>
+                    {
+                        new int[] { 0, 4 },
+                    },
+                    ProcessedNodes = new int[] { 3, 2, 1 },
+                },
+            };
+
+            foreach (var item in variations)
+            {
+                RunTest(graph, item.Results, null, item.ProcessedNodes);
+            }
+        }
+
+        private void RunTest(Graph<Vertex, DirectedEdge> graph, List<int[]> expectedResults, int? numberOfLevels = null, int[] processedNodes = null)
+        {
+            var x1 = graph.GetTopologicalOrdering(numberOfLevels, processedNodes);
             x1.Count.Should().Be(expectedResults.Count);
 
             var x2 = x1

@@ -1,9 +1,11 @@
 ﻿using FluentAssertions;
 using Khooversoft.Toolbox;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -13,26 +15,77 @@ namespace Khooversoft.Workflow.Test.GraphWorkflow
     public class StateWorkflowTests
     {
         private static IWorkContext _context = WorkContext.Empty;
+        private static int _testState;
+        private static ConcurrentQueue<int> _traceQueue;
 
         [Fact]
         public void NoWorkTest()
         {
-            var g1 = new WorkflowGraph();
-            g1.Run(_context);
+            var graph = new WorkflowGraph();
+            graph.RunParallel(_context);
         }
 
         [Fact]
         public void OneWorkTest()
         {
-            var g1 = new WorkflowGraph()
-            {
-                new Work(0, new IStateItem[] { new FakeStateItem() }),
-            };
-            g1.Run(_context);
+            _testState = 0;
 
-            g1.OfType<Work>()
+            var graph = new WorkflowGraph()
+            {
+                new Work(0, new IStateItem[] { new FakeStateItem(0, 0) }),
+            };
+
+            graph.RunParallel(_context);
+
+            graph.OfType<Work>()
                 .All(x => x.StateItems.OfType<FakeStateItem>().First().IsDone)
                 .Should().BeTrue();
+        }
+
+        [Fact]
+        public void TwoDependencyTest()
+        {
+            _testState = -1;
+            _traceQueue = new ConcurrentQueue<int>();
+
+            var graph = new WorkflowGraph()
+            {
+                new Work(0, new IStateItem[] { new FakeStateItem(-1, 0) }),
+                new Work(1, new IStateItem[] { new FakeStateItem(0, 1) }),
+                new DirectedEdge(0, 1),
+            };
+
+            graph.RunParallel(_context);
+
+            graph.OfType<Work>()
+                .All(x => x.StateItems.OfType<FakeStateItem>().First().IsDone)
+                .Should().BeTrue();
+
+            _testState.Should().Be(1);
+        }
+
+        [Fact]
+        public void ThreeDependencyTest()
+        {
+            _testState = -1;
+            _traceQueue = new ConcurrentQueue<int>();
+
+            var graph = new WorkflowGraph()
+            {
+                new Work(0, new IStateItem[] { new FakeStateItem(-1, 0) }),
+                new Work(1, new IStateItem[] { new FakeStateItem(0, 1) }),
+                new Work(2, new IStateItem[] { new FakeStateItem(1, 2) }),
+                new DirectedEdge(0, 1),
+                new DirectedEdge(1, 2),
+            };
+
+            graph.RunParallel(_context);
+
+            graph.OfType<Work>()
+                .All(x => x.StateItems.OfType<FakeStateItem>().First().IsDone)
+                .Should().BeTrue();
+
+            _testState.Should().Be(2);
         }
 
         private class Work : WorkflowVertex
@@ -47,8 +100,10 @@ namespace Khooversoft.Workflow.Test.GraphWorkflow
 
         private class FakeStateItem : IStateItem
         {
-            public FakeStateItem()
+            public FakeStateItem(int fromState, int toState)
             {
+                FromState = fromState;
+                ToState = toState;
             }
 
             public bool IsDone { get; private set; }
@@ -56,15 +111,22 @@ namespace Khooversoft.Workflow.Test.GraphWorkflow
             public string Name => "Name";
             public bool IgnoreError => false;
 
+            public int FromState { get; }
+            public int ToState { get; }
+
             public Task<bool> Set(IWorkContext context)
             {
+                int expectedFromState = Interlocked.CompareExchange(ref _testState, ToState, FromState);
+                expectedFromState.Should().Be(FromState);
+                _traceQueue.Enqueue(ToState);
+
                 IsDone = true;
                 return Task.FromResult(true);
             }
 
             public Task<bool> Test(IWorkContext context)
             {
-                return Task.FromResult(true);
+                return Task.FromResult(false);
             }
         }
     }

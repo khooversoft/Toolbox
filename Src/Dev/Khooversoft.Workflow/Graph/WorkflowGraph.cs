@@ -1,8 +1,6 @@
 ﻿using Khooversoft.Toolbox;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Khooversoft.Workflow
@@ -27,7 +25,7 @@ namespace Khooversoft.Workflow
         /// Process workflow graph based on dependencies
         /// </summary>
         /// <returns></returns>
-        public Task Run(IWorkContext context)
+        public Task RunParallel(IWorkContext context)
         {
             context = context.WithTag(_tag);
 
@@ -41,15 +39,18 @@ namespace Khooversoft.Workflow
             {
                 ProcessQueue(context, queue, tasks);
 
-                var processedEdges = Vertices.Values
-                    .Where(x => x.State != WorkflowState.None)
-                    .Join(Edges.Values, x => x.NodeId, x => x.EdgeId.SourceNodeId, (o, i) => i);
-
-                var processedToNodeIds = new HashSet<int>(processedEdges.Select(x => x.EdgeId.ToNodeId));
-
-                var freeNode = Vertices.Values
-                    .Where(x => x.State != WorkflowState.None && !processedToNodeIds.Contains(x.NodeId))
+                var processedNodeIds = Vertices.Values
+                    .Where(x => x.State == WorkflowState.Completed)
                     .Select(x => x.NodeId);
+
+                var inflightNodeIds = Vertices.Values
+                    .Where(x => x.State == WorkflowState.Running)
+                    .Select(x => x.NodeId)
+                    .ToHashSet();
+
+                var freeNode = GetTopologicalOrdering(1, processedNodeIds)
+                    .SelectMany(x => x)
+                    .Where(x => !inflightNodeIds.Contains(x));
 
                 if (!freeNode.Any())
                 {
@@ -77,14 +78,16 @@ namespace Khooversoft.Workflow
                     .Add(vertex.StateItems)
                     .Build();
 
-                Task t = Task.Run(() => manager.RunAsync(context));
                 vertex.State = WorkflowState.Running;
+                Task t = Task.Run(() => manager.RunAsync(context));
                 taskReferences.Add(nodeId, new TaskReference(t, nodeId));
             }
 
             if (taskReferences.Count > 0)
             {
-                Task.WaitAny(taskReferences.Values.Select(x => x.Task).ToArray(), context.CancellationToken);
+                Task[] waitTasks = taskReferences.Values.Select(x => x.Task).ToArray();
+                int index = Task.WaitAny(waitTasks, context.CancellationToken);
+                waitTasks[index].Wait();
             }
 
             taskReferences.Values
