@@ -321,13 +321,9 @@
       <Project>{4c580b5f-01b2-499f-b800-64ebaa878ac0}</Project>
       <Name>Khooversoft.Net</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Khooversoft.Security\Khooversoft.Security.csproj">
-      <Project>{b6b9a040-63da-4740-99dd-67877d77c9c8}</Project>
-      <Name>Khooversoft.Security</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Khooversoft.Services\Khooversoft.Services.csproj">
-      <Project>{89cf141d-400b-4d2c-adc0-4442b46d8be4}</Project>
-      <Name>Khooversoft.Services</Name>
+    <ProjectReference Include="..\Khooversoft.Toolbox.Core\Khooversoft.Toolbox.Core.csproj">
+      <Project>{6ef24d5a-428b-4c18-b4ae-e0c661b227ec}</Project>
+      <Name>Khooversoft.Toolbox.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Khooversoft.Toolbox\Khooversoft.Toolbox.csproj">
       <Project>{7c91ae08-d47e-467b-92b1-8dd5c85ccd8d}</Project>

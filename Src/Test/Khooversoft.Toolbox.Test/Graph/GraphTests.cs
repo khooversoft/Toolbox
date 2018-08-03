@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Khooversoft.Toolbox.Test
+namespace Khooversoft.Toolbox.Test.Graph
 {
     [Trait("Category", "Toolbox")]
     public class GraphTests

@@ -2,9 +2,9 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using Khooversoft.Net;
-using Khooversoft.Security;
-using Khooversoft.Services;
 using Khooversoft.Toolbox;
+using Khooversoft.Toolbox.Security;
+using Khooversoft.Toolbox.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Http.Headers;

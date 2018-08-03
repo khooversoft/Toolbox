@@ -98,6 +98,10 @@
       <Project>{8f84599e-3a9d-4691-9db7-710173d6d2b3}</Project>
       <Name>Khooversoft.MongoDb</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Dev\Khooversoft.Toolbox.Core\Khooversoft.Toolbox.Core.csproj">
+      <Project>{6ef24d5a-428b-4c18-b4ae-e0c661b227ec}</Project>
+      <Name>Khooversoft.Toolbox.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Dev\Khooversoft.Toolbox\Khooversoft.Toolbox.csproj">
       <Project>{7c91ae08-d47e-467b-92b1-8dd5c85ccd8d}</Project>
       <Name>Khooversoft.Toolbox</Name>

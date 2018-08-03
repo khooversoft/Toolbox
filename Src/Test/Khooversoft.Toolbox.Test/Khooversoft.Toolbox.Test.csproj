@@ -36,11 +36,30 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=4.8.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\_Packages\Autofac.4.8.1\lib\net45\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="FluentAssertions, Version=5.4.1.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\..\_Packages\FluentAssertions.5.4.1\lib\net47\FluentAssertions.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.IdentityModel.JsonWebTokens, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\_Packages\Microsoft.IdentityModel.JsonWebTokens.5.2.4\lib\net451\Microsoft.IdentityModel.JsonWebTokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Logging, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\_Packages\Microsoft.IdentityModel.Logging.5.2.4\lib\net451\Microsoft.IdentityModel.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Tokens, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\_Packages\Microsoft.IdentityModel.Tokens.5.2.4\lib\net451\Microsoft.IdentityModel.Tokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\_Packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\_Packages\System.IdentityModel.Tokens.Jwt.5.2.4\lib\net451\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -62,6 +81,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actor\ActorAutoFacTests.cs" />
+    <Compile Include="Actor\ActorChainCallTests.cs" />
+    <Compile Include="Actor\ActorProxyTestes.cs" />
+    <Compile Include="Actor\ActorProxyTests.cs" />
+    <Compile Include="Actor\ActorRetirementTests.cs" />
+    <Compile Include="Actor\ActorTests.cs" />
+    <Compile Include="Actor\ActorTimerTests.cs" />
     <Compile Include="Collections\KeyedDictionaryTests.cs" />
     <Compile Include="Collections\LruCacheTests.cs" />
     <Compile Include="Collections\RingQueueTest.cs" />
@@ -71,7 +97,20 @@
     <Compile Include="Graph\DependencyTreeTests.cs" />
     <Compile Include="Graph\EdgeIdTests.cs" />
     <Compile Include="Graph\GraphTests.cs" />
+    <Compile Include="Graph\StateWorkflowTests.cs" />
+    <Compile Include="Parser\AstParserTest\AstParserComplexTests.cs" />
+    <Compile Include="Parser\AstParserTest\AstParserTests.cs" />
+    <Compile Include="Parser\AstParserTest\ParserBodyTests.cs" />
+    <Compile Include="Parser\AstParserTest\ParserOptionalRepeat.cs" />
+    <Compile Include="Parser\AstParserTest\RequiredTests.cs" />
+    <Compile Include="Parser\GrammarTest\GrammerBuilderTests.cs" />
+    <Compile Include="Parser\TokenizerTest\StringTokenizerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\HmacTests.cs" />
+    <Compile Include="Security\JwtTests.cs" />
+    <Compile Include="Services\CertificateActorTests.cs" />
+    <Compile Include="Services\IdentityActorTests.cs" />
+    <Compile Include="Services\TestTokenConfiguration.cs" />
     <Compile Include="Tools\CacheObjectTests.cs" />
     <Compile Include="Tools\CursorListTests.cs" />
     <Compile Include="Tools\CustomTypeTests.cs" />
@@ -80,9 +119,18 @@
     <Compile Include="Tools\StringVectorTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Security\TestCertificate\Create-Certificate.ps1" />
+    <None Include="Security\TestCertificate\JwtVaultTest.khoover.com.pfx" />
+    <None Include="Security\TestCertificate\VaultClient.khoover.com.pfx" />
+    <None Include="Security\TestCertificate\VaultData.khoover.com.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Dev\Khooversoft.Toolbox.Core\Khooversoft.Toolbox.Core.csproj">
+      <Project>{6ef24d5a-428b-4c18-b4ae-e0c661b227ec}</Project>
+      <Name>Khooversoft.Toolbox.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Dev\Khooversoft.Toolbox\Khooversoft.Toolbox.csproj">
       <Project>{7c91ae08-d47e-467b-92b1-8dd5c85ccd8d}</Project>
       <Name>Khooversoft.Toolbox</Name>

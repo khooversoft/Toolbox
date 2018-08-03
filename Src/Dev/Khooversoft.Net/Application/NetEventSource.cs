@@ -40,7 +40,7 @@ namespace Khooversoft.Net
             _processName = Process.GetCurrentProcess().ProcessName;
         }
 
-        public class Keywords
+        public static class Keywords
         {
             public const EventKeywords Diagnostic = (EventKeywords)0x1;
             public const EventKeywords Perf = (EventKeywords)0x2;

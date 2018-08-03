@@ -97,6 +97,10 @@
     <Compile Include="Collection\IndexKey.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Khooversoft.Toolbox.Core\Khooversoft.Toolbox.Core.csproj">
+      <Project>{6ef24d5a-428b-4c18-b4ae-e0c661b227ec}</Project>
+      <Name>Khooversoft.Toolbox.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Khooversoft.Toolbox\Khooversoft.Toolbox.csproj">
       <Project>{7c91ae08-d47e-467b-92b1-8dd5c85ccd8d}</Project>
       <Name>Khooversoft.Toolbox</Name>

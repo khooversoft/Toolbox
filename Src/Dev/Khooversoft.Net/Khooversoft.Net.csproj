@@ -32,6 +32,18 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=4.8.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\_Packages\Autofac.4.8.1\lib\net45\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.JsonWebTokens, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\_Packages\Microsoft.IdentityModel.JsonWebTokens.5.2.4\lib\net451\Microsoft.IdentityModel.JsonWebTokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Logging, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\_Packages\Microsoft.IdentityModel.Logging.5.2.4\lib\net451\Microsoft.IdentityModel.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Tokens, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\_Packages\Microsoft.IdentityModel.Tokens.5.2.4\lib\net451\Microsoft.IdentityModel.Tokens.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\_Packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -41,12 +53,17 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\_Packages\System.IdentityModel.Tokens.Jwt.5.2.4\lib\net451\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http, Version=4.1.1.2, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\_Packages\System.Net.Http.4.3.3\lib\net46\System.Net.Http.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\_Packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application\NetEventSource.cs" />
@@ -54,6 +71,7 @@
     <Compile Include="Contracts\ErrorMessageContractV1.cs" />
     <Compile Include="Contracts\EventDetailContractV1.cs" />
     <Compile Include="Contracts\RestPageResultV1.cs" />
+    <Compile Include="DelegatingHandlers\HmacHandler.cs" />
     <Compile Include="DelegatingHandlers\LoggingHandler.cs" />
     <Compile Include="DelegatingHandlers\RequestHandler.cs" />
     <Compile Include="Exceptions\BadRequestException.cs" />
@@ -64,6 +82,7 @@
     <Compile Include="Exceptions\RestNotFoundException.cs" />
     <Compile Include="Extensions\EventDetailContractExtensions.cs" />
     <Compile Include="Extensions\ExceptionExtensions.cs" />
+    <Compile Include="Extensions\HmacConfigurationExtensions.cs" />
     <Compile Include="Extensions\HttpExtensions.cs" />
     <Compile Include="Extensions\PageResultExtensions.cs" />
     <Compile Include="Extensions\RestClientExtensions.cs" />
@@ -89,6 +108,11 @@
     <Compile Include="Exceptions\RestResponseException.cs" />
     <Compile Include="Rest\RestResponse_T.cs" />
     <Compile Include="Rest\RestUriBuilder.cs" />
+    <Compile Include="Services\ClientTokenManager.cs" />
+    <Compile Include="Services\IClientTokenManager.cs" />
+    <Compile Include="Services\ServerTokenManager.cs" />
+    <Compile Include="Services\TokenAutoFacModule.cs" />
+    <Compile Include="Services\TokenClientActor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -98,6 +122,10 @@
     <ProjectReference Include="..\Khooversoft.EventFlow\Khooversoft.EventFlow.csproj">
       <Project>{36a4183f-5703-453f-aef4-bf0d393e40ef}</Project>
       <Name>Khooversoft.EventFlow</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Khooversoft.Toolbox.Core\Khooversoft.Toolbox.Core.csproj">
+      <Project>{6ef24d5a-428b-4c18-b4ae-e0c661b227ec}</Project>
+      <Name>Khooversoft.Toolbox.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Khooversoft.Toolbox\Khooversoft.Toolbox.csproj">
       <Project>{7c91ae08-d47e-467b-92b1-8dd5c85ccd8d}</Project>
