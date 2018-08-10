@@ -73,8 +73,17 @@
     <Compile Include="Context\CollectionDetails.cs" />
     <Compile Include="Context\MongoDbContext.cs" />
     <Compile Include="DatabaseConfigurationBuilder.cs" />
-    <Compile Include="Extensions\BsonDocument.cs" />
+    <Compile Include="Extensions\BsonDocumentExtension.cs" />
     <Compile Include="Extensions\UtilityExtensions.cs" />
+    <Compile Include="Instructions\Functions\And.cs" />
+    <Compile Include="Instructions\Functions\Compare.cs" />
+    <Compile Include="Instructions\Functions\CompareType.cs" />
+    <Compile Include="Instructions\Functions\Or.cs" />
+    <Compile Include="Instructions\Functions\Field.cs" />
+    <Compile Include="Instructions\IInstructionNode.cs" />
+    <Compile Include="Instructions\InstructionCollection.cs" />
+    <Compile Include="Instructions\MongoTokenType.cs" />
+    <Compile Include="Instructions\ExpressionNode.cs" />
     <Compile Include="Models\Internal\ConvertToExtensions.cs" />
     <Compile Include="Models\Internal\InternalCollectionDetail.cs" />
     <Compile Include="Models\Internal\InternalCollectionOption.cs" />
@@ -84,6 +93,7 @@
     <Compile Include="Collection\CollectionIndex.cs" />
     <Compile Include="Models\V1\DatabaseDetailV1.cs" />
     <Compile Include="Models\V1\IndexDetailV1.cs" />
+    <Compile Include="MSql\Language.cs" />
     <Compile Include="MSql\TokenType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DocumentCollection.cs" />

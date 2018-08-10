@@ -44,18 +44,18 @@ namespace Khooversoft.Toolbox.Test.Parser
             var sstream = new Symbol<TokenType>(TokenType.SStream, "SSTREAM");
             var semiColon = new Symbol<TokenType>(TokenType.SemiColon, ";");
 
-            var rules = new AstProductionRules<TokenType>()
+            var rules = new ParserProductionRules<TokenType>()
             {
-                new AstNode() + rowset + equals + sstream + variable + semiColon,
+                new RootNode() + rowset + equals + sstream + variable + semiColon,
             } + _space;
 
-            AstNode tree = new AstParser<TokenType>(rules)
+            RootNode tree = new LexicalParser<TokenType>(rules)
                 .Parse("RdfCountryOrig = SSTREAM @RdfCountrySS;")
                 ?.RootNode;
 
             tree.Should().NotBeNull();
 
-            var check = new AstNode
+            var check = new RootNode
             {
                 new Expression<TokenType>(TokenType.Rowset, "RdfCountryOrig"),
                 equals,
@@ -89,14 +89,14 @@ namespace Khooversoft.Toolbox.Test.Parser
             var variableType = new Expression<TokenType>(TokenType.VariableType);
             var value = new Expression<TokenType>(TokenType.Value);
 
-            var rules = new AstProductionRules<TokenType>()
+            var rules = new ParserProductionRules<TokenType>()
             {
-                new AstNode()
+                new RootNode()
                     + (new Choice()
-                        + (new AstNode() + rowset + symEqual + symSstream + variable + symSemiColon)                   // {rowset} = SSTREAM {variable};
-                        + (new AstNode() + symDeclare + variable + variableType + symEqual + value + symSemiColon)     // #DECLARE {variable} int = {value};
-                        + (new AstNode() + symReference + value + symSemiColon)                                        // REFERENCE {referenceAssembly};
-                        + (new AstNode() + symUsing + value + symSemiColon)                                            // USING {value};
+                        + (new RootNode() + rowset + symEqual + symSstream + variable + symSemiColon)                   // {rowset} = SSTREAM {variable};
+                        + (new RootNode() + symDeclare + variable + variableType + symEqual + value + symSemiColon)     // #DECLARE {variable} int = {value};
+                        + (new RootNode() + symReference + value + symSemiColon)                                        // REFERENCE {referenceAssembly};
+                        + (new RootNode() + symUsing + value + symSemiColon)                                            // USING {value};
                         ),
                 _space,
             };
@@ -105,11 +105,11 @@ namespace Khooversoft.Toolbox.Test.Parser
             {
                 new {
                     RawData = "# PoiNamedPlace int = 4444;",
-                    Result = (AstNode)null,
+                    Result = (RootNode)null,
                 },
                 new {
                     RawData = "#DECLARE PoiNamedPlace int = 4444;",
-                    Result = new AstNode {
+                    Result = new RootNode {
                         symDeclare,
                         new Expression<TokenType>(TokenType.Variable, "PoiNamedPlace"),
                         new Expression<TokenType>(TokenType.VariableType, "int"),
@@ -121,11 +121,11 @@ namespace Khooversoft.Toolbox.Test.Parser
 
                 new {
                     RawData = "RdfCountryOrig = SS @RdfCountrySS; ",
-                    Result = (AstNode)null,
+                    Result = (RootNode)null,
                 },
                 new {
                     RawData = "RdfCountryOrig = SSTREAM @RdfCountrySS;  ",
-                    Result = new AstNode {
+                    Result = new RootNode {
                         new Expression<TokenType>(TokenType.Rowset, "RdfCountryOrig"),
                         symEqual,
                         symSstream,
@@ -136,11 +136,11 @@ namespace Khooversoft.Toolbox.Test.Parser
 
                 new {
                     RawData = "REFERENCE \"System.Data.dll\"",
-                    Result = (AstNode)null,
+                    Result = (RootNode)null,
                 },
                 new {
                     RawData = "REFERENCE \"System.Data.dll\";",
-                    Result = new AstNode {
+                    Result = new RootNode {
                         symReference,
                         new Expression<TokenType>(TokenType.Value, "\"System.Data.dll\""),
                         symSemiColon,
@@ -155,7 +155,7 @@ namespace Khooversoft.Toolbox.Test.Parser
             {
                 testNumber++;
 
-                AstNode tree = new AstParser<TokenType>(rules)
+                RootNode tree = new LexicalParser<TokenType>(rules)
                     .Parse(test.RawData)
                     ?.RootNode;
 
@@ -189,20 +189,20 @@ namespace Khooversoft.Toolbox.Test.Parser
             var value = new Expression<TokenType>(TokenType.Value);
             var repeatPlusValue = new Optional() + (new Repeat() + plus + value);
 
-            var rules = new AstProductionRules<TokenType>()
+            var rules = new ParserProductionRules<TokenType>()
             {
-                new AstNode() + declare + variable + variableType + equal + value + repeatPlusValue + semiColon,
+                new RootNode() + declare + variable + variableType + equal + value + repeatPlusValue + semiColon,
             } + _space;
 
             var variations = new[]
 {
                 new {
                     RawData = "#DECLARE EntityTSV string = @@OutputPath@@ + ;",
-                    Result = (AstNode)null,
+                    Result = (RootNode)null,
                 },
                 new {
                     RawData = "#DECLARE EntityTSV string = @@OutputPath@@;",
-                    Result = new AstNode {
+                    Result = new RootNode {
                         declare,
                         new Expression<TokenType>(TokenType.Variable, "EntityTSV"),
                         new Expression<TokenType>(TokenType.VariableType, "string"),
@@ -213,7 +213,7 @@ namespace Khooversoft.Toolbox.Test.Parser
                 },
                 new {
                     RawData = "#DECLARE EntityTSV string = @@OutputPath@@ + \"Entity.tsv\";",
-                    Result = new AstNode {
+                    Result = new RootNode {
                         declare,
                         new Expression<TokenType>(TokenType.Variable, "EntityTSV"),
                         new Expression<TokenType>(TokenType.VariableType, "string"),
@@ -226,11 +226,11 @@ namespace Khooversoft.Toolbox.Test.Parser
                 },
                 new {
                     RawData = "#DECLARE EntityTSV string = @@OutputPath@@ + \"Entity.tsv\" +;",
-                    Result = (AstNode)null,
+                    Result = (RootNode)null,
                 },
                 new {
                     RawData = "#DECLARE EntityTSV string = @@OutputPath@@ + \"Entity.tsv\" + \"/testPath\";",
-                    Result = new AstNode {
+                    Result = new RootNode {
                         declare,
                         new Expression<TokenType>(TokenType.Variable, "EntityTSV"),
                         new Expression<TokenType>(TokenType.VariableType, "string"),
@@ -247,7 +247,7 @@ namespace Khooversoft.Toolbox.Test.Parser
 
             foreach (var test in variations)
             {
-                AstNode tree = new AstParser<TokenType>(rules)
+                RootNode tree = new LexicalParser<TokenType>(rules)
                     .Parse(test.RawData)
                     ?.RootNode;
 
@@ -288,16 +288,16 @@ namespace Khooversoft.Toolbox.Test.Parser
             var optionalAs = new Optional() + referenceColumnName + symAs;
             var repeatColumns = new Repeat() + symComma + optionalAs + columnName;
 
-            var rules = new AstProductionRules<TokenType>()
+            var rules = new ParserProductionRules<TokenType>()
             {
-                new AstNode() + rowset + symEqual + symSelect + optionalAs + columnName + repeatColumns + symFrom + rowset + symSemiColon,
+                new RootNode() + rowset + symEqual + symSelect + optionalAs + columnName + repeatColumns + symFrom + rowset + symSemiColon,
             } + _space;
 
             var variations = new[]
 {
                 new {
                     RawData = new List<string> { "a = SELECT FROM;" },
-                    Result = (AstNode)null,
+                    Result = (RootNode)null,
                 },
                 new {
                     RawData = new List<string> {
@@ -312,7 +312,7 @@ namespace Khooversoft.Toolbox.Test.Parser
                         "           expanded_inclusion",
                         "    FROM RdfCartoLinkOrig;",
                     },
-                    Result = new AstNode {
+                    Result = new RootNode {
                         new Expression<TokenType>(TokenType.Rowset, "RdfCartoLink"),
                         symEqual,
                         symSelect,
@@ -353,7 +353,7 @@ namespace Khooversoft.Toolbox.Test.Parser
                         "           map_edge_link",
                         "    FROM RdfLinkOrig;",
                     },
-                    Result = new AstNode {
+                    Result = new RootNode {
                         new Expression<TokenType>(TokenType.Rowset, "RdfLink"),
                         symEqual,
                         symSelect,
@@ -392,7 +392,7 @@ namespace Khooversoft.Toolbox.Test.Parser
 
             foreach (var test in variations)
             {
-                AstNode tree = new AstParser<TokenType>(rules)
+                RootNode tree = new LexicalParser<TokenType>(rules)
                     .Parse(string.Join(" ", test.RawData))
                     ?.RootNode;
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Khooversoft.Toolbox.Parser
 {
-    public class Choice : AstNodeCollection<IAstNode>, IAstNode
+    public class Choice : NodeCollection<INode>, INode
     {
         public Choice(string name = null)
         {
@@ -21,7 +21,7 @@ namespace Khooversoft.Toolbox.Parser
             return $"{nameof(Choice)}, Count={Count}, Children=({this.ToDelimitedString()})";
         }
 
-        public static Choice operator +(Choice rootNode, IAstNode nodeToAdd)
+        public static Choice operator +(Choice rootNode, INode nodeToAdd)
         {
             rootNode.Add(nodeToAdd);
             return rootNode;

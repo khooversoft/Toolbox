@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace Khooversoft.Toolbox.Parser
 {
-    public class Optional : AstNodeCollection<IAstNode>, IAstNode
+    public class Optional : NodeCollection<INode>, INode
     {
         public Optional(string name = null)
         {
             Name = name;
         }
 
-        public Optional(IEnumerable<IAstNode> nodes)
+        public Optional(IEnumerable<INode> nodes)
             : base(nodes)
         {
         }
@@ -26,7 +26,7 @@ namespace Khooversoft.Toolbox.Parser
             return $"{nameof(Optional)}, Name={Name}, Count={Count}, Children=({this.ToDelimitedString()})";
         }
 
-        public static Optional operator +(Optional rootNode, IAstNode nodeToAdd)
+        public static Optional operator +(Optional rootNode, INode nodeToAdd)
         {
             rootNode.Add(nodeToAdd);
             return rootNode;

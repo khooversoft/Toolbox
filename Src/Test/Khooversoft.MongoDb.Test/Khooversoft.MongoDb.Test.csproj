@@ -82,11 +82,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application\Constants.cs" />
+    <Compile Include="DatabaseTests\BsonTest.cs" />
     <Compile Include="DatabaseTests\CappedCollectionModelPackageTests.cs" />
     <Compile Include="DatabaseTests\CollectionIndexTests.cs" />
     <Compile Include="DatabaseTests\CollectionModelPackageTests.cs" />
     <Compile Include="DatabaseTests\CreateRemoveDatabaseTests.cs" />
     <Compile Include="DatabaseTests\DocumentReadWriteTests.cs" />
+    <Compile Include="DocumentTests\DocumentSearchTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

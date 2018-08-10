@@ -104,5 +104,22 @@ namespace Khooversoft.Toolbox
                 yield return item;
             }
         }
+
+        /// <summary>
+        /// When all tasks are completed
+        /// </summary>
+        /// <typeparam name="T">type of collection</typeparam>
+        /// <param name="list"></param>
+        /// <param name="func"></param>
+        /// <returns>enumerable of T</returns>
+        public static async Task<IEnumerable<T>> DoAsync<T>(this IEnumerable<T> list, Func<T, Task> func)
+        {
+            foreach (var item in list)
+            {
+                await func(item);
+            }
+
+            return list;
+        }
     }
 }

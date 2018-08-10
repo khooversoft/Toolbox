@@ -6,7 +6,7 @@ using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using Xunit;
 
-namespace Khooversoft.Toolbox.Test.Services
+namespace Khooversoft.Toolbox.Test.Security
 {
     [Trait("Category", "JWT")]
     public class JwtTests

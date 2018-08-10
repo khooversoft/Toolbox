@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Khooversoft.Toolbox.Parser
 {
-    public class AstProductionRules<T> : IEnumerable<IRule> where T : System.Enum
+    public class ParserProductionRules<T> : IEnumerable<IRule> where T : System.Enum
     {
         private readonly List<IRule> _rules = new List<IRule>();
 
-        public AstProductionRules()
+        public ParserProductionRules()
         {
         }
 
@@ -23,7 +23,7 @@ namespace Khooversoft.Toolbox.Parser
 
         public int Count => _rules.Count;
 
-        public AstNode AstNode => new AstNode(_rules.OfType<AstNode>());   
+        public RootNode AstNode => new RootNode(_rules.OfType<RootNode>());   
 
         public IEnumerable<Bracket<T>> Brackets => _rules.OfType<Bracket<T>>();
 
@@ -34,7 +34,7 @@ namespace Khooversoft.Toolbox.Parser
             _rules.Clear();
         }
 
-        public AstProductionRules<T> Add(IRule node)
+        public ParserProductionRules<T> Add(IRule node)
         {
             _rules.Add(node);
             return this;
@@ -50,13 +50,13 @@ namespace Khooversoft.Toolbox.Parser
             return _rules.GetEnumerator();
         }
 
-        public static AstProductionRules<T> operator +(AstProductionRules<T> prNode, IRule nodeToAdd)
+        public static ParserProductionRules<T> operator +(ParserProductionRules<T> prNode, IRule nodeToAdd)
         {
             prNode.Add(nodeToAdd);
             return prNode;
         }
 
-        public static AstProductionRules<T> operator +(AstProductionRules<T> prNode, Bracket<T> nodeToAdd)
+        public static ParserProductionRules<T> operator +(ParserProductionRules<T> prNode, Bracket<T> nodeToAdd)
         {
             prNode.Add(nodeToAdd);
             return prNode;

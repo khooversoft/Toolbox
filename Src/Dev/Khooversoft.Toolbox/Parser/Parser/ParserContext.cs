@@ -17,8 +17,8 @@ namespace Khooversoft.Toolbox.Parser
 
         public CursorList<IToken> InputTokens { get; }
 
-        public IReadOnlyList<IAstNode> OutstandingNodes { get; set; }
+        public IReadOnlyList<INode> OutstandingNodes { get; set; }
 
-        public AstNode LastGood { get; set; }
+        public RootNode LastGood { get; set; }
     }
 }

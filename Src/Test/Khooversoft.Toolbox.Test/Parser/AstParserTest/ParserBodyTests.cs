@@ -37,7 +37,7 @@ namespace Khooversoft.Toolbox.Test.Parser
             public static Expression<TokenType> SubclassName { get; } = new Expression<TokenType>(TokenType.SubclassName);
         }
 
-        private AstProductionRules<TokenType> _rules;
+        private ParserProductionRules<TokenType> _rules;
 
         public ParserBodyTests()
         {
@@ -56,9 +56,9 @@ namespace Khooversoft.Toolbox.Test.Parser
 
             var body = new Body<TokenType>(Language.SymLeftBrace, Language.SymRightBrace, true);
 
-            _rules = new AstProductionRules<TokenType>()
+            _rules = new ParserProductionRules<TokenType>()
             {
-                new AstNode()
+                new RootNode()
                 + classType
                 + Language.SymClass
                 + Language.ClassName
@@ -97,7 +97,7 @@ namespace Khooversoft.Toolbox.Test.Parser
                 "}",
             };
 
-            var parser = new AstParser<TokenType>(_rules);
+            var parser = new LexicalParser<TokenType>(_rules);
             ParserResult result = parser.Parse(string.Join(" ", data));
             result.Should().NotBeNull();
             result.IsSuccess.Should().BeTrue();
@@ -118,7 +118,7 @@ namespace Khooversoft.Toolbox.Test.Parser
                 "}",
             };
 
-            var parser = new AstParser<TokenType>(_rules);
+            var parser = new LexicalParser<TokenType>(_rules);
             ParserResult result = parser.Parse(string.Join(" ", data));
             result.Should().NotBeNull();
             result.IsSuccess.Should().BeTrue();
@@ -139,7 +139,7 @@ namespace Khooversoft.Toolbox.Test.Parser
                 "}",
             };
 
-            var parser = new AstParser<TokenType>(_rules);
+            var parser = new LexicalParser<TokenType>(_rules);
             ParserResult result = parser.Parse(string.Join(" ", data));
             result.Should().NotBeNull();
             result.IsSuccess.Should().BeTrue();
@@ -160,7 +160,7 @@ namespace Khooversoft.Toolbox.Test.Parser
                 "}",
             };
 
-            var parser = new AstParser<TokenType>(_rules);
+            var parser = new LexicalParser<TokenType>(_rules);
             ParserResult result = parser.Parse(string.Join(" ", data));
             result.Should().NotBeNull();
             result.IsSuccess.Should().BeTrue();
@@ -181,7 +181,7 @@ namespace Khooversoft.Toolbox.Test.Parser
                 "}",
             };
 
-            var parser = new AstParser<TokenType>(_rules);
+            var parser = new LexicalParser<TokenType>(_rules);
             ParserResult result = parser.Parse(string.Join(" ", data));
             result.Should().NotBeNull();
             result.IsSuccess.Should().BeFalse();
@@ -198,7 +198,7 @@ namespace Khooversoft.Toolbox.Test.Parser
                 "}",
             };
 
-            var parser = new AstParser<TokenType>(_rules);
+            var parser = new LexicalParser<TokenType>(_rules);
             ParserResult result = parser.Parse(string.Join(" ", data));
             result.Should().NotBeNull();
             result.IsSuccess.Should().BeFalse();

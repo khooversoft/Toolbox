@@ -45,17 +45,17 @@ namespace Khooversoft.Toolbox.Test.Parser
             public static Expression<TokenType> Variable { get; } = new Expression<TokenType>(TokenType.Variable);
         }
 
-        private AstProductionRules<TokenType> _onlyPlusRules;
-        private AstProductionRules<TokenType> _Rules;
+        private ParserProductionRules<TokenType> _onlyPlusRules;
+        private ParserProductionRules<TokenType> _Rules;
 
         public ParserOptionalRepeat()
         {
             // let {variableName} {variableType} = {variable} [+ {variable}]
             var repeatPlusValue = new Optional() + (new Repeat() + Language.SymPlus + Language.Variable);
 
-            _onlyPlusRules = new AstProductionRules<TokenType>()
+            _onlyPlusRules = new ParserProductionRules<TokenType>()
             {
-                new AstNode()
+                new RootNode()
                 + Language.SymLet
                 + Language.VariableName
                 + Language.VariableType
@@ -76,9 +76,9 @@ namespace Khooversoft.Toolbox.Test.Parser
 
             var repeatMathValue = new Optional() + (new Repeat() + opsSign + Language.Variable);
 
-            _Rules = new AstProductionRules<TokenType>()
+            _Rules = new ParserProductionRules<TokenType>()
             {
-                new AstNode()
+                new RootNode()
                 + Language.SymLet
                 + Language.VariableName
                 + Language.VariableType
@@ -100,7 +100,7 @@ namespace Khooversoft.Toolbox.Test.Parser
                 "let EmptyLong long? = null;",
             };
 
-            var parser = new AstParser<TokenType>(_onlyPlusRules);
+            var parser = new LexicalParser<TokenType>(_onlyPlusRules);
             ParserResult result = parser.Parse(string.Join(" ", data));
             result.Should().NotBeNull();
             result.IsSuccess.Should().BeTrue();
@@ -124,7 +124,7 @@ namespace Khooversoft.Toolbox.Test.Parser
         [InlineData("let long? = null;")]
         public void LetNodeSingleFailTests(string data)
         {
-            var parser = new AstParser<TokenType>(_onlyPlusRules);
+            var parser = new LexicalParser<TokenType>(_onlyPlusRules);
             ParserResult result = parser.Parse(data);
             result.Should().NotBeNull();
             result.IsSuccess.Should().BeFalse();
@@ -136,7 +136,7 @@ namespace Khooversoft.Toolbox.Test.Parser
         [InlineData("let EmptyLong long? = 5 + var1 + 7 + 10;", new string[] { "5", "var1", "7", "10" })]
         public void LetMultipleValues(string data, string[] testValues)
         {
-            var parser = new AstParser<TokenType>(_onlyPlusRules);
+            var parser = new LexicalParser<TokenType>(_onlyPlusRules);
             ParserResult result = parser.Parse(data);
             result.Should().NotBeNull();
             result.IsSuccess.Should().BeTrue();
@@ -161,7 +161,7 @@ namespace Khooversoft.Toolbox.Test.Parser
         [InlineData("let MyVariable double = 5 + var1 + 7 / 10;", new string[] { "5", "var1", "7", "10" })]
         public void LetDifferentOpsValues(string data, string[] testValues)
         {
-            var parser = new AstParser<TokenType>(_Rules);
+            var parser = new LexicalParser<TokenType>(_Rules);
             ParserResult result = parser.Parse(data);
             result.Should().NotBeNull();
             result.IsSuccess.Should().BeTrue();

@@ -70,13 +70,13 @@ namespace Khooversoft.MongoDb
             await MongoCollection.DeleteManyAsync(filter, options, context.CancellationToken);
         }
 
-        public async Task<long> Count(IWorkContext context, FilterDefinition<TDocument> filter = null)
+        public Task<long> Count(IWorkContext context, FilterDefinition<TDocument> filter = null)
         {
             Verify.IsNotNull(nameof(context), context);
 
             var filterDefinition = filter ?? FilterDefinition<TDocument>.Empty;
 
-            return await MongoCollection.CountAsync(filterDefinition, options: null, cancellationToken: context.CancellationToken);
+            return MongoCollection.CountAsync(filterDefinition, options: null, cancellationToken: context.CancellationToken);
         }
     }
 }

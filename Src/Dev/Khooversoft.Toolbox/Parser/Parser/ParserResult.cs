@@ -8,26 +8,26 @@ namespace Khooversoft.Toolbox.Parser
 {
     public class ParserResult
     {
-        public ParserResult(AstNode rootNode, IEnumerable<IToken> tokens)
+        public ParserResult(RootNode rootNode, IEnumerable<IToken> tokens)
         {
             RootNode = rootNode;
             Tokens = tokens.ToList();
         }
 
-        public ParserResult(IEnumerable<IToken> tokens, AstNode lastGood, IEnumerable<IAstNode> outstandingNodes = null)
+        public ParserResult(IEnumerable<IToken> tokens, RootNode lastGood, IEnumerable<INode> outstandingNodes = null)
         {
             Tokens = tokens?.ToList();
             LastGood = lastGood;
             OutstandingNodes = outstandingNodes?.ToList();
         }
 
-        public AstNode RootNode { get; }
+        public RootNode RootNode { get; }
 
         public IReadOnlyList<IToken> Tokens { get; }
 
-        public IReadOnlyList<IAstNode> OutstandingNodes { get; }
+        public IReadOnlyList<INode> OutstandingNodes { get; }
 
-        public AstNode LastGood { get; }
+        public RootNode LastGood { get; }
 
         public bool IsSuccess => RootNode != null;
     }

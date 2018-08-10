@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Khooversoft.Toolbox.Parser
 {
-    public class Symbol<T> : IAstNode where T : System.Enum
+    public class Symbol<T> : INode where T : System.Enum
     {
         public Symbol(T tokenType)
         {

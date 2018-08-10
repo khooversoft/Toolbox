@@ -21,11 +21,11 @@ namespace Khooversoft.Toolbox.Parser
             _bracketList.Add(new Bracket<T>(startSymbol, endSymbol));
         }
 
-        public AstNode ProcessBracket(Token<T> token)
+        public RootNode ProcessBracket(Token<T> token)
         {
             foreach (var item in _bracketList ?? Enumerable.Empty<Bracket<T>>())
             {
-                AstNode astNodes = item.IfBracket(token);
+                RootNode astNodes = item.IfBracket(token);
                 if (astNodes != null)
                 {
                     return astNodes;

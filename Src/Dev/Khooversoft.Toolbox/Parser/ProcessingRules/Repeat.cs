@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Khooversoft.Toolbox.Parser
 {
-    public class Repeat : AstNodeCollection<IAstNode>, IAstNode
+    public class Repeat : NodeCollection<INode>, INode
     {
         public Repeat(string name = null)
         {
@@ -21,7 +21,7 @@ namespace Khooversoft.Toolbox.Parser
             return $"{nameof(Repeat)}, Count={Count}, Children=({this.ToDelimitedString()})";
         }
 
-        public static Repeat operator +(Repeat rootNode, IAstNode nodeToAdd)
+        public static Repeat operator +(Repeat rootNode, INode nodeToAdd)
         {
             rootNode.Add(nodeToAdd);
             return rootNode;

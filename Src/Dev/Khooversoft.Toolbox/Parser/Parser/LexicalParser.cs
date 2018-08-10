@@ -4,13 +4,13 @@ using System.Linq;
 
 namespace Khooversoft.Toolbox.Parser
 {
-    public class AstParser<T> where T : System.Enum
+    public class LexicalParser<T> where T : System.Enum
     {
         private readonly HashSet<string> _symbols;
-        private readonly AstNode _productionRules;
+        private readonly RootNode _productionRules;
         private BracketManager<T> _bracketManager;
 
-        public AstParser(AstProductionRules<T> productionRules)
+        public LexicalParser(ParserProductionRules<T> productionRules)
         {
             _productionRules = productionRules?.AstNode ?? throw new ArgumentNullException(nameof(productionRules));
             _bracketManager = new BracketManager<T>(productionRules.Brackets);
@@ -42,7 +42,7 @@ namespace Khooversoft.Toolbox.Parser
 
             var context = new ParserContext(Tokenizer.Parse(rawData));
 
-            AstNode result = Match(_productionRules, context);
+            RootNode result = Match(_productionRules, context);
             if (result != null)
             {
                 return new ParserResult(result, context.InputTokens);
@@ -51,10 +51,10 @@ namespace Khooversoft.Toolbox.Parser
             return new ParserResult(context.InputTokens, context.LastGood, context.OutstandingNodes);
         }
 
-        private AstNode Match(AstNode test, ParserContext context)
+        private RootNode Match(RootNode test, ParserContext context)
         {
-            var result = new AstNode();
-            var stack = new Stack<IAstNode>(test.Reverse());
+            var result = new RootNode();
+            var stack = new Stack<INode>(test.Reverse());
 
             while (stack.Count > 0)
             {
@@ -73,8 +73,8 @@ namespace Khooversoft.Toolbox.Parser
                         break;
 
                     case Optional optional:
-                        AstNode optionalNode = new AstNode(optional);
-                        AstNode optionalResult = TryMatch(optionalNode, context, label: "Optional");
+                        RootNode optionalNode = new RootNode(optional);
+                        RootNode optionalResult = TryMatch(optionalNode, context, label: "Optional");
                         if (optionalResult != null)
                         {
                             result += optionalResult;
@@ -99,8 +99,8 @@ namespace Khooversoft.Toolbox.Parser
                         Process<Skip<T>>(() => ProcessSkip(skip, context));
                         break;
 
-                    case AstNode astNode:
-                        Process<AstNode>(() => Match(astNode, context));
+                    case RootNode astNode:
+                        Process<RootNode>(() => Match(astNode, context));
                         break;
 
                     case Expression<T> expression:
@@ -134,7 +134,7 @@ namespace Khooversoft.Toolbox.Parser
                             break;
                         }
 
-                        AstNode bracketResult = _bracketManager.ProcessBracket(token);
+                        RootNode bracketResult = _bracketManager.ProcessBracket(token);
                         if (bracketResult != null)
                         {
                             result += bracketResult;
@@ -170,9 +170,9 @@ namespace Khooversoft.Toolbox.Parser
             return returnResult;
 
             // Local
-            bool Process<TNode>(Func<AstNode> processFunc) where TNode : IAstNode
+            bool Process<TNode>(Func<RootNode> processFunc) where TNode : INode
             {
-                AstNode testNode = processFunc();
+                RootNode testNode = processFunc();
                 if (testNode == null)
                 {
                     return false;
@@ -183,11 +183,11 @@ namespace Khooversoft.Toolbox.Parser
             }
         }
 
-        private AstNode TryMatch(AstNode test, ParserContext context, bool commit = true, string label = null)
+        private RootNode TryMatch(RootNode test, ParserContext context, bool commit = true, string label = null)
         {
             context.InputTokens.SaveCursor();
 
-            AstNode result = Match(test, context);
+            RootNode result = Match(test, context);
             if (result == null)
             {
                 context.InputTokens.RestoreCursor();
@@ -206,14 +206,14 @@ namespace Khooversoft.Toolbox.Parser
             return result;
         }
 
-        private AstNode ProcessRepeat(Repeat repeat, ParserContext context)
+        private RootNode ProcessRepeat(Repeat repeat, ParserContext context)
         {
-            var result = new AstNode();
+            var result = new RootNode();
 
             while (true)
             {
-                AstNode testNode = new AstNode(repeat);
-                AstNode testResult = TryMatch(testNode, context);
+                RootNode testNode = new RootNode(repeat);
+                RootNode testResult = TryMatch(testNode, context);
                 if (testResult == null)
                 {
                     break;
@@ -225,14 +225,14 @@ namespace Khooversoft.Toolbox.Parser
             return result.Count > 0 ? result : null;
         }
 
-        private AstNode ProcessChoice(Choice choice, ParserContext context)
+        private RootNode ProcessChoice(Choice choice, ParserContext context)
         {
-            var result = new AstNode();
+            var result = new RootNode();
 
             foreach (var test in choice)
             {
-                AstNode testNode = new AstNode() + test;
-                AstNode testResult = TryMatch(testNode, context);
+                RootNode testNode = new RootNode() + test;
+                RootNode testResult = TryMatch(testNode, context);
                 if (testResult != null)
                 {
                     result += testResult;
@@ -243,23 +243,23 @@ namespace Khooversoft.Toolbox.Parser
             return result.Count > 0 ? result : null;
         }
 
-        private AstNode ProcessAnyOrder(AnyOrder anyOrder, ParserContext context)
+        private RootNode ProcessAnyOrder(AnyOrder anyOrder, ParserContext context)
         {
-            var result = new AstNode();
-            var queue = new Queue<IAstNode>(anyOrder);
-            Queue<IAstNode> missQueue;
+            var result = new RootNode();
+            var queue = new Queue<INode>(anyOrder);
+            Queue<INode> missQueue;
 
             do
             {
-                missQueue = new Queue<IAstNode>();
+                missQueue = new Queue<INode>();
                 bool matchOne = false;
 
                 while (queue.Count > 0)
                 {
-                    IAstNode test = queue.Dequeue();
+                    INode test = queue.Dequeue();
 
-                    AstNode testNode = new AstNode() + test;
-                    AstNode testResult = TryMatch(testNode, context);
+                    RootNode testNode = new RootNode() + test;
+                    RootNode testResult = TryMatch(testNode, context);
                     if (testResult == null)
                     {
                         missQueue.Enqueue(test);
@@ -282,11 +282,11 @@ namespace Khooversoft.Toolbox.Parser
             return result.Count > 0 ? result : null;
         }
 
-        private AstNode ProcessBody(Body<T> body, ParserContext context)
+        private RootNode ProcessBody(Body<T> body, ParserContext context)
         {
             context.InputTokens.SaveCursor();
             var bodyTokenList = new List<IToken>();
-            var result = new AstNode();
+            var result = new RootNode();
 
             Token<T> token = context.InputTokens.Next() as Token<T>;
             if (token == null || !token.GrammarType.Equals(body.StartSymbol.TokenType))
@@ -337,7 +337,7 @@ namespace Khooversoft.Toolbox.Parser
             return null;
         }
 
-        private AstNode ProcessSkip(Skip<T> skip, ParserContext context)
+        private RootNode ProcessSkip(Skip<T> skip, ParserContext context)
         {
             var bodyTokenList = new List<IToken>();
             int nestLevel = 0;
@@ -376,11 +376,11 @@ namespace Khooversoft.Toolbox.Parser
 
                 foreach (var test in skip)
                 {
-                    AstNode testNode = new AstNode() + test;
-                    AstNode testResult = TryMatch(testNode, context, commit: false);
+                    RootNode testNode = new RootNode() + test;
+                    RootNode testResult = TryMatch(testNode, context, commit: false);
                     if (testResult != null)
                     {
-                        return new AstNode() + new BodyTokens(skip, bodyTokenList);
+                        return new RootNode() + new BodyTokens(skip, bodyTokenList);
                     }
                 }
 

@@ -8,7 +8,7 @@ using MongoDB.Bson;
 
 namespace Khooversoft.MongoDb
 {
-    public static class BsonDocument_Extension
+    public static class BsonDocumentExtension
     {
         /// <summary>
         /// Try to get element base on path
@@ -76,8 +76,10 @@ namespace Khooversoft.MongoDb
         /// <param name="self"></param>
         /// <param name="name"></param>
         /// <param name="defaultValue"></param>
+        /// <param name="required">value is required</param>
+        /// <exception cref="ArgumentException">throw if value is not present and required</exception>
         /// <returns></returns>
-        public static T Get<T>(this BsonDocument self, string name, T defaultValue = default(T), bool required = true)
+        public static T Get<T>(this BsonDocument self, string name, T defaultValue = default, bool required = true)
         {
             Verify.IsNotNull(nameof(self), self);
             Verify.IsNotEmpty(nameof(name), name);
@@ -86,7 +88,7 @@ namespace Khooversoft.MongoDb
             {
                 if (required)
                 {
-                    throw new InvalidOperationException($"Field {name} does not exist and required");
+                    throw new ArgumentException($"Field {name} does not exist and required");
                 }
 
                 return defaultValue;

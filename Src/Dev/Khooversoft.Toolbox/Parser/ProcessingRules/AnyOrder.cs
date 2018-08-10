@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Khooversoft.Toolbox.Parser
 {
-    public class AnyOrder : AstNodeCollection<IAstNode>, IAstNode
+    public class AnyOrder : NodeCollection<INode>, INode
     {
         public AnyOrder(string name = null)
         {
@@ -21,7 +21,7 @@ namespace Khooversoft.Toolbox.Parser
             return $"{nameof(Choice)}, Count={Count}";
         }
 
-        public static AnyOrder operator +(AnyOrder rootNode, IAstNode nodeToAdd)
+        public static AnyOrder operator +(AnyOrder rootNode, INode nodeToAdd)
         {
             rootNode.Add(nodeToAdd);
             return rootNode;

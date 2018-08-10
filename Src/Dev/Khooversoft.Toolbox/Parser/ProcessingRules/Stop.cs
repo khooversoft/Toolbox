@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Khooversoft.Toolbox.Parser
 {
-    public class Stop : IAstNode
+    public class Stop : INode
     {
         public Stop(string name = null)
         {

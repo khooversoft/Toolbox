@@ -23,7 +23,7 @@ namespace Khooversoft.Toolbox.Parser
                 .GroupBy(x => x.Match)
                 .Where(x => x.Count() > 1);
 
-            if( grouping.Count() > 0)
+            if(grouping.Any())
             {
                 throw new ArgumentException($"Cannot add duplicate 'match' symbols, {string.Join(", ", grouping.Select(x => x.Key))}");
             }

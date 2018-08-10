@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Khooversoft.Toolbox.Parser
 {
-    public class Skip<T> : AstNodeCollection<IAstNode>, IAstNode
+    public class Skip<T> : NodeCollection<INode>, INode
     {
         public Skip(bool supportNested = true, string name = null)
         {
@@ -24,7 +24,7 @@ namespace Khooversoft.Toolbox.Parser
             return $"{nameof(Skip<T>)}, SupportNested={SupportNested}, Count={Count}, Children=({this.ToDelimitedString()})";
         }
 
-        public static Skip<T> operator +(Skip<T> rootNode, IAstNode nodeToAdd)
+        public static Skip<T> operator +(Skip<T> rootNode, INode nodeToAdd)
         {
             rootNode.Add(nodeToAdd);
             return rootNode;

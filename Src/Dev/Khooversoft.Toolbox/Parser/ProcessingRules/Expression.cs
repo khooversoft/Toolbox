@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Khooversoft.Toolbox.Parser
 {
-    public class Expression<T> : IAstNode where T : System.Enum
+    public class Expression<T> : INode where T : System.Enum
     {
         public Expression(T tokenType)
         {

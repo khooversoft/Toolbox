@@ -28,8 +28,6 @@ namespace Khooversoft.Toolbox
 
         public bool IsSameNode(int nodeId) => EdgeId.SourceNodeId == nodeId || EdgeId.ToNodeId == nodeId;
 
-        public static long CreateEdgeId(int sourceNodeId, int toNodeId) => (long)sourceNodeId << 32 | (uint)toNodeId;
-
         public override string ToString()
         {
             return $"EdgeId={EdgeId}";

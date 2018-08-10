@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Khooversoft.Toolbox.Parser
 {
-    public class Body<T> : IAstNode where T : System.Enum
+    public class Body<T> : INode where T : System.Enum
     {
         public Body(Symbol<T> startSymbol, Symbol<T> endSymbol, bool supportNested = true)
         {

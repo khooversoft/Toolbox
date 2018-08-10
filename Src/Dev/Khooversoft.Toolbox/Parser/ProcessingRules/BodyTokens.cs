@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Khooversoft.Toolbox.Parser
 {
-    public class BodyTokens : IEnumerable<IToken>, IAstNode
+    public class BodyTokens : IEnumerable<IToken>, INode
     {
         private readonly List<IToken> _tokens;
 
-        public BodyTokens(IAstNode referenceNode, IEnumerable<IToken> tokens)
+        public BodyTokens(INode referenceNode, IEnumerable<IToken> tokens)
         {
             ReferencedNode = referenceNode;
             _tokens = tokens?.ToList();
@@ -19,7 +19,7 @@ namespace Khooversoft.Toolbox.Parser
 
         public string Name => "BodyTokens";
 
-        public IAstNode ReferencedNode { get; }
+        public INode ReferencedNode { get; }
 
         public IToken this[int index] => _tokens[index];
 

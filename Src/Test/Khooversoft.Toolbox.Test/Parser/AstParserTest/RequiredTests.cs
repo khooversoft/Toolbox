@@ -30,23 +30,23 @@ namespace Khooversoft.Toolbox.Test.Parser
             public static Expression<TokenType> Variable { get; } = new Expression<TokenType>(TokenType.Variable);
         }
 
-        private readonly AstProductionRules<TokenType>[] _Rules;
+        private readonly ParserProductionRules<TokenType>[] _Rules;
 
-        private readonly AstProductionRules<TokenType> _forumalRules;
+        private readonly ParserProductionRules<TokenType> _forumalRules;
 
         public RequiredTests()
         {
-            _Rules = new AstProductionRules<TokenType>[]
+            _Rules = new ParserProductionRules<TokenType>[]
             {
-                new AstProductionRules<TokenType>() { new AstNode() + Language.SymLet },
-                new AstProductionRules<TokenType>() { new AstNode() + Language.SymEqual},
-                new AstProductionRules<TokenType>() { new AstNode() + Language.SymLet + Language.SymEqual },
-                new AstProductionRules<TokenType>() { new AstNode() + Language.SymLet + Language.SymEqual + Language.SymSemiColon },
+                new ParserProductionRules<TokenType>() { new RootNode() + Language.SymLet },
+                new ParserProductionRules<TokenType>() { new RootNode() + Language.SymEqual},
+                new ParserProductionRules<TokenType>() { new RootNode() + Language.SymLet + Language.SymEqual },
+                new ParserProductionRules<TokenType>() { new RootNode() + Language.SymLet + Language.SymEqual + Language.SymSemiColon },
             };
 
-            _forumalRules = new AstProductionRules<TokenType>()
+            _forumalRules = new ParserProductionRules<TokenType>()
             {
-                new AstNode()
+                new RootNode()
                     + Language.SymLet
                     + Language.VariableName
                     + Language.SymEqual
@@ -72,7 +72,7 @@ namespace Khooversoft.Toolbox.Test.Parser
         [InlineData("let;=", 3, false)]
         public void RequiredSequenceTest(string data, int ruleNumber, bool shouldPass)
         {
-            var parser = new AstParser<TokenType>(_Rules[ruleNumber]);
+            var parser = new LexicalParser<TokenType>(_Rules[ruleNumber]);
             ParserResult result = parser.Parse(data);
             result.Should().NotBeNull();
             result.IsSuccess.Should().Be(shouldPass);
@@ -89,7 +89,7 @@ namespace Khooversoft.Toolbox.Test.Parser
         [InlineData("leta3;", false)]
         public void ForumlaTest(string data, bool shouldPass)
         {
-            var parser = new AstParser<TokenType>(_forumalRules);
+            var parser = new LexicalParser<TokenType>(_forumalRules);
             ParserResult result = parser.Parse(data);
             result.Should().NotBeNull();
             result.IsSuccess.Should().Be(shouldPass);

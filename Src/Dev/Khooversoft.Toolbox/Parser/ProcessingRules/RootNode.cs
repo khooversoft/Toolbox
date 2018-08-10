@@ -10,27 +10,27 @@ namespace Khooversoft.Toolbox.Parser
     /// <summary>
     /// General top level container of nodes
     /// </summary>
-    public class AstNode : IEnumerable<IAstNode>, IAstNode, IRule
+    public class RootNode : IEnumerable<INode>, INode, IRule
     {
-        private readonly List<IAstNode> _children;
+        private readonly List<INode> _children;
 
-        public AstNode(string name = null)
+        public RootNode(string name = null)
         {
-            _children = new List<IAstNode>();
+            _children = new List<INode>();
             Name = name;
         }
 
-        public AstNode(IEnumerable<IAstNode> nodes)
+        public RootNode(IEnumerable<INode> nodes)
         {
-            _children = new List<IAstNode>(nodes);
+            _children = new List<INode>(nodes);
         }
 
         /// <summary>
         /// Default empty instance
         /// </summary>
-        public static AstNode Empty { get; } = new AstNode();
+        public static RootNode Empty { get; } = new RootNode();
 
-        public IAstNode this[int index]
+        public INode this[int index]
         {
             get { return _children[index]; }
             set { _children[index] = value; }
@@ -45,13 +45,13 @@ namespace Khooversoft.Toolbox.Parser
             _children.Clear();
         }
 
-        public AstNode Add(IAstNode node)
+        public RootNode Add(INode node)
         {
             _children.Add(node);
             return this;
         }
 
-        public AstNode AddRange(IEnumerable<IAstNode> nodes)
+        public RootNode AddRange(IEnumerable<INode> nodes)
         {
             foreach (var node in nodes)
             {
@@ -61,38 +61,15 @@ namespace Khooversoft.Toolbox.Parser
             return this;
         }
 
-        public IEnumerable<IAstNode> FlattenNodes()
+        public IEnumerable<INode> FlattenNodes()
         {
-            var stack = new Stack<IAstNode>(this.Reverse<IAstNode>());
+            var stack = new Stack<INode>(this.Reverse<INode>());
 
             while (stack.Count > 0)
             {
-                IAstNode astNode = stack.Pop();
+                INode astNode = stack.Pop();
 
-                var childrenNodes = astNode as IEnumerable<IAstNode>;
-                if (childrenNodes != null)
-                {
-                    foreach (var item in childrenNodes)
-                    {
-                        stack.Push(item);
-                    }
-
-                    yield return astNode;
-                }
-
-                yield return astNode;
-            }
-        }
-
-        public IEnumerable<IToken> FlattenTokens()
-        {
-            var stack = new Stack<IToken>(this.OfType<IEnumerable<IToken>>().SelectMany(x => x).Reverse());
-
-            while (stack.Count > 0)
-            {
-                IToken astNode = stack.Pop();
-
-                var childrenNodes = astNode as IEnumerable<IToken>;
+                var childrenNodes = astNode as IEnumerable<INode>;
                 if (childrenNodes != null)
                 {
                     foreach (var item in childrenNodes)
@@ -109,7 +86,7 @@ namespace Khooversoft.Toolbox.Parser
 
         public IEnumerable<IGrammar<T>> BuildGrammars<T>() where T : System.Enum
         {
-            IEnumerable<IAstNode> nodes = FlattenNodes();
+            IEnumerable<INode> nodes = FlattenNodes();
 
             foreach (var node in nodes)
             {
@@ -129,10 +106,10 @@ namespace Khooversoft.Toolbox.Parser
 
         public override string ToString()
         {
-            return $"{nameof(AstNode)}: Name={Name}, Count={Count}, Children=({this.ToDelimitedString()})";
+            return $"{nameof(RootNode)}: Name={Name}, Count={Count}, Children=({this.ToDelimitedString()})";
         }
 
-        public IEnumerator<IAstNode> GetEnumerator()
+        public IEnumerator<INode> GetEnumerator()
         {
             return _children.GetEnumerator();
         }
@@ -142,7 +119,7 @@ namespace Khooversoft.Toolbox.Parser
             return _children.GetEnumerator();
         }
 
-        public static AstNode operator +(AstNode self, AstNode node2)
+        public static RootNode operator +(RootNode self, RootNode node2)
         {
             foreach (var node in node2)
             {
@@ -152,7 +129,7 @@ namespace Khooversoft.Toolbox.Parser
             return self;
         }
 
-        public static AstNode operator +(AstNode rootNode, IAstNode nodeToAdd)
+        public static RootNode operator +(RootNode rootNode, INode nodeToAdd)
         {
             rootNode.Add(nodeToAdd);
             return rootNode;

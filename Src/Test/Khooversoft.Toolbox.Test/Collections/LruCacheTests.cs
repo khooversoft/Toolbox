@@ -150,7 +150,7 @@ namespace Khooversoft.Toolbox.Test.Collections
                 .Select(x => Task.Run(() => ReadTask(cache, tokenSource.Token)))
                 .Run(x => tasks.Add(x));
 
-            await Task.Delay(TimeSpan.FromSeconds(5));
+            await Task.Delay(TimeSpan.FromSeconds(2));
             tokenSource.Cancel();
             Task.WaitAll(tasks.ToArray());
         }

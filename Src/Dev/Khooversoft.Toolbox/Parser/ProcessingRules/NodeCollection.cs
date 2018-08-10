@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace Khooversoft.Toolbox.Parser
 {
-    public abstract class AstNodeCollection<T> : IEnumerable<T>
+    public abstract class NodeCollection<T> : IEnumerable<T>
     {
         private readonly List<T> _children = new List<T>();
 
-        public AstNodeCollection()
+        public NodeCollection()
         {
         }
 
-        public AstNodeCollection(IEnumerable<T> nodes)
+        public NodeCollection(IEnumerable<T> nodes)
         {
             _children.AddRange(nodes);
         }

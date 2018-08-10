@@ -64,7 +64,7 @@ namespace Khooversoft.MongoDb.Collection.States
             CappedCollectionModel cappedModel = Parent.Model as CappedCollectionModel;
             if (cappedModel != null)
             {
-                bool status = detail.Capped == true &&
+                bool status = detail.Capped &&
                     cappedModel.MaxNumberOfDocuments == (int)detail.MaxDocuments &&
                     cappedModel.MaxSizeInBytes == (long)detail.MaxSizeInBytes;
 

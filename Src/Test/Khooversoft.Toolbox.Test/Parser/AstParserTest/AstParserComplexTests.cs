@@ -63,19 +63,19 @@ namespace Khooversoft.Toolbox.Test.Parser
             public static Expression<TokenType> JoinReference { get; } = new Expression<TokenType>(TokenType.JoinReference);
         }
 
-        private AstProductionRules<TokenType> _rules;
+        private ParserProductionRules<TokenType> _rules;
 
         public AstParserComplexTests()
         {
             /// {rowset} = SELECT ([refColumnName AS] {columnName}) [(, {columnName})] FROM {rowset} [{joins} WHERE {where clauses}]";
 
-            var joinKey = new AstNode("joinKey")
+            var joinKey = new RootNode("joinKey")
                 + (new Optional() + Language.SymLeft)
                 + (new Optional() + Language.SymOuter)
                 + (new Optional() + Language.SymInner)
                 + Language.SymJoin;
 
-            var refRowset = new AstNode()
+            var refRowset = new RootNode()
                 + Language.RefRowset
                 + (new Optional() + Language.RefRowsetAlias);
 
@@ -91,14 +91,14 @@ namespace Khooversoft.Toolbox.Test.Parser
                 + Language.ColumnReference
                 + Language.SymAs;
 
-            var columns = new AstNode()
+            var columns = new RootNode()
                 + optionalAs
                 + Language.ColumnName
                 + (new Optional() + (new Repeat() + Language.SymComma + optionalAs + Language.ColumnName));
 
-            _rules = new AstProductionRules<TokenType>()
+            _rules = new ParserProductionRules<TokenType>()
             {
-                new AstNode("main")
+                new RootNode("main")
                     + (new Optional() + Language.Rowset + Language.SymEqual)
                     + Language.SymSelect
                     + (new Optional() + Language.SymDistinct)
@@ -315,7 +315,7 @@ namespace Khooversoft.Toolbox.Test.Parser
         {
             string rawData = string.Join(" ", data);
 
-            var parser = new AstParser<TokenType>(_rules);
+            var parser = new LexicalParser<TokenType>(_rules);
             ParserResult result = parser.Parse(rawData);
             result.IsSuccess.Should().Be(shouldPass, result?.LastGood?.ToString() ?? "<no good last>");
             if (!result.IsSuccess)
@@ -371,7 +371,7 @@ namespace Khooversoft.Toolbox.Test.Parser
 
         private class Rowset
         {
-            public Rowset(IEnumerable<IAstNode> nodes)
+            public Rowset(IEnumerable<INode> nodes)
             {
                 Name = nodes
                     .Where(x => Language.RefRowset.Equals(x))
@@ -415,7 +415,7 @@ namespace Khooversoft.Toolbox.Test.Parser
 
         public class ColumnName
         {
-            public ColumnName(IEnumerable<IAstNode> nodes)
+            public ColumnName(IEnumerable<INode> nodes)
             {
                 Name = nodes
                     .Where(x => Language.ColumnName.Equals(x))
@@ -459,7 +459,7 @@ namespace Khooversoft.Toolbox.Test.Parser
 
         public class Join
         {
-            public Join(IEnumerable<IAstNode> nodes)
+            public Join(IEnumerable<INode> nodes)
             {
                 Left = nodes
                     .Where(x => Language.JoinReference.Equals(x))

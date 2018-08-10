@@ -27,7 +27,7 @@ namespace Khooversoft.Toolbox.Parser
             }
         }
 
-        public AstNode IfBracket(Token<T> token)
+        public RootNode IfBracket(Token<T> token)
         {
             bool isStartSymbol = token?.GrammarType.Equals(StartSymbol.TokenType) == true;
             bool isEndSymbol = token?.GrammarType.Equals(EndSymbol.TokenType) == true;
@@ -37,7 +37,7 @@ namespace Khooversoft.Toolbox.Parser
                 return null;
             }
 
-            AstNode astNodes = new AstNode();
+            RootNode astNodes = new RootNode();
             astNodes += new Symbol<T>(token.GrammarType);
             return astNodes;
         }

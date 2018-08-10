@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Khooversoft.Toolbox.Parser
 {
-    public interface IAstNode
+    public interface INode
     {
         string Name { get; }
     }
