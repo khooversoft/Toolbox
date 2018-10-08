@@ -88,6 +88,7 @@
     <Compile Include="Actor\ActorRetirementTests.cs" />
     <Compile Include="Actor\ActorTests.cs" />
     <Compile Include="Actor\ActorTimerTests.cs" />
+    <Compile Include="Application\Constants.cs" />
     <Compile Include="Collections\KeyedDictionaryTests.cs" />
     <Compile Include="Collections\LruCacheTests.cs" />
     <Compile Include="Collections\RingQueueTest.cs" />

@@ -11,7 +11,13 @@ namespace Khooversoft.Toolbox.Test.Security
     [Trait("Category", "JWT")]
     public class JwtTests
     {
-        private static IWorkContext _workContext = WorkContext.Empty;
+        private static readonly IWorkContext _workContext = WorkContext.Empty;
+
+        private static readonly LocalCertificate _jwtVaultTest =
+            new LocalCertificate(StoreLocation.LocalMachine, StoreName.My, "CB965B095107F792022114ED67A8B2E8C4DFBCA8", true);
+
+        private static readonly LocalCertificate _vaultData =
+            new LocalCertificate(StoreLocation.LocalMachine, StoreName.My, "5B76606DD3076D73825CA2FA04C7D285AEBC7C73", true);
 
         [Fact]
         public void JwtSecurityTokenBuilderTest()
@@ -20,8 +26,6 @@ namespace Khooversoft.Toolbox.Test.Security
             const string emailText = "Email";
             const string emailId = "testemail@domain.com";
 
-            var localCertificate = new LocalCertificate(StoreLocation.LocalMachine, StoreName.My, "7A270477C5F0B9AAB2AD304B0838E1F8714C5377", true);
-
             string token = new JwtTokenBuilder()
                 .SetAudience(new Uri("http://localhost/audience").ToString())
                 .SetIssuer(new Uri("http://localhost/Issuer").ToString())
@@ -29,17 +33,17 @@ namespace Khooversoft.Toolbox.Test.Security
                 .SetIssuedAt(DateTime.Now)
                 .SetClaim(new Claim(emailText, emailId))
                 .AddSubject(userId)
-                .SetCertificate(localCertificate.GetCertificate(_workContext))
+                .SetCertificate(_jwtVaultTest.GetCertificate(_workContext))
                 .Build();
 
             token.Should().NotBeNullOrEmpty();
 
             JwtTokenDetails tokenDetails = new JwtTokenParserBuilder()
-                .AddCertificate(localCertificate.GetCertificate(_workContext))
+                .AddCertificate(_jwtVaultTest.GetCertificate(_workContext))
                 .Build()
                 .Parse(_workContext, token);
 
-            tokenDetails.JwtSecurityToken.Header.Kid.Should().Be(localCertificate.LocalCertificateKey.Thumbprint);
+            tokenDetails.JwtSecurityToken.Header.Kid.Should().Be(_jwtVaultTest.LocalCertificateKey.Thumbprint);
             tokenDetails.JwtSecurityToken.Subject.Should().Be(userId);
             tokenDetails.JwtSecurityToken.Claims.Any(x => x.Type == emailText && x.Value == emailId).Should().BeTrue();
         }
@@ -48,72 +52,67 @@ namespace Khooversoft.Toolbox.Test.Security
         public void JwtSecurityTokenAudienceTest()
         {
             var audience = new Uri("http://localhost/audience");
-            var localCertificate = new LocalCertificate(StoreLocation.LocalMachine, StoreName.My, "7A270477C5F0B9AAB2AD304B0838E1F8714C5377", true);
 
             string token = new JwtTokenBuilder()
                 .SetAudience(audience.ToString())
                 .SetExpires(DateTime.Now.AddDays(10))
                 .SetIssuedAt(DateTime.Now)
                 .SetClaim(new Claim("Email", "testemail@domain.com"))
-                .SetCertificate(localCertificate.GetCertificate(_workContext))
+                .SetCertificate(_jwtVaultTest.GetCertificate(_workContext))
                 .Build();
 
             token.Should().NotBeNullOrEmpty();
 
             JwtTokenDetails tokenDetails = new JwtTokenParserBuilder()
-                .AddCertificate(localCertificate.GetCertificate(_workContext))
+                .AddCertificate(_jwtVaultTest.GetCertificate(_workContext))
                 .AddValidAudience(audience.ToString())
                 .Build()
                 .Parse(_workContext, token);
 
-            tokenDetails.JwtSecurityToken.Header.Kid.Should().Be(localCertificate.LocalCertificateKey.Thumbprint);
+            tokenDetails.JwtSecurityToken.Header.Kid.Should().Be(_jwtVaultTest.LocalCertificateKey.Thumbprint);
         }
 
         [Fact]
         public void JwtSecurityTokenIssuerTest()
         {
             var issuer = new Uri("http://localhost/Issuer");
-            var localCertificate = new LocalCertificate(StoreLocation.LocalMachine, StoreName.My, "7A270477C5F0B9AAB2AD304B0838E1F8714C5377", true);
 
             string token = new JwtTokenBuilder()
                 .SetIssuer(issuer.ToString())
                 .SetExpires(DateTime.Now.AddDays(10))
                 .SetIssuedAt(DateTime.Now)
                 .SetClaim(new Claim("Email", "testemail@domain.com"))
-                .SetCertificate(localCertificate.GetCertificate(_workContext))
+                .SetCertificate(_jwtVaultTest.GetCertificate(_workContext))
                 .Build();
 
             token.Should().NotBeNullOrEmpty();
 
             JwtTokenDetails tokenDetails = new JwtTokenParserBuilder()
-                .AddCertificate(localCertificate.GetCertificate(_workContext))
+                .AddCertificate(_jwtVaultTest.GetCertificate(_workContext))
                 .AddValidIssuer(issuer.ToString())
                 .Build()
                 .Parse(_workContext, token);
 
-            tokenDetails.JwtSecurityToken.Header.Kid.Should().Be(localCertificate.LocalCertificateKey.Thumbprint);
+            tokenDetails.JwtSecurityToken.Header.Kid.Should().Be(_jwtVaultTest.LocalCertificateKey.Thumbprint);
         }
 
         [Fact]
         public void JwtSecurityFailureTest()
         {
             var issuer = new Uri("http://localhost/Issuer");
-            var localCertificate = new LocalCertificate(StoreLocation.LocalMachine, StoreName.My, "7A270477C5F0B9AAB2AD304B0838E1F8714C5377", true);
 
             string token = new JwtTokenBuilder()
                 .SetIssuer(issuer.ToString())
                 .SetExpires(DateTime.Now.AddDays(10))
                 .SetIssuedAt(DateTime.Now)
                 .SetClaim(new Claim("Email", "testemail@domain.com"))
-                .SetCertificate(localCertificate.GetCertificate(_workContext))
+                .SetCertificate(_jwtVaultTest.GetCertificate(_workContext))
                 .Build();
 
             token.Should().NotBeNullOrEmpty();
 
-            var localCertificate2 = new LocalCertificate(StoreLocation.LocalMachine, StoreName.My, "A4A261513C973CCCC13ABA45B2062484F71CE32F", true);
-
             JwtTokenDetails tokenDetails = new JwtTokenParserBuilder()
-                .AddCertificate(localCertificate2.GetCertificate(_workContext))
+                .AddCertificate(_vaultData.GetCertificate(_workContext))
                 .AddValidIssuer(issuer.ToString())
                 .Build()
                 .Parse(_workContext, token);
@@ -122,28 +121,27 @@ namespace Khooversoft.Toolbox.Test.Security
             tokenDetails.Should().BeNull();
 
             tokenDetails = new JwtTokenParserBuilder()
-                .AddCertificate(localCertificate.GetCertificate(_workContext))
-                .AddCertificate(localCertificate2.GetCertificate(_workContext))
+                .AddCertificate(_jwtVaultTest.GetCertificate(_workContext))
+                .AddCertificate(_vaultData.GetCertificate(_workContext))
                 .AddValidIssuer(issuer.ToString())
                 .Build()
                 .Parse(_workContext, token);
 
             tokenDetails.Should().NotBeNull();
-            tokenDetails.JwtSecurityToken.Header.Kid.Should().Be(localCertificate.LocalCertificateKey.Thumbprint);
+            tokenDetails.JwtSecurityToken.Header.Kid.Should().Be(_jwtVaultTest.LocalCertificateKey.Thumbprint);
         }
 
         [Fact]
         public void JwtSecuritySignatureFailureTest()
         {
             var issuer = new Uri("http://localhost/Issuer");
-            var localCertificate = new LocalCertificate(StoreLocation.LocalMachine, StoreName.My, "7A270477C5F0B9AAB2AD304B0838E1F8714C5377", true);
 
             string token = new JwtTokenBuilder()
                 .SetIssuer(issuer.ToString())
                 .SetExpires(DateTime.Now.AddDays(10))
                 .SetIssuedAt(DateTime.Now)
                 .SetClaim(new Claim("Email", "testemail@domain.com"))
-                .SetCertificate(localCertificate.GetCertificate(_workContext))
+                .SetCertificate(_jwtVaultTest.GetCertificate(_workContext))
                 .Build();
 
             token.Should().NotBeNullOrEmpty();
@@ -151,7 +149,7 @@ namespace Khooversoft.Toolbox.Test.Security
             token = token.Remove(3, 2);
 
             JwtTokenDetails tokenDetails = new JwtTokenParserBuilder()
-                .AddCertificate(localCertificate.GetCertificate(_workContext))
+                .AddCertificate(_jwtVaultTest.GetCertificate(_workContext))
                 .AddValidIssuer(issuer.ToString())
                 .Build()
                 .Parse(_workContext, token);

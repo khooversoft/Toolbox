@@ -76,10 +76,15 @@
     <Compile Include="Extensions\BsonDocumentExtension.cs" />
     <Compile Include="Extensions\UtilityExtensions.cs" />
     <Compile Include="Instructions\Functions\And.cs" />
+    <Compile Include="Instructions\Functions\Command.cs" />
     <Compile Include="Instructions\Functions\Compare.cs" />
     <Compile Include="Instructions\Functions\CompareType.cs" />
+    <Compile Include="Instructions\Functions\DirectionType.cs" />
     <Compile Include="Instructions\Functions\Or.cs" />
     <Compile Include="Instructions\Functions\Field.cs" />
+    <Compile Include="Instructions\Functions\OrderBy.cs" />
+    <Compile Include="Instructions\Functions\Query.cs" />
+    <Compile Include="Instructions\ICommandNode.cs" />
     <Compile Include="Instructions\IInstructionNode.cs" />
     <Compile Include="Instructions\InstructionCollection.cs" />
     <Compile Include="Instructions\MongoTokenType.cs" />

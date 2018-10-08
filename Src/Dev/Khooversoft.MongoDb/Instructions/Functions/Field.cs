@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Khooversoft.MongoDb
 {
-    public class Field : InstructionCollection, IInstructionNode
+    public class Field : InstructionCollection<IInstructionNode>, IInstructionNode
     {
         public Field(string fieldName)
         {

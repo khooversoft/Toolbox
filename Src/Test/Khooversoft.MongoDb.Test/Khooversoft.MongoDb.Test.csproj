@@ -88,6 +88,7 @@
     <Compile Include="DatabaseTests\CollectionModelPackageTests.cs" />
     <Compile Include="DatabaseTests\CreateRemoveDatabaseTests.cs" />
     <Compile Include="DatabaseTests\DocumentReadWriteTests.cs" />
+    <Compile Include="DocumentTests\DocumentSearchAdvanceTests.cs" />
     <Compile Include="DocumentTests\DocumentSearchTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

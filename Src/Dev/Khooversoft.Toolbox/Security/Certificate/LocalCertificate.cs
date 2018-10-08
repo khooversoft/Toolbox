@@ -64,8 +64,7 @@ namespace Khooversoft.Toolbox.Security
                         {
                             certificate = certificateList
                                 .OfType<X509Certificate2>()
-                                .Where(x => !LocalCertificateKey.RequirePrivateKey || x.HasPrivateKey)
-                                .FirstOrDefault();
+                                .FirstOrDefault(x => !LocalCertificateKey.RequirePrivateKey || x.HasPrivateKey);
 
                             _cachedCertificate.Set(certificate);
                         }

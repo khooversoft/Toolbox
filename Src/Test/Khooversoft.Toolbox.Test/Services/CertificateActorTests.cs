@@ -33,7 +33,7 @@ namespace Khooversoft.Toolbox.Test.Services
             using (ILifetimeScope scopeContainer = container.BeginLifetimeScope())
             using (manager)
             {
-                var key = new LocalCertificateKey(StoreLocation.LocalMachine, StoreName.My, "7A270477C5F0B9AAB2AD304B0838E1F8714C5377", true);
+                var key = new LocalCertificateKey(StoreLocation.LocalMachine, StoreName.My, Constants.JwtVaultTestCertificateThumbprint, true);
 
                 ICertificateActor actor = await manager.CreateProxyAsync<ICertificateActor>(context, key.CreateActorKey());
                 byte[] rawBytes = Encoding.UTF8.GetBytes(testData);

@@ -60,14 +60,15 @@ namespace Khooversoft.MongoDb
             }
         }
 
-        public async Task Delete(IWorkContext context, FilterDefinition<TDocument> filter)
+        public async Task<int> Delete(IWorkContext context, FilterDefinition<TDocument> filter)
         {
             Verify.IsNotNull(nameof(context), context);
             Verify.IsNotNull(nameof(filter), filter);
 
             var options = new DeleteOptions();
 
-            await MongoCollection.DeleteManyAsync(filter, options, context.CancellationToken);
+            DeleteResult deleteResult = await MongoCollection.DeleteManyAsync(filter, options, context.CancellationToken);
+            return (int)deleteResult.DeletedCount;
         }
 
         public Task<long> Count(IWorkContext context, FilterDefinition<TDocument> filter = null)

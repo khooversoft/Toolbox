@@ -7,7 +7,7 @@ using MongoDB.Bson;
 
 namespace Khooversoft.MongoDb
 {
-    public class Or : InstructionCollection, IInstructionNode
+    public class Or : InstructionCollection<IInstructionNode>, IInstructionNode
     {
         public Or()
         {

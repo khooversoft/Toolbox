@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Khooversoft.MongoDb
 {
-    public class And : InstructionCollection, IInstructionNode
+    public class And : InstructionCollection<IInstructionNode>, IInstructionNode
     {
         public BsonDocument ToDocument()
         {

@@ -140,6 +140,32 @@ namespace Khooversoft.MongoDb.Test.DocumentTests
         }
 
         [Fact]
+        public async Task TestDate_3_SimpleSearch()
+        {
+            DateTime searchDate = _tranData.AddDays(4);
+
+            var query = new And()
+                + (new Field(nameof(TestDocument.TranDate)) <= searchDate);
+
+            var findResult = await _collection.Find(_workContext, query.ToDocument());
+            List<TestDocument> resultDocuments = findResult.ToList();
+            VerifyDocuments(_testDocuments.Where(x => x.TranDate <= searchDate), resultDocuments);
+        }
+
+        [Fact]
+        public async Task TestDate_4_SimpleSearch()
+        {
+            DateTime searchDate = _tranData.AddDays(4);
+
+            var query = new And()
+                + (new Field(nameof(TestDocument.TranDate)) > searchDate);
+
+            var findResult = await _collection.Find(_workContext, query.ToDocument());
+            List<TestDocument> resultDocuments = findResult.ToList();
+            VerifyDocuments(_testDocuments.Where(x => x.TranDate > searchDate), resultDocuments);
+        }
+
+        [Fact]
         public async Task AndSimpleSearch()
         {
             string lookupName = $"First_{1}";
@@ -220,6 +246,77 @@ namespace Khooversoft.MongoDb.Test.DocumentTests
             VerifyDocuments(_testDocuments.Where(x => x.Index <= 4), resultDocuments);
         }
 
+        [Fact]
+        public async Task SearchFor_1_GuidSearch()
+        {
+            Guid searchForKey = _testDocuments.Skip(2).First().GuidKey;
+
+            var query = new And()
+                + new Compare(CompareType.Equal, nameof(TestDocument.GuidKey), searchForKey);
+
+            BsonDocument queryBson = query.ToDocument();
+
+            var findResult = await _collection.Find(_workContext, queryBson);
+            List<TestDocument> resultDocuments = findResult.ToList();
+            VerifyDocuments(_testDocuments.Where(x => x.GuidKey == searchForKey), resultDocuments);
+        }
+
+        [Fact]
+        public async Task SearchFor_2_GuidSearch()
+        {
+            Guid searchForKey = _testDocuments.Skip(4).First().GuidKey;
+
+            var query = new And()
+                + (new Field(nameof(TestDocument.GuidKey)) == searchForKey);
+
+            BsonDocument queryBson = query.ToDocument();
+
+            var findResult = await _collection.Find(_workContext, queryBson);
+            List<TestDocument> resultDocuments = findResult.ToList();
+            VerifyDocuments(_testDocuments.Where(x => x.GuidKey == searchForKey), resultDocuments);
+        }
+
+        [Fact]
+        public async Task LockedDate_IsNull_GuidSearch()
+        {
+            var query = new And()
+                + (new Field(nameof(TestDocument.LockedDate)) == null);
+
+            BsonDocument queryBson = query.ToDocument();
+
+            var findResult = await _collection.Find(_workContext, queryBson);
+            List<TestDocument> resultDocuments = findResult.ToList();
+            VerifyDocuments(_testDocuments.Where(x => x.LockedDate == null), resultDocuments);
+        }
+
+        [Fact]
+        public async Task LockedDate_IsNotNull_GuidSearch()
+        {
+            var query = new And()
+                + (new Field(nameof(TestDocument.LockedDate)) != null);
+
+            BsonDocument queryBson = query.ToDocument();
+
+            var findResult = await _collection.Find(_workContext, queryBson);
+            List<TestDocument> resultDocuments = findResult.ToList();
+            VerifyDocuments(_testDocuments.Where(x => x.LockedDate != null), resultDocuments);
+        }
+
+        [Fact]
+        public async Task LockedDate_IsNotNull_AndEqual_GuidSearch()
+        {
+            DateTime tt = _tranData.AddDays(3);
+
+            var query = new And()
+                + (new Field(nameof(TestDocument.LockedDate)) == tt);
+
+            BsonDocument queryBson = query.ToDocument();
+
+            var findResult = await _collection.Find(_workContext, queryBson);
+            List<TestDocument> resultDocuments = findResult.ToList();
+            VerifyDocuments(_testDocuments.Where(x => x.LockedDate == tt), resultDocuments);
+        }
+
         private TestDocument CreateTestDocument(int index)
         {
             DateTime tt = _tranData.AddDays(index);
@@ -236,6 +333,8 @@ namespace Khooversoft.MongoDb.Test.DocumentTests
                 State = $"State_{index}",
                 ZipCode = $"Zip_{index}",
                 TranDate = tt,
+                GuidKey = Guid.NewGuid(),
+                LockedDate = index % 3 == 0 ? tt : (DateTime?)null,
             };
         }
 
@@ -259,6 +358,8 @@ namespace Khooversoft.MongoDb.Test.DocumentTests
                 result.State.Should().Be(test.State);
                 result.ZipCode.Should().Be(test.ZipCode);
                 result.TranDate.Should().Be(test.TranDate);
+                result.GuidKey.Should().Be(test.GuidKey);
+                result.LockedDate.Should().Be(test.LockedDate);
             }
         }
 
@@ -286,6 +387,11 @@ namespace Khooversoft.MongoDb.Test.DocumentTests
 
             [BsonDateTimeOptions(Kind = DateTimeKind.Utc, Representation = BsonType.Int64)]
             public DateTime TranDate { get; set; }
+
+            public Guid GuidKey { get; set; }
+
+            [BsonDateTimeOptions(Kind = DateTimeKind.Utc, Representation = BsonType.Int64)]
+            public DateTime? LockedDate { get; set; }
         }
     }
 }

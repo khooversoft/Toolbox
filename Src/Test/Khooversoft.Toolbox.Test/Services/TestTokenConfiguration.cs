@@ -21,11 +21,11 @@ namespace Khooversoft.Toolbox.Test.Services
 
         public IEnumerable<LocalCertificateKey> TokenAuthorizationRequestCertificateKeys { get; } = new List<LocalCertificateKey>
         {
-            new LocalCertificateKey(StoreLocation.LocalMachine, StoreName.My, "7A270477C5F0B9AAB2AD304B0838E1F8714C5377", true),
+            new LocalCertificateKey(StoreLocation.LocalMachine, StoreName.My, Constants.JwtVaultTestCertificateThumbprint, true),
         };
 
         public TokenAuthorizationConfiguration TokenAuthorization { get; } = new TokenAuthorizationConfiguration(
-                new LocalCertificateKey(StoreLocation.LocalMachine, StoreName.My, "7A270477C5F0B9AAB2AD304B0838E1F8714C5377", true),
+                new LocalCertificateKey(StoreLocation.LocalMachine, StoreName.My, Constants.JwtVaultTestCertificateThumbprint, true),
                 TimeSpan.FromHours(1),
                 _testServerName);
 
@@ -33,7 +33,7 @@ namespace Khooversoft.Toolbox.Test.Services
         // Client configuration
         // ========================================================================================
 
-        public LocalCertificateKey RequestSigningCertificateKey { get; } = new LocalCertificateKey(StoreLocation.LocalMachine, StoreName.My, "7A270477C5F0B9AAB2AD304B0838E1F8714C5377", true);
+        public LocalCertificateKey RequestSigningCertificateKey { get; } = new LocalCertificateKey(StoreLocation.LocalMachine, StoreName.My, Constants.JwtVaultTestCertificateThumbprint, true);
 
         public string RequestingIssuer { get; } = _testClientIssuerName;
 
@@ -41,7 +41,7 @@ namespace Khooversoft.Toolbox.Test.Services
 
         public IEnumerable<LocalCertificateKey> ServerSigningCertificateKeys { get; } = new List<LocalCertificateKey>
         {
-            new LocalCertificateKey(StoreLocation.LocalMachine, StoreName.My, "7A270477C5F0B9AAB2AD304B0838E1F8714C5377", true),
+            new LocalCertificateKey(StoreLocation.LocalMachine, StoreName.My, Constants.JwtVaultTestCertificateThumbprint, true),
         };
 
         //public string AuthorizationIssuer { get; } = _testServerName;
