@@ -12,8 +12,8 @@ namespace Khooversoft.Toolbox.Actor
     /// Actor proxy built by RealProxy class in .NET.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    [DebuggerStepThrough]
-    internal class ActorProxy<T> : DispatchProxy where T : IActor
+    //[DebuggerStepThrough]
+    public class ActorProxy<T> : DispatchProxy where T : IActor
     {
         private static readonly CorrelationVector _cv = new CorrelationVector("Toolbox-ActorProxy");
         private readonly SemaphoreSlim _lockSemaphore = new SemaphoreSlim(1, 1);
@@ -22,7 +22,7 @@ namespace Khooversoft.Toolbox.Actor
         private IWorkContext _workContext;
         private static readonly Tag _tag = new Tag(nameof(ActorProxy<T>));
 
-        private ActorProxy()
+        public ActorProxy()
         {
         }
 
@@ -35,6 +35,8 @@ namespace Khooversoft.Toolbox.Actor
         /// <returns>proxy</returns>
         public static T Create(IWorkContext context, IActorBase instance, IActorManager manager)
         {
+            Debugger.Break();
+
             Verify.IsNotNull(nameof(context), context);
             Verify.IsNotNull(nameof(instance), instance);
             Verify.IsNotNull(nameof(manager), manager);

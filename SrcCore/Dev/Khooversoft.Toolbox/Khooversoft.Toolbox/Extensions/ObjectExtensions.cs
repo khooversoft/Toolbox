@@ -14,12 +14,18 @@ namespace Khooversoft.Toolbox
         /// </summary>
         /// <typeparam name="T">type to change to</typeparam>
         /// <param name="self">value</param>
+        /// <param name="raiseException">if true, return default if type cannot change</param>
         /// <returns>converted type</returns>
-        public static T AsType<T>(this object self)
+        public static T AsType<T>(this object self, bool raiseException = true)
         {
             if (self is T)
             {
                 return (T)Convert.ChangeType(self, typeof(T));
+            }
+
+            if (raiseException)
+            {
+                return default;
             }
 
             throw new ArgumentException($"Cannot convert {self.GetType().Name} to type {typeof(T).Name}");

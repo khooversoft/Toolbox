@@ -24,7 +24,7 @@ namespace Khooversoft.Toolbox.Services
             return self;
         }
 
-        public static ActorManagerBuilder AddIdentityModule(this ActorManagerBuilder self, ILifetimeScope container)
+        public static ActorConfigurationBuilder AddIdentityModule(this ActorConfigurationBuilder self, ILifetimeScope container)
         {
             Verify.IsNotNull(nameof(self), self);
             Verify.IsNotNull(nameof(container), container);

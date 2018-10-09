@@ -20,7 +20,7 @@ namespace Khooversoft.Toolbox
         CorrelationVector Cv { get; }
         Tag Tag { get; }
         ILifetimeScope Container { get; }
-        IProperties Properties { get; }
+        IPropertyBag Properties { get; }
         CancellationToken CancellationToken { get; }
         IEventLog EventLog { get; }
         IEventDimensions Dimensions { get; }

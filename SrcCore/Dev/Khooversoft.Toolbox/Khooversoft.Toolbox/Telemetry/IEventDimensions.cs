@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Khooversoft.Toolbox
 {
-    public interface IEventDimensions : IReadOnlyList<KeyValuePair<string, string>>
+    public interface IEventDimensions : IReadOnlyList<KeyValuePair<string, object>>
     {
     }
 }

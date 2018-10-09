@@ -22,9 +22,8 @@ namespace Khooversoft.Toolbox.Actor
         private const string _disposedTestText = "Actor Manager has been disposed";
 
         public ActorManager()
+            : this(ActorConfiguration.Default)
         {
-            Configuration = new ActorManagerBuilder();
-            _actorRepository = new ActorRepository(Configuration);
         }
 
         public ActorManager(IActorConfiguration configuration)
@@ -108,7 +107,9 @@ namespace Khooversoft.Toolbox.Actor
                 throw ex;
             }
 
-            actorRegistration = new ActorRegistration(typeof(T), actorKey, actorBase, ActorProxy<T>.Create(context, actorBase, this));
+            T actorInterface = ActorProxy<T>.Create(context, actorBase, this);
+            actorRegistration = new ActorRegistration(typeof(T), actorKey, actorBase, actorInterface);
+
             await _actorRepository.SetAsync(context, actorRegistration);
 
             // Create proxy for interface

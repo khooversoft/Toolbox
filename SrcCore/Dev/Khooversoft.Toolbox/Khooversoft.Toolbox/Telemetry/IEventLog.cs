@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,5 +35,8 @@ namespace Khooversoft.Toolbox
 
         void TrackMetric(IWorkContext context, string name, double value, IEventDimensions dimensions = null);
         void TrackMetric(IWorkContext context, string name, double value, object dimensions);
+
+        void LogEvent(IWorkContext context, TelemetryType eventLevel, string eventSourceName, string eventName, IEventDimensions dimensions = null);
+        void LogEvent(IWorkContext context, TelemetryType eventLevel, string eventSourceName, string eventName, object dimensions);
     }
 }

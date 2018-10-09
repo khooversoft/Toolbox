@@ -23,12 +23,14 @@ namespace Khooversoft.Toolbox.Services
             return self;
         }
 
-        public static ActorManagerBuilder AddCertificateModule(this ActorManagerBuilder self, ILifetimeScope container)
+        public static ActorConfigurationBuilder AddCertificateModule(this ActorConfigurationBuilder self, ILifetimeScope container)
         {
             Verify.IsNotNull(nameof(self), self);
             Verify.IsNotNull(nameof(container), container);
 
-            self.Register<ICertificateActor>((c, k, m) => container.Resolve<ICertificateActor>(new TypedParameter(typeof(ActorKey), k), new TypedParameter(typeof(IActorManager), m)));
+            self.Register<ICertificateActor>(
+                (c, k, m) => container.Resolve<ICertificateActor>(new TypedParameter(typeof(ActorKey), k), new TypedParameter(typeof(IActorManager), m))
+                );
 
             return self;
         }

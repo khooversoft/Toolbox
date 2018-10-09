@@ -47,17 +47,22 @@ namespace Khooversoft.Toolbox
         /// <typeparam name="TKey"></typeparam>
         /// <typeparam name="TValue"></typeparam>
         /// <param name="self"></param>
+        /// <param name="ignoreCase">true to ignore case with string</param>
         /// <returns></returns>
-        public static IEnumerable<KeyValuePair<TKey, TValue>> Materialized<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> self)
+        public static IEnumerable<KeyValuePair<TKey, TValue>> Materialized<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> self, bool ignoreCase = true)
         {
-            if( self == null)
+            if (self == null)
             {
                 return null;
             }
 
+            IEqualityComparer<TKey> comparer = ignoreCase && (typeof(TKey) == typeof(string)) ?
+                (IEqualityComparer<TKey>)StringComparer.InvariantCultureIgnoreCase :
+                EqualityComparer<TKey>.Default;
+
             return self
                 .Select((x, i) => new { pair = x, index = i })
-                .GroupBy(x => x.pair.Key)
+                .GroupBy(x => x.pair.Key, comparer)
                 .Select(x => x.OrderByDescending(y => y.index).First())
                 .Select(x => x.pair);
         }

@@ -4,13 +4,13 @@ using System.Text;
 
 namespace Khooversoft.Toolbox
 {
-    public class EventDimensions : List<KeyValuePair<string, string>>, IEventDimensions
+    public class EventDimensions : List<KeyValuePair<string, object>>, IEventDimensions
     {
         public EventDimensions()
         {
         }
 
-        public EventDimensions(IEnumerable<KeyValuePair<string, string>> values)
+        public EventDimensions(IEnumerable<KeyValuePair<string, object>> values)
             : base(values)
         {
         }

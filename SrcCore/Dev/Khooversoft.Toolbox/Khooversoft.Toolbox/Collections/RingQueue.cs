@@ -29,7 +29,7 @@ namespace Khooversoft.Toolbox
         /// <param name="size"></param>
         public RingQueue(int size)
         {
-            Verify.Assert(size >= 0, "Size must be greater then 0");
+            Verify.Assert(size > 0, "Size must be greater then 0");
 
             Size = size;
             Clear();

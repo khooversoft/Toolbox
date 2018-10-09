@@ -11,37 +11,21 @@ namespace Khooversoft.Toolbox
     /// </summary>
     public class EventDimensionsBuilder
     {
-        private const string _idName = "id";
-        private const string _cvName = "cv";
-        private const string _activityIdName = "activityId";
-        private const string _parentActivityIdName = "parentActivityId";
-
-        private readonly Dictionary<string, string> _properties;
+        private readonly List<KeyValuePair<string, object>> _properties;
 
         public EventDimensionsBuilder()
         {
-            _properties = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+            _properties = new List<KeyValuePair<string, object>>();
         }
 
-        public EventDimensionsBuilder(IReadOnlyDictionary<string, string> values)
+        public EventDimensionsBuilder(IEnumerable<KeyValuePair<string, object>> values)
         {
-            _properties = values.ToDictionary(x => x.Key, x => x.Value, StringComparer.InvariantCultureIgnoreCase);
+            _properties = values.ToList();
         }
 
-        public string Id { get { return GetValue(_idName); } set { _properties[_idName] = value; } }
-        public string Cv { get { return GetValue(_cvName); } set { _properties[_cvName] = value; } }
-        public string ActivityId { get { return GetValue(_activityIdName); } set { _properties[_activityIdName] = value; } }
-        public string ParentActivityId { get { return GetValue(_parentActivityIdName); } set { _properties[_parentActivityIdName] = value; } }
-
-        public EventDimensionsBuilder Set(string key, string value)
+        public EventDimensionsBuilder Add(string key, object value)
         {
-            _properties[key] = value;
-            return this;
-        }
-
-        public EventDimensionsBuilder Set(string key, object value)
-        {
-            _properties[key] = value.ToString();
+            _properties.Add(new KeyValuePair<string, object>(key, value));
             return this;
         }
 
@@ -51,27 +35,9 @@ namespace Khooversoft.Toolbox
             return this;
         }
 
-        public EventDimensionsBuilder Remove(string key)
-        {
-            _properties.Remove(key);
-            return this;
-        }
-
         public IEventDimensions Build()
         {
-            return _properties
-                .ToList()
-                .AsType<IEventDimensions>();
-        }
-
-        private string GetValue(string key)
-        {
-            if( !_properties.TryGetValue(key, out string value))
-            {
-                return null;
-            }
-
-            return value;
+            return new EventDimensions(_properties);
         }
     }
 }

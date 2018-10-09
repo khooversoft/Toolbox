@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Khooversoft.Toolbox
 {
-    public interface IProperties : IReadOnlyDictionary<string, object>
+    public interface IPropertyBag : IReadOnlyDictionary<string, object>
     {
     }
 }

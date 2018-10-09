@@ -11,7 +11,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E2BFBFC0
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Khooversoft.Toolbox.Test", "..\..\Test\Khooversoft.Toolbox.Test\Khooversoft.Toolbox.Test.csproj", "{AC0D7581-9684-4076-B73E-B90E211F7B4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Khooversoft.Toolbox.Services.Test", "..\..\Test\Khooversoft.Toolbox.Services.Test\Khooversoft.Toolbox.Services.Test.csproj", "{CCAA67CC-292B-43A5-8996-A1B60BB797D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Khooversoft.Toolbox.Services.Test", "..\..\Test\Khooversoft.Toolbox.Services.Test\Khooversoft.Toolbox.Services.Test.csproj", "{CCAA67CC-292B-43A5-8996-A1B60BB797D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Khooversoft.Telemetry", "Khooversoft.Telemetry\Khooversoft.Telemetry.csproj", "{98547644-19D1-4A14-914B-50AC3D41068C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Khooversoft.Telemetry.Test", "..\..\Test\Khooversoft.Telemetry.Test\Khooversoft.Telemetry.Test.csproj", "{8430A571-0ADB-4D7E-A4BA-327E9EBB776C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +39,14 @@ Global
 		{CCAA67CC-292B-43A5-8996-A1B60BB797D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCAA67CC-292B-43A5-8996-A1B60BB797D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCAA67CC-292B-43A5-8996-A1B60BB797D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98547644-19D1-4A14-914B-50AC3D41068C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98547644-19D1-4A14-914B-50AC3D41068C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98547644-19D1-4A14-914B-50AC3D41068C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98547644-19D1-4A14-914B-50AC3D41068C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8430A571-0ADB-4D7E-A4BA-327E9EBB776C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8430A571-0ADB-4D7E-A4BA-327E9EBB776C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8430A571-0ADB-4D7E-A4BA-327E9EBB776C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8430A571-0ADB-4D7E-A4BA-327E9EBB776C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,6 +54,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{AC0D7581-9684-4076-B73E-B90E211F7B4C} = {E2BFBFC0-650E-4DD1-A2DA-1A9B9C9E60EB}
 		{CCAA67CC-292B-43A5-8996-A1B60BB797D1} = {E2BFBFC0-650E-4DD1-A2DA-1A9B9C9E60EB}
+		{8430A571-0ADB-4D7E-A4BA-327E9EBB776C} = {E2BFBFC0-650E-4DD1-A2DA-1A9B9C9E60EB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5FD34F1F-A266-44BC-A0D9-400B24C91485}

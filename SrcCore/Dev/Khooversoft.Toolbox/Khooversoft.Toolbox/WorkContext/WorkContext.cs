@@ -24,9 +24,9 @@ namespace Khooversoft.Toolbox
         {
             Cv = new CorrelationVector();
             Tag = Tag.Empty;
-            Properties = new Properties();
+            Properties = PropertyBag.Empty;
             EventLog = new EventLogNull();
-            Dimensions = new EventDimensions();
+            Dimensions = EventDimensions.Empty;
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Khooversoft.Toolbox
             Cv = workContext.Cv;
             Tag = workContext.Tag;
             Container = workContext.Container;
-            Properties = new Properties(workContext.Properties);
+            Properties = new PropertyBag(workContext.Properties);
             CancellationToken = workContext.CancellationToken;
             EventLog = workContext.EventLog;
             Dimensions = new EventDimensions(workContext.Dimensions);
@@ -58,7 +58,7 @@ namespace Khooversoft.Toolbox
             CorrelationVector cv,
             Tag tag,
             ILifetimeScope workContainer,
-            IProperties properties = null,
+            IPropertyBag properties = null,
             CancellationToken? cancellationToken = null,
             IEventLog eventLog = null,
             IEventDimensions dimensions = null
@@ -70,7 +70,7 @@ namespace Khooversoft.Toolbox
             Cv = cv;
             Tag = tag;
             Container = workContainer;
-            Properties = properties != null ? new Properties(properties) : new Properties();
+            Properties = properties != null ? new PropertyBag(properties) : new PropertyBag();
             CancellationToken = cancellationToken ?? CancellationToken.None;
             EventLog = eventLog ?? new EventLogNull();
             Dimensions = dimensions != null ? new EventDimensions(dimensions) : new EventDimensions();
@@ -87,7 +87,7 @@ namespace Khooversoft.Toolbox
 
         public ILifetimeScope Container { get; }
 
-        public IProperties Properties { get; }
+        public IPropertyBag Properties { get; }
 
         public CancellationToken CancellationToken { get; private set; } = CancellationToken.None;
 

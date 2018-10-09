@@ -25,7 +25,7 @@ namespace Khooversoft.Toolbox
             Cv = new CorrelationVector();
             Tag = Tag.Empty;
             EventLog = new EventLogNull();
-            Dimensions = new Dictionary<string, string>();
+            Dimensions = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Khooversoft.Toolbox
 
         public IEventLog EventLog { get; set; }
 
-        public IDictionary<string, string> Dimensions { get; set; }
+        public IDictionary<string, object> Dimensions { get; set; }
 
         /// <summary>
         /// Add new property
@@ -127,7 +127,7 @@ namespace Khooversoft.Toolbox
         /// </summary>
         /// <param name="values">dimensions values</param>
         /// <returns>this</returns>
-        public WorkContextBuilder Set(IEnumerable<KeyValuePair<string, string>> values)
+        public WorkContextBuilder Set(IEnumerable<KeyValuePair<string, object>> values)
         {
             Verify.IsNotNull(nameof(values), values);
 
@@ -193,10 +193,10 @@ namespace Khooversoft.Toolbox
                 cv: Cv,
                 tag: Tag,
                 workContainer: WorkContainer,
-                properties: Properties.ToProperties(),
+                properties: new PropertyBag(Properties),
                 CancellationToken,
                 eventLog: EventLog,
-                dimensions: Dimensions.ToEventDimensions()
+                dimensions: new EventDimensions(Dimensions)
                 );
         }
     }

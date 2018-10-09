@@ -57,7 +57,12 @@ namespace Khooversoft.Toolbox
         {
             Verify.IsNotEmpty(nameof(name), name);
 
-            if (EqualityComparer<T>.Default.Equals(value, default(T)))
+            if( typeof(T).IsValueType)
+            {
+                return;
+            }
+
+            if (EqualityComparer<T>.Default.Equals(value, default))
             {
                 throw new ArgumentNullException(name, "Is NULL");
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Text;
 
 namespace Khooversoft.Toolbox
@@ -47,6 +48,14 @@ namespace Khooversoft.Toolbox
         }
 
         public void Info(IWorkContext context, string message, object dimensions)
+        {
+        }
+
+        public void LogEvent(IWorkContext context, TelemetryType eventLevel, string eventSourceName, string eventName, IEventDimensions dimensions = null)
+        {
+        }
+
+        public void LogEvent(IWorkContext context, TelemetryType eventLevel, string eventSourceName, string eventName, object dimensions)
         {
         }
 

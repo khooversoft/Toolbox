@@ -48,9 +48,10 @@ namespace Khooversoft.Toolbox.Test.Actor
             builder.RegisterType<StringCache>().As<ICache>();
             ILifetimeScope container = builder.Build();
 
-            IActorManager manager = new ActorManagerBuilder()
+            IActorManager manager = new ActorConfigurationBuilder()
                 .Register<ICache>((c, k, m) => container.Resolve<ICache>(new TypedParameter(typeof(ActorKey), k), new TypedParameter(typeof(IActorManager), m)))
-                .Build();
+                .Build()
+                .ToActorManager();
 
             using (container.BeginLifetimeScope())
             {
