@@ -6,14 +6,14 @@ using System.Text;
 
 namespace Khooversoft.Telemetry
 {
-    public class TelemetryMemoryListener : RingQueue<EventData>
+    public class TrackEventMemoryListener : RingQueue<EventData>
     {
-        public TelemetryMemoryListener(int size)
+        public TrackEventMemoryListener(int size)
             : base(size)
         {
         }
 
-        public TelemetryMemoryListener()
+        public TrackEventMemoryListener()
             : this(1000)
         {
         }

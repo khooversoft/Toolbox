@@ -36,7 +36,7 @@ namespace Khooversoft.Toolbox
         void TrackMetric(IWorkContext context, string name, double value, IEventDimensions dimensions = null);
         void TrackMetric(IWorkContext context, string name, double value, object dimensions);
 
-        void LogEvent(IWorkContext context, TelemetryType eventLevel, string eventSourceName, string eventName, IEventDimensions dimensions = null);
-        void LogEvent(IWorkContext context, TelemetryType eventLevel, string eventSourceName, string eventName, object dimensions);
+        void LogEvent(IWorkContext context, TelemetryType telemetryLevel, string eventSourceName, string eventName, IEventDimensions dimensions = null);
+        void LogEvent(IWorkContext context, TelemetryType telemetryLevel, string eventSourceName, string eventName, object dimensions);
     }
 }

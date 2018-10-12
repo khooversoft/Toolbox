@@ -7,13 +7,13 @@ using System.Text;
 
 namespace Khooversoft.Telemetry
 {
-    public class TelemetrySource : IEventLog
+    public class TrackEventSource : IEventLog
     {
         private const string _messageName = "message";
-        private readonly TelemetryRouter _router;
+        private readonly EventRouter _router;
         private readonly string _eventSourceName;
 
-        public TelemetrySource(TelemetryRouter router, string eventSourceName)
+        public TrackEventSource(EventRouter router, string eventSourceName)
         {
             Verify.IsNotNull(nameof(router), router);
             Verify.IsNotEmpty(nameof(eventSourceName), eventSourceName);
