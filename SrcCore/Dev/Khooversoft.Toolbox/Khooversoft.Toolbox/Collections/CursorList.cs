@@ -28,22 +28,39 @@ namespace Khooversoft.Toolbox
             _list = new List<T>(list);
         }
 
+        /// <summary>
+        /// Return value at index
+        /// </summary>
+        /// <param name="index">index</param>
+        /// <returns>value</returns>
         public T this[int index]
         {
             get { return _list[index]; }
             set { _list[index] = value; }
         }
 
+        /// <summary>
+        /// Count in list
+        /// </summary>
         public int Count => _list.Count;
 
+        /// <summary>
+        /// Test end of list, true if cursor is at the end
+        /// </summary>
         public bool EndOfList => _list.Count == 0 || _cursor >= _list.Count;
 
+        /// <summary>
+        /// Set / Get cursor position
+        /// </summary>
         public int Cursor
         {
             get { return _cursor; }
-            set { _cursor = Math.Min(_list.Count, value); }
+            set { _cursor = Math.Min(_list.Count, Math.Max(0, value)); }
         }
 
+        /// <summary>
+        /// Get value at cursor
+        /// </summary>
         public T Current
         {
             get
@@ -57,23 +74,42 @@ namespace Khooversoft.Toolbox
             }
         }
 
+        /// <summary>
+        /// Return values from cursor
+        /// </summary>
         public IEnumerable<T> FromCursor { get { return _list.Skip(Cursor); } }
 
+        /// <summary>
+        /// Clear list
+        /// </summary>
         public void Clear()
         {
             _list.Clear();
         }
 
+        /// <summary>
+        /// Add value to list
+        /// </summary>
+        /// <param name="value"></param>
         public void Add(T value)
         {
             _list.Add(value);
         }
 
+        /// <summary>
+        /// Remove value at index
+        /// </summary>
+        /// <param name="index"></param>
         public void RemoveAt(int index)
         {
             _list.RemoveAt(index);
         }
 
+        /// <summary>
+        /// Like "Next" return list of values
+        /// </summary>
+        /// <param name="count">number of next instructions</param>
+        /// <returns></returns>
         public IEnumerable<T> Next(int count)
         {
             while (!EndOfList && count-- != 0)
@@ -82,6 +118,10 @@ namespace Khooversoft.Toolbox
             }
         }
 
+        /// <summary>
+        /// Get next value and advance cursor
+        /// </summary>
+        /// <returns>value</returns>
         public T Next()
         {
             if (_cursor >= _list.Count)
@@ -92,6 +132,11 @@ namespace Khooversoft.Toolbox
             return _list[_cursor++];
         }
 
+        /// <summary>
+        /// Try to get the next value and if available
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public bool TryNext(out T value)
         {
             value = default(T);
@@ -105,11 +150,17 @@ namespace Khooversoft.Toolbox
             return true;
         }
 
+        /// <summary>
+        /// Save cursor in cursor stack
+        /// </summary>
         public void SaveCursor()
         {
             _cursorStack.Push(_cursor);
         }
 
+        /// <summary>
+        /// Restore cursor from save stack
+        /// </summary>
         public void RestoreCursor()
         {
             if (_cursorStack.Count == 0)
@@ -120,6 +171,9 @@ namespace Khooversoft.Toolbox
             _cursor = _cursorStack.Pop();
         }
 
+        /// <summary>
+        /// Abandon a saved cursor position
+        /// </summary>
         public void AbandonSavedCursor()
         {
             if (_cursorStack.Count == 0)
@@ -130,6 +184,10 @@ namespace Khooversoft.Toolbox
             _cursorStack.Pop();
         }
 
+        /// <summary>
+        /// Return debug details
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             var list = new List<string>()

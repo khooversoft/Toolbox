@@ -25,7 +25,7 @@ namespace Khooversoft.Toolbox
             Cv = new CorrelationVector();
             Tag = Tag.Empty;
             Properties = PropertyBag.Empty;
-            EventLog = new EventLogNull();
+            EventLog = new TelemetryLogNull();
             Dimensions = EventDimensions.Empty;
         }
 
@@ -60,7 +60,7 @@ namespace Khooversoft.Toolbox
             ILifetimeScope workContainer,
             IPropertyBag properties = null,
             CancellationToken? cancellationToken = null,
-            IEventLog eventLog = null,
+            ITelemetry eventLog = null,
             IEventDimensions dimensions = null
             )
         {
@@ -72,7 +72,7 @@ namespace Khooversoft.Toolbox
             Container = workContainer;
             Properties = properties != null ? new PropertyBag(properties) : new PropertyBag();
             CancellationToken = cancellationToken ?? CancellationToken.None;
-            EventLog = eventLog ?? new EventLogNull();
+            EventLog = eventLog ?? new TelemetryLogNull();
             Dimensions = dimensions != null ? new EventDimensions(dimensions) : new EventDimensions();
         }
 
@@ -91,7 +91,7 @@ namespace Khooversoft.Toolbox
 
         public CancellationToken CancellationToken { get; private set; } = CancellationToken.None;
 
-        public IEventLog EventLog { get; private set; }
+        public ITelemetry EventLog { get; private set; }
 
         public IEventDimensions Dimensions { get; private set; }
 
@@ -144,7 +144,7 @@ namespace Khooversoft.Toolbox
         /// </summary>
         /// <param name="eventLog">event log to use</param>
         /// <returns>new work context</returns>
-        public IWorkContext With(IEventLog eventLog)
+        public IWorkContext With(ITelemetry eventLog)
         {
             Verify.IsNotNull(nameof(eventLog), eventLog);
 

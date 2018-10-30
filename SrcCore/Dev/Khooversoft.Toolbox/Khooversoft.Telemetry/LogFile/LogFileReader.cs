@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Khooversoft.Telemetry
 {
-    public class LogFileReader : ILogFileReader
+    public class LogFileReader : IDisposable
     {
         private readonly Deserializer<FastBinaryReader<InputStream>> _serializer;
         private FileStream _file;

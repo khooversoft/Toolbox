@@ -16,33 +16,47 @@ namespace Khooversoft.Telemetry
         public EventData(
             string eventSourceName,
             string eventName,
-            TelemetryType telemetryType,
+            TelemetryLevel telemetryLevel,
             string cv,
             string tag,
             IEnumerable<KeyValuePair<string, object>> properties
             )
-            : this(DateTime.UtcNow, eventSourceName, eventName, telemetryType, cv, tag, null, properties)
+            : this(DateTimeOffset.UtcNow, eventSourceName, eventName, telemetryLevel, null, cv, tag, null, properties)
         {
         }
 
         public EventData(
             string eventSourceName,
             string eventName,
-            TelemetryType telemetryType,
+            TelemetryLevel telemetryLevel,
+            string message,
+            string cv,
+            string tag,
+            IEnumerable<KeyValuePair<string, object>> properties
+            )
+            : this(DateTimeOffset.UtcNow, eventSourceName, eventName, telemetryLevel, message, cv, tag, null, properties)
+        {
+        }
+
+        public EventData(
+            string eventSourceName,
+            string eventName,
+            TelemetryLevel telemetryLevel,
             string cv,
             string tag,
             double value,
             IEnumerable<KeyValuePair<string, object>> properties
             )
-            : this(DateTime.UtcNow, eventSourceName, eventName, telemetryType, cv, tag, value, properties)
+            : this(DateTimeOffset.UtcNow, eventSourceName, eventName, telemetryLevel, null, cv, tag, value, properties)
         {
         }
 
         public EventData(
-            DateTime timestamp,
+            DateTimeOffset timestamp,
             string eventSourceName,
             string eventName,
-            TelemetryType telemetryType,
+            TelemetryLevel telemetryLevel,
+            string message,
             string cv,
             string tag,
             double? value,
@@ -55,7 +69,8 @@ namespace Khooversoft.Telemetry
             Timestamp = timestamp;
             EventSourceName = eventSourceName;
             EventName = eventName;
-            TelemetryType = telemetryType;
+            TelemetryLevel = telemetryLevel;
+            Message = message;
             Cv = cv;
             Tag = tag;
             Value = value;
@@ -68,7 +83,9 @@ namespace Khooversoft.Telemetry
 
         public string EventName { get; }
 
-        public TelemetryType TelemetryType { get; }
+        public TelemetryLevel TelemetryLevel { get; }
+
+        public string Message { get; }
 
         public string Cv { get; }
 

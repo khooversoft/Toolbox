@@ -24,7 +24,7 @@ namespace Khooversoft.Toolbox
             Properties = new Dictionary<string, object>();
             Cv = new CorrelationVector();
             Tag = Tag.Empty;
-            EventLog = new EventLogNull();
+            EventLog = new TelemetryLogNull();
             Dimensions = new Dictionary<string, object>();
         }
 
@@ -55,7 +55,7 @@ namespace Khooversoft.Toolbox
 
         public CancellationToken? CancellationToken { get; set; }
 
-        public IEventLog EventLog { get; set; }
+        public ITelemetry EventLog { get; set; }
 
         public IDictionary<string, object> Dimensions { get; set; }
 
@@ -114,7 +114,7 @@ namespace Khooversoft.Toolbox
         /// </summary>
         /// <param name="eventLog">event log</param>
         /// <returns>this</returns>
-        public WorkContextBuilder Set(IEventLog eventLog)
+        public WorkContextBuilder Set(ITelemetry eventLog)
         {
             Verify.IsNotNull(nameof(eventLog), eventLog);
 

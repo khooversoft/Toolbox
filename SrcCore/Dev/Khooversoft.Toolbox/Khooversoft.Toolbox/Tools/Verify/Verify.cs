@@ -79,7 +79,7 @@ namespace Khooversoft.Toolbox
         {
             Verify.IsNotEmpty(nameof(message), message);
 
-            if (test == false)
+            if (!test)
             {
                 if (message.IsEmpty())
                 {

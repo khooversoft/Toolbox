@@ -9,10 +9,12 @@ using System.Threading.Tasks;
 
 namespace Khooversoft.Telemetry
 {
-    public interface ILogFileReader : IDisposable
+    public interface IEventDataWriter : IDisposable
     {
-        LogFileReader Open();
+        string LogFileName { get; }
 
-        IEnumerable<EventData> Read(int recordMaxCount);
+        IEventDataWriter Open();
+
+        IEventDataWriter Write(EventData eventDataItem);
     }
 }

@@ -22,7 +22,7 @@ namespace Khooversoft.Toolbox.Actor
                 .Add(nameof(message), message)
                 .Build();
 
-            configuration.WorkContext.EventLog.LogEvent(context, TelemetryType.Verbose, _actorEventName, nameof(ActorCreated), dimensions);
+            configuration.WorkContext.EventLog.LogEvent(context, TelemetryLevel.Verbose, _actorEventName, nameof(ActorCreated), dimensions);
             configuration.WorkContext.EventLog.TrackMetric(context, nameof(ActorCreated), dimensions);
         }
 
@@ -38,7 +38,7 @@ namespace Khooversoft.Toolbox.Actor
                 .Add(nameof(message), message)
                 .Build();
 
-            configuration.WorkContext.EventLog.LogEvent(context, TelemetryType.Verbose, _actorEventName, nameof(ActorActivate), dimensions);
+            configuration.WorkContext.EventLog.LogEvent(context, TelemetryLevel.Verbose, _actorEventName, nameof(ActorActivate), dimensions);
             configuration.WorkContext.EventLog.TrackMetric(context, nameof(ActorActivate), dimensions);
         }
 
@@ -54,7 +54,7 @@ namespace Khooversoft.Toolbox.Actor
                 .Add(nameof(message), message)
                 .Build();
 
-            configuration.WorkContext.EventLog.LogEvent(context, TelemetryType.Verbose, _actorEventName, nameof(ActorDeactivate), dimensions);
+            configuration.WorkContext.EventLog.LogEvent(context, TelemetryLevel.Verbose, _actorEventName, nameof(ActorDeactivate), dimensions);
         }
 
         public static void ActorCalling(this IActorConfiguration configuration, IWorkContext context, ActorKey actorKey, Type actorType, string methodName, string message = null)
@@ -70,7 +70,7 @@ namespace Khooversoft.Toolbox.Actor
                 .Add(nameof(message), message)
                 .Build();
 
-            configuration.WorkContext.EventLog.LogEvent(context, TelemetryType.Verbose, _actorEventName, nameof(ActorCalling), dimensions);
+            configuration.WorkContext.EventLog.LogEvent(context, TelemetryLevel.Verbose, _actorEventName, nameof(ActorCalling), dimensions);
         }
 
         public static void ActorCalled(this IActorConfiguration configuration, IWorkContext context, ActorKey actorKey, Type interfaceType, string methodName, string message = null)
@@ -87,7 +87,7 @@ namespace Khooversoft.Toolbox.Actor
                 .Add(nameof(message), message)
                 .Build();
 
-            configuration.WorkContext.EventLog.LogEvent(context, TelemetryType.Verbose, _actorEventName, nameof(ActorCalled), dimensions);
+            configuration.WorkContext.EventLog.LogEvent(context, TelemetryLevel.Verbose, _actorEventName, nameof(ActorCalled), dimensions);
         }
 
         public static void ActorRegistered(this IActorConfiguration configuration, IWorkContext context, Type interfaceType, string message = null)
@@ -100,7 +100,7 @@ namespace Khooversoft.Toolbox.Actor
                 .Add(nameof(message), message)
                 .Build();
 
-            configuration.WorkContext.EventLog.LogEvent(context, TelemetryType.Verbose, _actorEventName, nameof(ActorRegistered), dimensions);
+            configuration.WorkContext.EventLog.LogEvent(context, TelemetryLevel.Verbose, _actorEventName, nameof(ActorRegistered), dimensions);
         }
 
         public static void ActorStartTimer(this IActorConfiguration configuration, IWorkContext context, ActorKey actorKey, string message = null)
@@ -113,7 +113,7 @@ namespace Khooversoft.Toolbox.Actor
                 .Add(nameof(message), message)
                 .Build();
 
-            configuration.WorkContext.EventLog.LogEvent(context, TelemetryType.Verbose, _actorEventName, nameof(ActorStartTimer), dimensions);
+            configuration.WorkContext.EventLog.LogEvent(context, TelemetryLevel.Verbose, _actorEventName, nameof(ActorStartTimer), dimensions);
         }
 
         public static void ActorStopTimer(this IActorConfiguration configuration, IWorkContext context, ActorKey actorKey, string message = null)
@@ -126,7 +126,7 @@ namespace Khooversoft.Toolbox.Actor
                 .Add(nameof(message), message)
                 .Build();
 
-            configuration.WorkContext.EventLog.LogEvent(context, TelemetryType.Verbose, _actorEventName, nameof(ActorStopTimer), dimensions);
+            configuration.WorkContext.EventLog.LogEvent(context, TelemetryLevel.Verbose, _actorEventName, nameof(ActorStopTimer), dimensions);
         }
 
         public static void ActorTimerCallback(this IActorConfiguration configuration, IWorkContext context, ActorKey actorKey, string message = null)
@@ -139,7 +139,7 @@ namespace Khooversoft.Toolbox.Actor
                 .Add(nameof(message), message)
                 .Build();
 
-            configuration.WorkContext.EventLog.LogEvent(context, TelemetryType.Verbose, _actorEventName, nameof(ActorTimerCallback), dimensions);
+            configuration.WorkContext.EventLog.LogEvent(context, TelemetryLevel.Verbose, _actorEventName, nameof(ActorTimerCallback), dimensions);
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Khooversoft.Toolbox
             Verify.Assert(size > 0, "Size must be greater then 0");
 
             Size = size;
-            Clear();
+            _queue = new Queue<T>(Size);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Khooversoft.Toolbox
         /// <summary>
         /// Size of queue
         /// </summary>
-        public int Size { get; private set; }
+        public int Size { get; }
 
         /// <summary>
         /// Clear queue
@@ -68,7 +68,7 @@ namespace Khooversoft.Toolbox
         {
             lock (_lock)
             {
-                _queue = new Queue<T>(Size);
+                _queue.Clear();
                 LostCount = 0;
             }
 

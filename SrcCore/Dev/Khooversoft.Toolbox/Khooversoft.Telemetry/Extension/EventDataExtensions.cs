@@ -21,7 +21,8 @@ namespace Khooversoft.Telemetry
                 Timestamp = self.Timestamp.ToString("o"),
                 EventName = self.EventName,
                 EventSourceName = self.EventSourceName,
-                EventLevel = self.TelemetryType.ToString(),
+                EventLevel = self.TelemetryLevel.ToString(),
+                Message = self.Message,
                 Tag = self.Tag,
                 Cv = self.Cv,
                 Value = self.Value,
@@ -83,7 +84,8 @@ namespace Khooversoft.Telemetry
                 timestamp: DateTime.Parse(record.Timestamp, null, DateTimeStyles.RoundtripKind),
                 eventName: record.EventName,
                 eventSourceName: record.EventSourceName,
-                telemetryType: (TelemetryType)Enum.Parse(typeof(TelemetryType), record.EventLevel),
+                telemetryLevel: (TelemetryLevel)Enum.Parse(typeof(TelemetryLevel), record.EventLevel),
+                message: record.Message,
                 tag: record.Tag,
                 cv: record.Cv,
                 value: record.Value,
@@ -105,29 +107,109 @@ namespace Khooversoft.Telemetry
             };
         }
 
-        //public static void Test()
-        //{
-        //    var record = new EventDataRecord
-        //    {
-        //        Date = DateTime.Now.ToString("o"),
-        //        Version = 1,
-        //        EventName = "eventName",
-        //        EventSourceName = "eventSourceName",
-        //        EventLevel = "eventLevel",
-        //    };
+        public static EventData ConvertTo(this EventWrittenEventArgs args)
+        {
+            var properties = args.PayloadNames
+                .Zip(args.Payload, (key, v) => new KeyValuePair<string, object>(key, v))
+                .ToList();
 
-        //    var output = new OutputBuffer();
-        //    var writer = new CompactBinaryWriter<OutputBuffer>(output);
+            DateTimeOffset timestamp = DateTimeOffset.UtcNow;
+            string eventSourceName = args.EventSource.Name;
+            string message = null;
+            string cv = null;
+            string tag = null;
+            double? value = null;
 
-        //    // The first calls to Serialize.To and Deserialize<T>.From can take
-        //    // a relatively long time because they generate the de/serializer
-        //    // for a given type and protocol.
-        //    Bond.Serialize.To(writer, record);
+            foreach(KeyValuePair<string, object> property in properties)
+            {
+                switch( property.Key)
+                {
+                    case "Timestamp":
+                        timestamp = (DateTimeOffset)property.Value;
+                        break;
 
-        //    var input = new InputBuffer(output.Data);
-        //    var reader = new CompactBinaryReader<InputBuffer>(input);
+                    case "EventSourceName":
+                        eventSourceName = (string)property.Value;
+                        break;
 
-        //    var dst = Deserialize<EventDataRecord>.From(reader);
-        //}
+                    case "Message":
+                        message = (string)property.Value;
+                        break;
+
+                    case "Cv":
+                        cv = (string)property.Value;
+                        break;
+
+                    case "Tag":
+                        tag = (string)property.Value;
+                        break;
+
+                    case "Value":
+                        value = (double)property.Value;
+                        break;
+                }
+            }
+
+            return new EventData(
+                timestamp: timestamp,
+                eventSourceName: eventSourceName,
+                eventName: args.EventName,
+                telemetryLevel: args.Level.ConvertTo(),
+                message: message,
+                cv: cv,
+                tag: tag,
+                value: value,
+                properties: properties
+                );
+        }
+
+        public static TelemetryLevel ConvertTo(this EventLevel eventLevel)
+        {
+            switch (eventLevel)
+            {
+                case EventLevel.Verbose:
+                    return TelemetryLevel.Verbose;
+
+                case EventLevel.Informational:
+                    return TelemetryLevel.Informational;
+
+                case EventLevel.Warning:
+                    return TelemetryLevel.Warning;
+
+                case EventLevel.Error:
+                    return TelemetryLevel.Error;
+
+                case EventLevel.Critical:
+                    return TelemetryLevel.Critical;
+
+                default:
+                    return TelemetryLevel.Verbose;
+            }
+        }
+
+        public static EventLevel ConverTo(this TelemetryLevel telemetryType)
+        {
+            switch (telemetryType)
+            {
+                case TelemetryLevel.Verbose:
+                    return EventLevel.Verbose;
+
+                case TelemetryLevel.Informational:
+                    return EventLevel.Informational;
+
+                case TelemetryLevel.Warning:
+                    return EventLevel.Warning;
+
+                case TelemetryLevel.Error:
+                    return EventLevel.Error;
+
+                case TelemetryLevel.Critical:
+                    return EventLevel.Critical;
+
+                default:
+                    return EventLevel.Verbose;
+            }
+
+        }
     }
 }

@@ -17,7 +17,7 @@ using System.Threading.Tasks.Dataflow;
 
 namespace Khooversoft.Telemetry
 {
-    public class LogFileWriter : ILogFileWriter
+    public class LogFileWriter : IEventDataWriter
     {
         private readonly Serializer<FastBinaryWriter<OutputStream>> _serializer;
         private FileStream _file;
@@ -34,7 +34,7 @@ namespace Khooversoft.Telemetry
 
         public string LogFileName { get; }
 
-        public LogFileWriter Open()
+        public IEventDataWriter Open()
         {
             Verify.Assert(_file == null, "Log file already opened");
 
@@ -46,7 +46,7 @@ namespace Khooversoft.Telemetry
             return this;
         }
 
-        public LogFileWriter Write(EventData eventDataItem)
+        public IEventDataWriter Write(EventData eventDataItem)
         {
             Verify.IsNotNull(nameof(eventDataItem), eventDataItem);
             Verify.Assert(_file != null, "Not open");

@@ -59,7 +59,7 @@ namespace Khooversoft.Toolbox
             Verify.Assert<FormatException>(parts.Length < 2 || parts.Skip(1).All(x => int.TryParse(x, out extensionValue)), "Data in correlation tag is not formatted correctly");
 
             ExtensionValue = extensionValue;
-            BaseCv = string.Join(".", parts.Take(parts.Count() - 1));
+            BaseCv = string.Join(".", parts.Take(parts.Length - 1));
         }
 
         private CorrelationVector(string correlationTag, int extensionValue)
@@ -71,7 +71,7 @@ namespace Khooversoft.Toolbox
             ExtensionValue = extensionValue;
         }
 
-        public int ExtensionValue { get; private set; }
+        public int ExtensionValue { get; }
 
         public string BaseCv { get; private set; }
 

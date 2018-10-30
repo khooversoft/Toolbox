@@ -7,7 +7,7 @@ namespace Khooversoft.Toolbox
     /// <summary>
     /// Identifies the level of an event.
     /// </summary>
-    public enum TelemetryType
+    public enum TelemetryLevel
     {
         None = 0,
 
@@ -22,14 +22,19 @@ namespace Khooversoft.Toolbox
         Error = 2,
 
         /// <summary>
+        /// Warning message
+        /// </summary>
+        Warning = 3,
+
+        /// <summary>
         /// General purpose information
         /// </summary>
-        Informational = 3,
+        Informational = 4,
 
         /// <summary>
         /// Verbose level, this level adds lengthy events or messages. It causes all events to be logged.
         /// </summary>
-        Verbose = 4,
+        Verbose = 5,
 
         /// <summary>
         /// Metric type

@@ -10,8 +10,10 @@ using System.Threading.Tasks;
 
 namespace Khooversoft.Toolbox
 {
-    public interface IEventLog
+    public interface ITelemetry
     {
+        string EventSourceName { get; }
+
         void ActivityStart(IWorkContext context, string message = null, IEventDimensions dimensions = null);
         void ActivityStart(IWorkContext context, string message, object dimensions);
 
@@ -27,8 +29,8 @@ namespace Khooversoft.Toolbox
         void Error(IWorkContext context, string message, Exception exception = null, IEventDimensions dimensions = null);
         void Error(IWorkContext context, string message, object dimensions, Exception exception = null);
 
-        void Critial(IWorkContext context, string message, Exception exception = null, IEventDimensions dimensions = null);
-        void Critial(IWorkContext context, string message, object dimensions, Exception exception = null);
+        void Critical(IWorkContext context, string message, Exception exception = null, IEventDimensions dimensions = null);
+        void Critical(IWorkContext context, string message, object dimensions, Exception exception = null);
 
         void TrackMetric(IWorkContext context, string name, IEventDimensions dimensions = null);
         void TrackMetric(IWorkContext context, string name, object dimensions);
@@ -36,7 +38,7 @@ namespace Khooversoft.Toolbox
         void TrackMetric(IWorkContext context, string name, double value, IEventDimensions dimensions = null);
         void TrackMetric(IWorkContext context, string name, double value, object dimensions);
 
-        void LogEvent(IWorkContext context, TelemetryType telemetryLevel, string eventSourceName, string eventName, IEventDimensions dimensions = null);
-        void LogEvent(IWorkContext context, TelemetryType telemetryLevel, string eventSourceName, string eventName, object dimensions);
+        void LogEvent(IWorkContext context, TelemetryLevel telemetryLevel, string eventSourceName, string eventName, IEventDimensions dimensions = null);
+        void LogEvent(IWorkContext context, TelemetryLevel telemetryLevel, string eventSourceName, string eventName, object dimensions);
     }
 }

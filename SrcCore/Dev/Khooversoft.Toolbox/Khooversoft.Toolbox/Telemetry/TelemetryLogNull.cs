@@ -5,11 +5,13 @@ using System.Text;
 
 namespace Khooversoft.Toolbox
 {
-    public class EventLogNull : IEventLog
+    public class TelemetryLogNull : ITelemetry
     {
-        public EventLogNull()
+        public TelemetryLogNull()
         {
         }
+
+        public string EventSourceName => "null";
 
         public void ActivityStart(IWorkContext context, string message = null, IEventDimensions dimensions = null)
         {
@@ -27,11 +29,11 @@ namespace Khooversoft.Toolbox
         {
         }
 
-        public void Critial(IWorkContext context, string message, Exception exception = null, IEventDimensions dimensions = null)
+        public void Critical(IWorkContext context, string message, Exception exception = null, IEventDimensions dimensions = null)
         {
         }
 
-        public void Critial(IWorkContext context, string message, object dimensions, Exception exception = null)
+        public void Critical(IWorkContext context, string message, object dimensions, Exception exception = null)
         {
         }
 
@@ -51,11 +53,11 @@ namespace Khooversoft.Toolbox
         {
         }
 
-        public void LogEvent(IWorkContext context, TelemetryType eventLevel, string eventSourceName, string eventName, IEventDimensions dimensions = null)
+        public void LogEvent(IWorkContext context, TelemetryLevel telemetryLevel, string eventSourceName, string eventName, IEventDimensions dimensions = null)
         {
         }
 
-        public void LogEvent(IWorkContext context, TelemetryType eventLevel, string eventSourceName, string eventName, object dimensions)
+        public void LogEvent(IWorkContext context, TelemetryLevel telemetryLevel, string eventSourceName, string eventName, object dimensions)
         {
         }
 

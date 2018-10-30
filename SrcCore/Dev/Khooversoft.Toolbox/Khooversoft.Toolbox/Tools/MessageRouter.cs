@@ -14,6 +14,7 @@ namespace Khooversoft.Toolbox
         private readonly RingQueue<T> _queue = new RingQueue<T>(1000);
         private readonly Dictionary<string, Action<T, CancellationToken>> _actions = new Dictionary<string, Action<T, CancellationToken>>();
         private readonly IWorkContext _workContext;
+        private readonly bool _drainOnDispose;
         private int _processLock = 0;
         private readonly object _lock = new object();
         private readonly object _processingLock = new object();
@@ -21,11 +22,12 @@ namespace Khooversoft.Toolbox
         private List<Action<T, CancellationToken>> _cacheList;
         private int _shutdown = False;
 
-        public MessageRouter(IWorkContext context)
+        public MessageRouter(IWorkContext context, bool drainOnDispose = true)
         {
             Verify.IsNotNull(nameof(context), context);
 
             _workContext = context;
+            _drainOnDispose = drainOnDispose;
             _timer = new Timer(ProcessQueue, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(500));
         }
 
@@ -88,7 +90,7 @@ namespace Khooversoft.Toolbox
 
         public void Dispose()
         {
-            Close(false);
+            Close(_drainOnDispose);
         }
 
         private void ProcessQueue(object arg)

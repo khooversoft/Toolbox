@@ -7,9 +7,9 @@ namespace Khooversoft.Telemetry
 {
     public class TrackEventLogListener
     {
-        private ILogFileWriter _logWriter;
+        private IEventDataWriter _logWriter;
 
-        public TrackEventLogListener(ILogFileWriter logWriter)
+        public TrackEventLogListener(IEventDataWriter logWriter)
         {
             Verify.IsNotNull(nameof(logWriter), logWriter);
 

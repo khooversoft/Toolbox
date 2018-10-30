@@ -22,7 +22,7 @@ namespace Khooversoft.Toolbox
         ILifetimeScope Container { get; }
         IPropertyBag Properties { get; }
         CancellationToken CancellationToken { get; }
-        IEventLog EventLog { get; }
+        ITelemetry EventLog { get; }
         IEventDimensions Dimensions { get; }
 
         IWorkContext With(string key, object value);

@@ -32,11 +32,12 @@ struct EventDataRecord
     20  : string EventName;
     30  : string EventSourceName;
     40  : string EventLevel;
-    50  : nullable<string> Cv;
-    60  : nullable<string> Tag;
-    70  : nullable<double> Value;
-    80  : nullable<vector<PropertyDataInt>> IntProperties;
-    90  : nullable<vector<PropertyDataLong>> LongProperties;
-    100 : nullable<vector<PropertyDataString>> StringProperties;
-    110 : nullable<vector<PropertyDataDate>> DateProperties;
+    50  : string Message;
+    60  : nullable<string> Cv;
+    70  : nullable<string> Tag;
+    80  : nullable<double> Value;
+    90  : nullable<vector<PropertyDataInt>> IntProperties;
+    100 : nullable<vector<PropertyDataLong>> LongProperties;
+    110 : nullable<vector<PropertyDataString>> StringProperties;
+    120 : nullable<vector<PropertyDataDate>> DateProperties;
 }
