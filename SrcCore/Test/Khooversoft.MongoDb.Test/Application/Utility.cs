@@ -47,6 +47,8 @@ namespace Khooversoft.MongoDb.Test
 
         public static int Count = 10;
 
+        public static string CollectionName => _collectionName;
+
         public static IDocumentServer DocumentServer { get; private set; }
 
         public static List<TestDocument> TestDocuments { get; private set; }

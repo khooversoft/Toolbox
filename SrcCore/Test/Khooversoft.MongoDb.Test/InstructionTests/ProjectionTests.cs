@@ -27,7 +27,7 @@ namespace Khooversoft.MongoDb.Test.InstructionTests
             string lookupName = $"NotFirst_{1}";
 
             var query = new Pipeline()
-                + new Projection("FirstName".ToEnumerable());
+                + new Projection(nameof(TestDocument.FirstName).ToEnumerable());
 
             var findResult = await Utility.Collection.Find(_workContext, query);
             List<TestDocument> resultDocuments = findResult.ToList();
@@ -37,6 +37,58 @@ namespace Khooversoft.MongoDb.Test.InstructionTests
             resultDocuments
                 .All(x => x.LastName == null)
                 .Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task ChangeTypeProjectionTest()
+        {
+            string lookupName = $"NotFirst_{1}";
+
+            var query = new Pipeline()
+                + new Projection(nameof(TestDocument.FirstName).ToEnumerable());
+
+            var findResult = await Utility.Database.GetCollection<ReducedTestDocument>(Utility.CollectionName).Find(_workContext, query);
+            List<ReducedTestDocument> resultDocuments = findResult.ToList();
+            resultDocuments.Should().NotBeNull();
+            resultDocuments.Count.Should().Be(Utility.Count);
+
+            resultDocuments
+                .All(x => x.LastName == null)
+                .Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task BsonDocumentTypeProjectionTest()
+        {
+            string lookupName = $"NotFirst_{1}";
+
+            var query = new Pipeline()
+                + new Projection(new string[] { nameof(TestDocument.FirstName), nameof(TestDocument.LastName) })
+                + new OrderBy(DirectionType.Descending, nameof(TestDocument.FirstName));
+
+            var findResult = await Utility.Database.GetCollection<BsonDocument>(Utility.CollectionName).Find(_workContext, query);
+            List<BsonDocument> resultDocuments = findResult.ToList();
+            resultDocuments.Should().NotBeNull();
+            resultDocuments.Count.Should().Be(Utility.Count);
+
+            int index = 0;
+            foreach(var item in Utility.TestDocuments.OrderByDescending(x => x.Index))
+            {
+                BsonValue value = resultDocuments[index++][nameof(TestDocument.FirstName)];
+                value.Should().NotBeNull();
+                value.AsString.Should().Be(item.FirstName);
+            }
+        }
+
+        private class ReducedTestDocument
+        {
+            public ObjectId _id { get; set; }
+
+            public int Index { get; set; }
+
+            public string FirstName { get; set; }
+
+            public string LastName { get; set; }
         }
     }
 }

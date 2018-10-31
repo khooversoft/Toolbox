@@ -12,7 +12,6 @@ using Xunit;
 namespace Khooversoft.MongoDb.Test.InstructionTests
 {
     [Trait("Category", "MongoDB")]
-    //[Collection("DB tests")]
     public class InstructionFindTests
     {
         private readonly IWorkContext _workContext = WorkContext.Empty;
@@ -28,7 +27,7 @@ namespace Khooversoft.MongoDb.Test.InstructionTests
             string lookupName = $"NotFirst_{1}";
 
             var query = new And()
-                + new Compare(CompareType.Equal, "FirstName", lookupName);
+                + new Compare(CompareType.Equal, nameof(TestDocument.FirstName), lookupName);
 
             var findResult = await Utility.Collection.Find(_workContext, query);
             List<TestDocument> resultDocuments = findResult.ToList();
@@ -41,7 +40,7 @@ namespace Khooversoft.MongoDb.Test.InstructionTests
             string lookupName = $"First_{1}";
 
             var query = new And()
-                + new Compare(CompareType.Equal, "FirstName", lookupName);
+                + new Compare(CompareType.Equal, nameof(TestDocument.FirstName), lookupName);
 
             var findResult = await Utility.Collection.Find(_workContext, query);
             List<TestDocument> resultDocuments = findResult.ToList();
@@ -149,8 +148,8 @@ namespace Khooversoft.MongoDb.Test.InstructionTests
             string secondName = $"Last_{1}";
 
             var query = new And()
-                + new Compare(CompareType.Equal, "FirstName", lookupName)
-                + new Compare(CompareType.Equal, "LastName", secondName);
+                + new Compare(CompareType.Equal, nameof(TestDocument.FirstName), lookupName)
+                + new Compare(CompareType.Equal, nameof(TestDocument.LastName), secondName);
 
             var findResult = await Utility.Collection.Find(_workContext, query);
             List<TestDocument> resultDocuments = findResult.ToList();
@@ -161,8 +160,8 @@ namespace Khooversoft.MongoDb.Test.InstructionTests
         public async Task OrSimpleSearch()
         {
             var query = new Or()
-                + (new And() + new Compare(CompareType.Equal, "FirstName", $"First_{1}"))
-                + (new And() + new Compare(CompareType.Equal, "Address1", $"Addr1_{2}"));
+                + (new And() + new Compare(CompareType.Equal, nameof(TestDocument.FirstName), $"First_{1}"))
+                + (new And() + new Compare(CompareType.Equal, nameof(TestDocument.Address1), $"Addr1_{2}"));
 
             var findResult = await Utility.Collection.Find(_workContext, query);
             List<TestDocument> resultDocuments = findResult.ToList();
