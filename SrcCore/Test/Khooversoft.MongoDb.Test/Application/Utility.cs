@@ -94,7 +94,7 @@ namespace Khooversoft.MongoDb.Test
 
             sourceList.Count.Should().Be(resultList.Count);
 
-            foreach (var result in resultDocuments)
+            foreach (var result in resultList)
             {
                 var test = sourceList[docIndex++];
 

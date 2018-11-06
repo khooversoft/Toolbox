@@ -48,5 +48,17 @@ namespace Khooversoft.MongoDb.Test.DocumentTests
 
             Utility.VerifyDocuments(Utility.TestDocuments.OrderByDescending(x => x.Index).Take(6), resultDocuments, orderData: false);
         }
+
+        [Fact]
+        public void TestSimpleSearchMultipleSortFail()
+        {
+            var pipeline = new Pipeline()
+                + (new Query() + (new Field(nameof(TestDocument.Index)) > 3))
+                + new OrderBy(DirectionType.Ascending, nameof(TestDocument.Index))
+                + new OrderBy(DirectionType.Ascending, nameof(TestDocument.Address1));
+
+            Func<Task<IEnumerable<TestDocument>>> act = async () => await Utility.Collection.Find(_workContext, pipeline);
+            act.Should().Throw<InvalidOperationException>();
+        }
     }
 }

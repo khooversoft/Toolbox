@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Khooversoft.MongoDb
 {
-    public interface ICommandNode
+    public interface IAggregateNode
     {
         BsonDocument ToDocument();
     }

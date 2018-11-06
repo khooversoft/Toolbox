@@ -63,6 +63,16 @@ namespace Khooversoft.MongoDb
             }
         }
 
+        public async Task<IEnumerable<TDocument>> Aggregate(IWorkContext context, PipelineDefinition<TDocument, TDocument> pipeline, AggregateOptions options = null)
+        {
+            Verify.IsNotNull(nameof(context), context);
+
+            using (var cursor = await MongoCollection.AggregateAsync(pipeline, options, context.CancellationToken))
+            {
+                return await cursor.ToListAsync(context.CancellationToken);
+            }
+        }
+
         public async Task<int> Delete(IWorkContext context, FilterDefinition<TDocument> filter)
         {
             Verify.IsNotNull(nameof(context), context);

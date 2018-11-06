@@ -24,6 +24,8 @@ namespace Khooversoft.MongoDb
 
         Task<IEnumerable<TDocument>> Find(IWorkContext context, FilterDefinition<TDocument> filter, FindOptions<TDocument, TDocument> options = null);
 
+        Task<IEnumerable<TDocument>> Aggregate(IWorkContext context, PipelineDefinition<TDocument, TDocument> pipeline, AggregateOptions options = null);
+
         Task<int> Delete(IWorkContext context, FilterDefinition<TDocument> filter);
 
         Task<long> Count(IWorkContext context, FilterDefinition<TDocument> filter = null);

@@ -25,8 +25,8 @@ namespace Khooversoft.MongoDb
                 return await self.Find(context, andOr.ToDocument());
             }
 
-            OrderBy orderBy = instruction.OfType<OrderBy>().FirstOrDefault();
-            Projection projection = instruction.OfType<Projection>().FirstOrDefault();
+            OrderBy orderBy = instruction.OfType<OrderBy>().SingleOrDefault();
+            Projection projection = instruction.OfType<Projection>().SingleOrDefault();
 
             FindOptions<T, T> options = new FindOptions<T, T>
             {
@@ -37,6 +37,14 @@ namespace Khooversoft.MongoDb
             Query query = instruction.OfType<Query>().FirstOrDefault();
 
             return await self.Find(context, query?.ToDocument() ?? new BsonDocument(), options);
+        }
+
+        public static async Task<IEnumerable<T>> Aggregate<T>(this IDocumentCollection<T> self, IWorkContext context, Aggregate aggregate)
+        {
+            Verify.IsNotNull(nameof(self), self);
+            Verify.IsNotNull(nameof(aggregate), aggregate);
+
+            return await self.Aggregate(context, aggregate.ToDocuments());
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Khooversoft.MongoDb.Test.Aggregate
+namespace Khooversoft.MongoDb.Test.AggregateTests
 {
     [Trait("Category", "MongoDB")]
     public class AggregateTests
@@ -24,11 +24,61 @@ namespace Khooversoft.MongoDb.Test.Aggregate
         {
             string lookupName = $"NotFirst_{1}";
 
-            var pipeline = new Pipeline()
-                + (new Query() + (new Field(nameof(TestDocument.Index)) > 3))
-                + new OrderBy(DirectionType.Ascending, nameof(TestDocument.Index));
+            var aggregate = new Aggregate()
+                + (new Match() + (new Field(nameof(TestDocument.Index)) > 3));
 
-            var findResult = await Utility.Collection.Find(_workContext, pipeline);
+            var findResult = await Utility.Collection.Aggregate(_workContext, aggregate);
+            List<TestDocument> resultDocuments = findResult.ToList();
+            resultDocuments.Count.Should().Be(6);
+
+            Utility.VerifyDocuments(Utility.TestDocuments.OrderBy(x => x.Index).Skip(4), resultDocuments);
+        }
+
+        [Fact]
+        public async Task TestSimpleSearchAndSort()
+        {
+            string lookupName = $"NotFirst_{1}";
+
+            var aggregate = new Aggregate()
+                + (new Match() + (new Field(nameof(TestDocument.Index)) > 3))
+                + (new Sort() + new OrderBy(DirectionType.Ascending, nameof(TestDocument.Index)));
+
+            var findResult = await Utility.Collection.Aggregate(_workContext, aggregate);
+            List<TestDocument> resultDocuments = findResult.ToList();
+            resultDocuments.Count.Should().Be(6);
+
+            Utility.VerifyDocuments(Utility.TestDocuments.OrderBy(x => x.Index).Skip(4), resultDocuments);
+        }
+
+        [Fact]
+        public async Task TestSimpleSearchAndDecending()
+        {
+            string lookupName = $"NotFirst_{1}";
+
+            var aggregate = new Aggregate()
+                + (new Match() + (new Field(nameof(TestDocument.Index)) > 3))
+                + (new Sort() + new OrderBy(DirectionType.Descending, nameof(TestDocument.Index)));
+
+            var findResult = await Utility.Collection.Aggregate(_workContext, aggregate);
+            List<TestDocument> resultDocuments = findResult.ToList();
+            resultDocuments.Count.Should().Be(6);
+
+            Utility.VerifyDocuments(Utility.TestDocuments.OrderByDescending(x => x.Index).Take(6), resultDocuments);
+        }
+
+        [Fact]
+        public async Task TestSimpleSearchAndMultipleSort()
+        {
+            string lookupName = $"NotFirst_{1}";
+
+            var aggregate = new Aggregate()
+                + (new Match() + (new Field(nameof(TestDocument.Index)) > 3))
+                + (new Sort()
+                    + new OrderBy(DirectionType.Ascending, nameof(TestDocument.Index))
+                    + new OrderBy(DirectionType.Descending, nameof(TestDocument.Address1))
+                    );
+
+            var findResult = await Utility.Collection.Aggregate(_workContext, aggregate);
             List<TestDocument> resultDocuments = findResult.ToList();
             resultDocuments.Count.Should().Be(6);
 
